@@ -1,9 +1,9 @@
 language: go
 go:
   - 1.9.x
-services:
-  - mysql
-  - postgresql
+#services:
+#  - mysql
+#  - postgresql
 before_install:
   - go get -t -v ./...
 script:
