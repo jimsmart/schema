@@ -80,7 +80,7 @@ var driverDialect map[string]*dialect = map[string]*dialect{
 // func Register(driver sql.Driver, d *Dialect) {}
 //
 
-// TableNames returns a list of all table names in the database
+// TableNames returns a list of all table names in the current database/schema
 // (not including system tables).
 //
 // If the underlying driver's name is not in the package registry of
@@ -90,7 +90,7 @@ func TableNames(db *sql.DB) ([]string, error) {
 	return names(db, tableNames)
 }
 
-// ViewNames returns a list of all view names in the database
+// ViewNames returns a list of all view names in the current database/schema
 // (not including system views).
 //
 // If the underlying driver's name is not in the package registry of
@@ -172,7 +172,7 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return rows.ColumnTypes()
 }
 
-// Tables returns column type metadata for all tables in the database
+// Tables returns column type metadata for all tables in the current database/schema
 // (not including system tables). The returned map is keyed by table name.
 //
 // If the underlying driver's name is not in the package registry of
@@ -182,7 +182,7 @@ func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return objects(db, TableNames)
 }
 
-// Views returns column type metadata for all views in the database
+// Views returns column type metadata for all views in the current database/schema
 // (not including system views). The returned map is keyed by view name.
 //
 // If the underlying driver's name is not in the package registry of
