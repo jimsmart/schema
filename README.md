@@ -1,6 +1,6 @@
 # schema
 
-[![Godoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/jimsmart/schema)
+[![BSD3](https://img.shields.io/badge/license-BSD3-blue.svg?style=flat)](LICENSE.md) [![Build Status](https://img.shields.io/travis/jimsmart/schema/master.svg?style=flat)](https://travis-ci.org/jimsmart/schema) [![Go Report Card](https://goreportcard.com/badge/github.com/jimsmart/schema)](https://goreportcard.com/report/github.com/jimsmart/schema) [![Godoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/jimsmart/schema)
 
 schema is a [Go](https://golang.org) package providing database schema metadata for database/sql drivers.
 
@@ -47,17 +47,14 @@ import "github.com/jimsmart/schema"
 
 ### Dependencies
 
+- Some supported database driver from above lists.
 - Standard library.
 - [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) if you wish to run the tests.
+- Tests also require various database drivers to be installed and configured.
 
 ## Example
 
-```go
-import "github.com/jimsmart/schema"
-
-// TODO
-
-```
+See GoDocs for usage examples.
 
 ## Documentation
 

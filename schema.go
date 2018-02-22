@@ -13,6 +13,11 @@
 //  	fmt.Println("Table: %s", tnames[i])
 //  }
 //
+//  // Output:
+//  // Table: employee_tbl
+//  // Table: department_tbl
+//  // Table: sales_tbl
+//
 // Both user permissions and current database/schema effect table visibility.
 //
 // To query column type metadata for a single table, use schema.Table().
@@ -24,11 +29,17 @@
 //  	fmt.Println("Column: %s %s", tcols[i].Name(), tcols[i].DatabaseTypeName())
 //  }
 //
-// To query names and column type metadata for all tables, use schema.Tables().
+//  // Output:
+//  // Column: employee_id INTEGER
+//  // Column: first_name TEXT
+//  // Column: last_name TEXT
+//  // Column: created_at TIMESTAMP
+//
+// To query table names and column type metadata for all tables, use schema.Tables().
 //
 // See also https://golang.org/pkg/database/sql/#ColumnType
 //
-// Underlying driver support for column type metadata is somewhat variable.
+// Underlying driver support for column type metadata is implementation specific and somewhat variable.
 //
 // View Metadata
 //
