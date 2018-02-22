@@ -4,7 +4,7 @@
 
 schema is a [Go](https://golang.org) package providing database schema metadata for database/sql drivers.
 
-TODO
+TODO more docs
 
 The following drivers are supported and fully tested:
 
@@ -14,7 +14,7 @@ The following drivers are supported and fully tested:
 - gopkg.in/goracle.v2 - Oracle
 - github.com/go-sql-driver/mysql - MySQL
 
-An effort has been made to support the following drivers, but they are untested:
+An effort has been made to support the following drivers, but they are currently untested:
 
 - github.com/gwenn/gosqlite - SQLite
 - github.com/mxk/go-sqlite - SQLite
@@ -25,7 +25,7 @@ An effort has been made to support the following drivers, but they are untested:
 - github.com/mattn/go-oci8 - Oracle
 - github.com/ziutek/mymysql - MySQL
 
-If you use schema with any of these drivers, please open an issue commenting whether it worked or not, to update this list.
+If you use the schema package with any of these drivers, please open an issue commenting whether it worked or not, to keep this list up-to-date.
 
 If your favourite driver is not featured in either of the above lists, open an issue detailing which driver you use.
 
