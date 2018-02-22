@@ -70,4 +70,4 @@ $ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 
 ## License
 
-Package schema is copyright 2018 by Jim Smart and released under the [3-Clause BSD License](LICENSE.md)
+Package schema is copyright 2018 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
