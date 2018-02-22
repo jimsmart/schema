@@ -9,7 +9,7 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
-var _ = Describe("schema", func() {
+var _ = XDescribe("schema", func() {
 	Context("using github.com/go-goracle/goracle (Oracle)", func() {
 
 		const (

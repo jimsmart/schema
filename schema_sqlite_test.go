@@ -18,7 +18,8 @@ var _ = Describe("schema", func() {
 			// pass = ""
 			// host = ""
 			// port = ""
-			dbs = "./test.sqlite"
+			dbs = ":memory:"
+			// dbs = "./test.sqlite"
 		)
 
 		var sqlite = &testParams{
@@ -52,6 +53,9 @@ var _ = Describe("schema", func() {
 				`DROP TABLE web_resource;`,
 			},
 			DropFn: func() {
+				if dbs == ":memory:" {
+					return
+				}
 				err := os.Remove(dbs)
 				if err != nil {
 					log.Printf("os.Remove error %v", err)
