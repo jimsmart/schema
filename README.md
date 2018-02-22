@@ -6,10 +6,6 @@ schema is a [Go](https://golang.org) package providing database schema metadata 
 
 TODO
 
-See https://github.com/golang/go/issues/7408
-
-See https://github.com/golang/go/issues/7408#issuecomment-252046876
-
 The following drivers are supported and fully tested:
 
 - github.com/mattn/go-sqlite3 - SQLite
