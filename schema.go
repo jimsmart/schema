@@ -52,8 +52,7 @@ const (
 
 // dialect describes how each database 'flavour' provides its metadata.
 type dialect struct {
-	// queries for fetching database schema metadata,
-	// one per query type (tableNames, viewNames and columnTypes).
+	// queries for fetching metadata: tableNames, viewNames, columnTypes.
 	queries [3]string
 }
 
@@ -84,9 +83,8 @@ var driverDialect map[string]*dialect = map[string]*dialect{
 // TableNames returns a list of all table names in the database
 // (not including system tables).
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func TableNames(db *sql.DB) ([]string, error) {
 	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, tableNames)
@@ -95,9 +93,8 @@ func TableNames(db *sql.DB) ([]string, error) {
 // ViewNames returns a list of all view names in the database
 // (not including system views).
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func ViewNames(db *sql.DB) ([]string, error) {
 	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, viewNames)
@@ -135,28 +132,26 @@ func names(db *sql.DB, qt query) ([]string, error) {
 	return names, nil
 }
 
-// Table returns the column type information for the given table.
+// Table returns the column type metadata for the given table.
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
 }
 
-// View returns the column type information for the given view.
+// View returns the column type metadata for the given view.
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
 }
 
-// object queries the database and returns metadata about the
-// column types for a single table or view.
+// object queries the database and returns column type metadata
+// for a single table or view.
 //
 // It uses the database driver name to lookup the appropriate
 // dialect, and the passed table/view name build the query.
@@ -177,23 +172,21 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return rows.ColumnTypes()
 }
 
-// Tables returns column type information for all tables in the database
+// Tables returns column type metadata for all tables in the database
 // (not including system tables). The returned map is keyed by table name.
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	// Originally called 'Schema' in comment/proposal.
 	return objects(db, TableNames)
 }
 
-// Views returns column type information for all views in the database
-// (not including system views). The returned map is keyed by table name.
+// Views returns column type metadata for all views in the database
+// (not including system views). The returned map is keyed by view name.
 //
-// If the underlying driver does not support this feature,
-// or is not a driver recognised by this package,
-// then (nil, nil) is returned, and a log message is emitted.
+// If the underlying driver's name is not in the package registry of
+// known drivers then (nil, nil) is returned, and a log message is emitted.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	// Originally called 'Schema' in comment/proposal.
 	return objects(db, ViewNames)

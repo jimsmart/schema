@@ -33,7 +33,7 @@ If you use schema with any of these drivers, please open an issue commenting whe
 
 If your favourite driver is not featured in either of the above lists, open an issue detailing which driver you use.
 
-Pull requests welcome.
+Pull requests welcome!
 
 
 ## Installation
