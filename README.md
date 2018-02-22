@@ -14,9 +14,9 @@ The following drivers are supported and fully tested:
 
 - github.com/mattn/go-sqlite3 - SQLite
 - github.com/lib/pq - Postgres
-- github.com/go-sql-driver/mysql - MySQL
 - github.com/denisenkom/go-mssqldb - Microsoft SQL Server
 - gopkg.in/goracle.v2 - Oracle
+- github.com/go-sql-driver/mysql - MySQL
 
 An effort has been made to support the following drivers, but they are untested:
 
@@ -24,10 +24,10 @@ An effort has been made to support the following drivers, but they are untested:
 - github.com/mxk/go-sqlite - SQLite
 - github.com/jackc/pgx/stdlib - Postgres
 - github.com/jbarham/gopgsqldriver - Postgres
-- github.com/ziutek/mymysql - MySQL
 - github.com/minus5/gofreetds - Microsoft SQL Server
 - gopkg.in/rana/ora.v4 - Oracle
 - github.com/mattn/go-oci8 - Oracle
+- github.com/ziutek/mymysql - MySQL
 
 If you use schema with any of these drivers, please open an issue commenting whether it worked or not, to update this list.
 

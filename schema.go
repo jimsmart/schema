@@ -1,4 +1,35 @@
 // Package schema provides database schema metadata for database/sql drivers.
+//
+// For driver support status, see https://github.com/jimsmart/schema
+//
+// Table Metadata
+//
+// The schema package works alongside database/sql and its underlying driver to provide schema metadata.
+//
+//  tnames, err := schema.TableNames(db)
+//  	...
+//  // tnames is []string
+//  for i := range tnames {
+//  	fmt.Println("Table: %s", tnames[i])
+//  }
+//
+// Both user permissions and current database/schema effect table visibility.
+//
+//  columns, err := schema.Table(db, "employee_tbl")
+//  	...
+//  // columns is []*sql.ColumnInfo
+//  for i := range columns {
+//  	fmt.Println("Column: %s %s", columns[i].Name(), columns[i].DatabaseTypeName())
+//  }
+//
+// Underlying driver support for column type metadata varies.
+// See also https://golang.org/pkg/database/sql/#ColumnType
+//
+// To obtain metadata for all tables in a single call, use schema.Tables().
+//
+// View Metadata
+//
+// The same metadata can also be obtained for views.
 package schema
 
 import (
@@ -40,51 +71,8 @@ import (
 
 //
 
-// query defines dialect query types.
-type query int
-
-// query type enum.
-const (
-	tableNames  query = iota // Index of query to get table names.
-	viewNames                // Index of query to get view names.
-	columnTypes              // Index of query to get column type info.
-)
-
-// dialect describes how each database 'flavour' provides its metadata.
-type dialect struct {
-	// queries for fetching metadata: tableNames, viewNames, columnTypes.
-	queries [3]string
-}
-
-// driverDialect is a registry, mapping database/sql driver names to database dialects.
-// This is somewhat fragile.
-var driverDialect map[string]*dialect = map[string]*dialect{
-	"*sqlite3.SQLiteDriver":       &sqlite,   // github.com/mattn/go-sqlite3
-	"*sqlite.impl":                &sqlite,   // TODO(js) UNTESTED github.com/gwenn/gosqlite
-	"sqlite3.Driver":              &sqlite,   // TODO(js) UNTESTED github.com/mxk/go-sqlite
-	"*pq.Driver":                  &postgres, // github.com/lib/pq
-	"*stdlib.Driver":              &postgres, // TODO(js) UNTESTED github.com/jackc/pgx/stdlib
-	"*pgsqldriver.postgresDriver": &postgres, // TODO(js) UNTESTED github.com/jbarham/gopgsqldriver
-	"*mysql.MySQLDriver":          &mysql,    // github.com/go-sql-driver/mysql
-	"*godrv.Driver":               &mysql,    // TODO(js) UNTESTED github.com/ziutek/mymysql
-	"*mssql.MssqlDriver":          &mssql,    // github.com/denisenkom/go-mssqldb
-	"*freetds.MssqlDriver":        &mssql,    // TODO(js) UNTESTED github.com/minus5/gofreetds
-	"*goracle.drv":                &oracle,   // gopkg.in/goracle.v2
-	"*ora.Drv":                    &oracle,   // TODO(js) UNTESTED gopkg.in/rana/ora.v4
-	"*oci8.OCI8Driver":            &oracle,   // TODO(js) UNTESTED github.com/mattn/go-oci8
-}
-
-// TODO Should we expose a method of registering a driver string/dialect in our registry?
-// -- It would allow folk to work around the fragility. e.g.
-//
-// func Register(driver sql.Driver, d *Dialect) {}
-//
-
 // TableNames returns a list of all table names in the current database/schema
 // (not including system tables).
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
 func TableNames(db *sql.DB) ([]string, error) {
 	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, tableNames)
@@ -92,9 +80,6 @@ func TableNames(db *sql.DB) ([]string, error) {
 
 // ViewNames returns a list of all view names in the current database/schema
 // (not including system views).
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
 func ViewNames(db *sql.DB) ([]string, error) {
 	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, viewNames)
@@ -132,19 +117,13 @@ func names(db *sql.DB, qt query) ([]string, error) {
 	return names, nil
 }
 
-// Table returns the column type metadata for the given table.
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
+// Table returns the column type metadata for the given table name.
 func Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
 }
 
-// View returns the column type metadata for the given view.
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
+// View returns the column type metadata for the given view name.
 func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
@@ -174,9 +153,6 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 
 // Tables returns column type metadata for all tables in the current database/schema
 // (not including system tables). The returned map is keyed by table name.
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	// Originally called 'Schema' in comment/proposal.
 	return objects(db, TableNames)
@@ -184,9 +160,6 @@ func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 
 // Views returns column type metadata for all views in the current database/schema
 // (not including system views). The returned map is keyed by view name.
-//
-// If the underlying driver's name is not in the package registry of
-// known drivers then (nil, nil) is returned, and a log message is emitted.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	// Originally called 'Schema' in comment/proposal.
 	return objects(db, ViewNames)
