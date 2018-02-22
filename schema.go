@@ -1,6 +1,6 @@
 // Package schema provides database schema metadata for database/sql drivers.
 //
-// For driver support status, see https://github.com/jimsmart/schema
+// For further information about current driver support status, see https://github.com/jimsmart/schema
 //
 // Table Metadata
 //
@@ -15,21 +15,24 @@
 //
 // Both user permissions and current database/schema effect table visibility.
 //
-//  columns, err := schema.Table(db, "employee_tbl")
+// To query column type metadata for a single table, use schema.Table().
+//
+//  tcols, err := schema.Table(db, "employee_tbl")
 //  	...
-//  // columns is []*sql.ColumnInfo
-//  for i := range columns {
-//  	fmt.Println("Column: %s %s", columns[i].Name(), columns[i].DatabaseTypeName())
+//  // tcols is []*sql.ColumnInfo
+//  for i := range tcols {
+//  	fmt.Println("Column: %s %s", tcols[i].Name(), tcols[i].DatabaseTypeName())
 //  }
 //
-// Underlying driver support for column type metadata varies.
+// To query names and column type metadata for all tables, use schema.Tables().
+//
 // See also https://golang.org/pkg/database/sql/#ColumnType
 //
-// To obtain metadata for all tables in a single call, use schema.Tables().
+// Underlying driver support for column type metadata is somewhat variable.
 //
 // View Metadata
 //
-// The same metadata can also be obtained for views.
+// The same metadata can also be queried for views.
 package schema
 
 import (
