@@ -1,6 +1,5 @@
 # License
 The 3-Clause BSD License (BSD-3-Clause)
-
 Copyright © 2018 Jim Smart
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
