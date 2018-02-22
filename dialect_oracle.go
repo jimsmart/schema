@@ -2,7 +2,7 @@ package schema
 
 var oracle = dialect{
 	queries: [3]string{
-		// tableNames
+		// tableNames query.
 		pack(`
 			SELECT table_name
 			FROM
@@ -10,7 +10,7 @@ var oracle = dialect{
 			WHERE
 				owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
 		`),
-		// viewNames
+		// viewNames query.
 		pack(`
 			SELECT view_name
 			FROM
@@ -18,7 +18,7 @@ var oracle = dialect{
 			WHERE
 				owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
 		`),
-		// columnTypes
-		"SELECT * FROM %s WHERE 1=0",
+		// columnTypes query.
+		`SELECT * FROM %s WHERE 1=0`,
 	},
 }

@@ -2,7 +2,7 @@ package schema
 
 var sqlite = dialect{
 	queries: [3]string{
-		// tableNames
+		// tableNames query.
 		pack(`
 			SELECT name
 			FROM
@@ -10,7 +10,7 @@ var sqlite = dialect{
 			WHERE
 				type = 'table'
 		`),
-		// viewNames
+		// viewNames query.
 		pack(`
 			SELECT name
 			FROM
@@ -18,7 +18,7 @@ var sqlite = dialect{
 			WHERE
 				type = 'view'
 		`),
-		// columnTypes
-		"SELECT * FROM %s LIMIT 0",
+		// columnTypes query.
+		`SELECT * FROM %s LIMIT 0`,
 	},
 }
