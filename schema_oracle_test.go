@@ -3,7 +3,7 @@ package schema_test
 import (
 	"fmt"
 
-	_ "gopkg.in/goracle.v2"
+	// _ "gopkg.in/goracle.v2"
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
