@@ -28,7 +28,7 @@ import (
 //  View(db *sql.DB, name string) ([]*sql.ColumnType, error)
 //  Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
 //
-// If this were to be part of database/sql, the API would become:-
+// If this package were to be part of database/sql, then the API would become:-
 //
 //  func (db *DB) Table(name string) ([]*ColumnType, error)
 //  func (db *DB) TableNames() ([]string, error)
@@ -50,7 +50,7 @@ const (
 	columnTypes              // Index of query to get column type info.
 )
 
-// dialect describes how each 'flavour' of database provides its metadata.
+// dialect describes how each database 'flavour' provides its metadata.
 type dialect struct {
 	// queries for fetching database schema metadata,
 	// one per query type (tableNames, viewNames and columnTypes).
@@ -103,6 +103,11 @@ func ViewNames(db *sql.DB) ([]string, error) {
 	return names(db, viewNames)
 }
 
+// names queries the database schema metadata and returns
+// either a list of table or view names.
+//
+// It uses the database driver name and the passed query type
+// to lookup the appropriate dialect and query.
 func names(db *sql.DB, qt query) ([]string, error) {
 	// Originally called 'SchemaNames' in comment/proposal.
 	dt := fmt.Sprintf("%T", db.Driver())
@@ -150,6 +155,11 @@ func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return object(db, name)
 }
 
+// object queries the database and returns metadata about the
+// column types for a single table or view.
+//
+// It uses the database driver name to lookup the appropriate
+// dialect, and the passed table/view name build the query.
 func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Originally called 'SchemaObject' in comment/proposal.
 	dt := fmt.Sprintf("%T", db.Driver())
@@ -189,7 +199,15 @@ func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return objects(db, ViewNames)
 }
 
-func objects(db *sql.DB, nameFn func(*sql.DB) ([]string, error)) (map[string][]*sql.ColumnType, error) {
+// listFn provides a list of names from the database.
+type listFn func(*sql.DB) ([]string, error)
+
+// objects queries the database and returns metadata about the
+// column types for all tables or all views.
+//
+// It uses the passed list provider function to obtain table/view names,
+// and calls object() to fetch the column metadata for each name in the list.
+func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
 	// Originally called 'Schema' in comment/proposal.
 	names, err := nameFn(db)
 	if err != nil {
