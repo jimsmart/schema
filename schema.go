@@ -146,8 +146,8 @@ func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 // object queries the database and returns column type metadata
 // for a single table or view.
 //
-// It uses the database driver name to lookup the appropriate
-// dialect, and the passed table/view name build the query.
+// It uses the database driver name to look up the appropriate
+// dialect, and the passed table/view name to build the query.
 func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
