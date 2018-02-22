@@ -39,18 +39,18 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"strings"
 )
 
 // https://github.com/golang/go/issues/7408
 //
 // https://github.com/golang/go/issues/7408#issuecomment-252046876
 //
-// Proposed API:-
+// Last proposed API:-
 //
 //  SchemaNames(db *sql.DB) ([]string, error)
 //  SchemaObject(db *sql.DB, name string) ([]sql.ColumnType, error)
 //  Schema(db *sql.DB) (map[string][]sql.ColumnType, error)
+//
 //
 // After some refactoring, this is where it's at:-
 //
@@ -61,6 +61,7 @@ import (
 //  ViewNames(db *sql.DB) ([]string, error)
 //  View(db *sql.DB, name string) ([]*sql.ColumnType, error)
 //  Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
+//
 //
 // If this package were to be part of database/sql, then the API would become:-
 //
@@ -77,14 +78,12 @@ import (
 // TableNames returns a list of all table names in the current database/schema
 // (not including system tables).
 func TableNames(db *sql.DB) ([]string, error) {
-	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, tableNames)
 }
 
 // ViewNames returns a list of all view names in the current database/schema
 // (not including system views).
 func ViewNames(db *sql.DB) ([]string, error) {
-	// Originally called 'SchemaNames' in comment/proposal.
 	return names(db, viewNames)
 }
 
@@ -94,20 +93,23 @@ func ViewNames(db *sql.DB) ([]string, error) {
 // It uses the database driver name and the passed query type
 // to lookup the appropriate dialect and query.
 func names(db *sql.DB, qt query) ([]string, error) {
-	// Originally called 'SchemaNames' in comment/proposal.
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
 		log.Printf("unknown db driver %s\n", dt)
 		return nil, nil
 	}
+	// Run the appropriate query from dialect:
+	// this runs a query to fetch names of tables/views
+	// from tables that contain db metadata.
+	// It's different for every dialect.
 	q := d.queries[qt]
 	rows, err := db.Query(q)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
+	// Scan result into list of names.
 	var names []string
 	n := ""
 	for rows.Next() {
@@ -122,13 +124,11 @@ func names(db *sql.DB, qt query) ([]string, error) {
 
 // Table returns the column type metadata for the given table name.
 func Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
 }
 
 // View returns the column type metadata for the given view name.
 func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	// Originally called 'SchemaObject' in comment/proposal.
 	return object(db, name)
 }
 
@@ -138,13 +138,15 @@ func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 // It uses the database driver name to lookup the appropriate
 // dialect, and the passed table/view name build the query.
 func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	// Originally called 'SchemaObject' in comment/proposal.
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
 		log.Printf("unknown db driver %s\n", dt)
 		return nil, nil
 	}
+	// Build and run the appropriate query from dialect:
+	// this runs a query that returns no rows, and then
+	// picks off the column type info.
 	q := fmt.Sprintf(d.queries[columnTypes], name)
 	rows, err := db.Query(q)
 	if err != nil {
@@ -157,14 +159,12 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 // Tables returns column type metadata for all tables in the current database/schema
 // (not including system tables). The returned map is keyed by table name.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	// Originally called 'Schema' in comment/proposal.
 	return objects(db, TableNames)
 }
 
 // Views returns column type metadata for all views in the current database/schema
 // (not including system views). The returned map is keyed by view name.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	// Originally called 'Schema' in comment/proposal.
 	return objects(db, ViewNames)
 }
 
@@ -177,7 +177,6 @@ type listFn func(*sql.DB) ([]string, error)
 // It uses the passed list provider function to obtain table/view names,
 // and calls object() to fetch the column metadata for each name in the list.
 func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
-	// Originally called 'Schema' in comment/proposal.
 	names, err := nameFn(db)
 	if err != nil {
 		return nil, err
@@ -191,9 +190,4 @@ func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
 		m[n] = ci
 	}
 	return m, nil
-}
-
-// pack a string, normalising its whitespace.
-func pack(s string) string {
-	return strings.Join(strings.Fields(s), " ")
 }

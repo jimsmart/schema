@@ -1,5 +1,7 @@
 package schema
 
+import "strings"
+
 // query defines dialect query types.
 type query int
 
@@ -39,3 +41,8 @@ var driverDialect map[string]*dialect = map[string]*dialect{
 //
 // func Register(driver sql.Driver, d *Dialect) {}
 //
+
+// pack a string, normalising its whitespace.
+func pack(s string) string {
+	return strings.Join(strings.Fields(s), " ")
+}
