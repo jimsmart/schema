@@ -2,7 +2,7 @@
 
 [![Godoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/jimsmart/schema)
 
-schema is a [Go](https://golang.org) package providing database/sql schema metadata.
+schema is a [Go](https://golang.org) package providing database schema metadata for database/sql drivers.
 
 TODO
 
@@ -10,7 +10,7 @@ See https://github.com/golang/go/issues/7408
 
 See https://github.com/golang/go/issues/7408#issuecomment-252046876
 
-The following drivers are supported and tested:
+The following drivers are supported and fully tested:
 
 - github.com/mattn/go-sqlite3 - SQLite
 - github.com/lib/pq - Postgres
@@ -18,7 +18,7 @@ The following drivers are supported and tested:
 - github.com/denisenkom/go-mssqldb - Microsoft SQL Server
 - gopkg.in/goracle.v2 - Oracle
 
-An effort has been made to support these drivers, but they are untested:
+An effort has been made to support the following drivers, but they are untested:
 
 - github.com/gwenn/gosqlite - SQLite
 - github.com/mxk/go-sqlite - SQLite
@@ -29,9 +29,11 @@ An effort has been made to support these drivers, but they are untested:
 - gopkg.in/rana/ora.v4 - Oracle
 - github.com/mattn/go-oci8 - Oracle
 
-If you use schema with any of these drivers, please open an issue commenting if it worked successfully or not, to update this list.
+If you use schema with any of these drivers, please open an issue commenting whether it worked or not, to update this list.
 
-If your favourite driver is not featured in either of the above lists, open an issue detailing which driver you use. Pull requests welcome.
+If your favourite driver is not featured in either of the above lists, open an issue detailing which driver you use.
+
+Pull requests welcome.
 
 
 ## Installation

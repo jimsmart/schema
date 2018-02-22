@@ -1,4 +1,4 @@
-// Package schema provides database/sql schema metadata.
+// Package schema provides database schema metadata for database/sql drivers.
 package schema
 
 import (
@@ -9,50 +9,56 @@ import (
 )
 
 // https://github.com/golang/go/issues/7408
-
+//
 // https://github.com/golang/go/issues/7408#issuecomment-252046876
 //
 // Proposed API:-
 //
-// SchemaNames(db *sql.DB) ([]string, error)
-// SchemaObject(db *sql.DB, name string) ([]sql.ColumnType, error)
-// Schema(db *sql.DB) (map[string][]sql.ColumnType, error)
-
+//  SchemaNames(db *sql.DB) ([]string, error)
+//  SchemaObject(db *sql.DB, name string) ([]sql.ColumnType, error)
+//  Schema(db *sql.DB) (map[string][]sql.ColumnType, error)
+//
+// After some refactoring, this is where it's at:-
+//
+//  TableNames(db *sql.DB) ([]string, error)
+//  Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
+//  Tables(db *sql.DB) (map[string][]*sql.ColumnType, error)
+//
+//  ViewNames(db *sql.DB) ([]string, error)
+//  View(db *sql.DB, name string) ([]*sql.ColumnType, error)
+//  Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
+//
+// If this were to be part of database/sql, the API would become:-
+//
+//  func (db *DB) Table(name string) ([]*ColumnType, error)
+//  func (db *DB) TableNames() ([]string, error)
+//  func (db *DB) Tables() (map[string][]*ColumnType, error)
+//  func (db *DB) View(name string) ([]*ColumnType, error)
+//  func (db *DB) ViewNames() ([]string, error)
+//  func (db *DB) Views() (map[string][]*ColumnType, error)
 //
 
-// Arguably, what I've implemented thus far could be better named:
 //
-// TableNames(db *sql.DB) ([]string, error)
-// Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
-// Tables(db *sql.DB) (map[string][]*sql.ColumnType, error)
-//
-// This could easily lead on the same for views, or passing a 'type' param to more generic methods:
-//
-// ViewNames(db *sql.DB) ([]string, error)
-// View(db *sql.DB, name string) ([]*sql.ColumnType, error)
-// Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
-//
-// ...and what about indexes? The issue here is that we don't have a pre-existing struct to return data in.
-//
-// IndexNames(db *sql.DB) ([]string, error)
-// Index(db *sql.DB, name string) ([]*sql.IndexInfo?, error)
-// Indexes(db *sql.DB) (map[string][]*sql.IndexInfo?, error)
 
 // query defines dialect query types.
 type query int
 
+// query type enum.
 const (
-	tableNames query = iota
-	viewNames
-	columnTypes
+	tableNames  query = iota // Index of query to get table names.
+	viewNames                // Index of query to get view names.
+	columnTypes              // Index of query to get column type info.
 )
 
-// dialect consists of three queries for each database flavour.
+// dialect describes how each 'flavour' of database provides its metadata.
 type dialect struct {
+	// queries for fetching database schema metadata,
+	// one per query type (tableNames, viewNames and columnTypes).
 	queries [3]string
 }
 
-// driverDialect maps database/sql driver names to database dialects.
+// driverDialect is a registry, mapping database/sql driver names to database dialects.
+// This is somewhat fragile.
 var driverDialect map[string]*dialect = map[string]*dialect{
 	"*sqlite3.SQLiteDriver":       &sqlite,   // github.com/mattn/go-sqlite3
 	"*sqlite.impl":                &sqlite,   // TODO(js) UNTESTED github.com/gwenn/gosqlite
@@ -68,6 +74,12 @@ var driverDialect map[string]*dialect = map[string]*dialect{
 	"*ora.Drv":                    &oracle,   // TODO(js) UNTESTED gopkg.in/rana/ora.v4
 	"*oci8.OCI8Driver":            &oracle,   // TODO(js) UNTESTED github.com/mattn/go-oci8
 }
+
+// TODO Should we expose a method of registering a driver string/dialect in our registry?
+// -- It would allow folk to work around the fragility. e.g.
+//
+// func Register(driver sql.Driver, d *Dialect) {}
+//
 
 // TableNames returns a list of all table names in the database
 // (not including system tables).
