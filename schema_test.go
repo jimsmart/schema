@@ -63,7 +63,7 @@ func SchemaTestRunner(params *testParams) {
 	}
 
 	Describe("Table", func() {
-		It("should return the column type info", func() {
+		It("should return the column type info for an existing table", func() {
 			db, done := setup()
 			defer done()
 			ci, err := schema.Table(db, "web_resource")
@@ -74,6 +74,12 @@ func SchemaTestRunner(params *testParams) {
 				list = append(list, c.Name()+" "+c.DatabaseTypeName())
 			}
 			Expect(list).To(Equal(params.TableExpRes))
+		})
+		It("should return an error for a non-existing table", func() {
+			db, done := setup()
+			defer done()
+			_, err := schema.Table(db, "XXX-NO-SUCH-TABLE-XXX")
+			Expect(err).ToNot(BeNil())
 		})
 	})
 
