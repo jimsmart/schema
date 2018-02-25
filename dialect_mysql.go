@@ -2,6 +2,8 @@ package schema
 
 var mysql = dialect{
 	queries: [3]string{
+		// columnTypes query.
+		`SELECT * FROM %s LIMIT 0`,
 		// tableNames query.
 		pack(`
 			SELECT table_name
@@ -20,7 +22,5 @@ var mysql = dialect{
 				table_type = 'VIEW' AND
 				table_schema = database()
 		`),
-		// columnTypes query.
-		`SELECT * FROM %s LIMIT 0`,
 	},
 }

@@ -2,6 +2,8 @@ package schema
 
 var sqlite = dialect{
 	queries: [3]string{
+		// columnTypes query.
+		`SELECT * FROM %s LIMIT 0`,
 		// tableNames query.
 		pack(`
 			SELECT name
@@ -18,7 +20,5 @@ var sqlite = dialect{
 			WHERE
 				type = 'view'
 		`),
-		// columnTypes query.
-		`SELECT * FROM %s LIMIT 0`,
 	},
 }

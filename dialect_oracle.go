@@ -2,6 +2,8 @@ package schema
 
 var oracle = dialect{
 	queries: [3]string{
+		// columnTypes query.
+		`SELECT * FROM %s WHERE 1=0`,
 		// tableNames query.
 		pack(`
 			SELECT table_name
@@ -18,7 +20,5 @@ var oracle = dialect{
 			WHERE
 				owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
 		`),
-		// columnTypes query.
-		`SELECT * FROM %s WHERE 1=0`,
 	},
 }

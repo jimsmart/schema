@@ -4,6 +4,8 @@ package schema
 
 var mssql = dialect{
 	queries: [3]string{
+		// columnTypes query.
+		`SELECT * FROM %s WHERE 1=0`,
 		// tableNames query.
 		pack(`
 			SELECT T.name as name
@@ -28,7 +30,5 @@ var mssql = dialect{
 				(EP.class_desc IS NULL OR (EP.class_desc <> 'OBJECT_OR_COLUMN' AND
 				EP.[name] <> 'microsoft_database_tools_support'))
 		`),
-		// columnTypes query.
-		`SELECT * FROM %s WHERE 1=0`,
 	},
 }

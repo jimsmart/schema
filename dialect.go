@@ -7,9 +7,9 @@ type query int
 
 // query type enum.
 const (
-	tableNames  query = iota // Index of query to get table names.
+	columnTypes query = iota // Index of query to get column type info.
+	tableNames               // Index of query to get table names.
 	viewNames                // Index of query to get view names.
-	columnTypes              // Index of query to get column type info.
 )
 
 // dialect describes how each database 'flavour' provides its metadata.
