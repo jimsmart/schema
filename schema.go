@@ -192,6 +192,9 @@ func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(names) == 0 {
+		return nil, nil
+	}
 	m := make(map[string][]*sql.ColumnType, len(names))
 	for _, n := range names {
 		ci, err := object(db, n)

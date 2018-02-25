@@ -2,6 +2,7 @@ package schema_test
 
 import (
 	"database/sql"
+	"database/sql/driver"
 	"log"
 	"strings"
 
@@ -150,6 +151,45 @@ func SchemaTestRunner(params *testParams) {
 		})
 	})
 
+}
+
+var _ = Describe("schema", func() {
+	Context("using a fake db driver", func() {
+		sql.Register("fakedb", fakeDb{})
+		db, _ := sql.Open("fakedb", "")
+
+		It("should return nils for every method", func() {
+			ci, err := schema.Table(db, "web_resource")
+			Expect(ci).To(BeNil())
+			Expect(err).To(BeNil())
+
+			tn, err := schema.TableNames(db)
+			Expect(tn).To(BeNil())
+			Expect(err).To(BeNil())
+
+			ta, err := schema.Tables(db)
+			Expect(ta).To(BeNil())
+			Expect(err).To(BeNil())
+
+			ci, err = schema.View(db, "web_resource")
+			Expect(ci).To(BeNil())
+			Expect(err).To(BeNil())
+
+			vn, err := schema.ViewNames(db)
+			Expect(vn).To(BeNil())
+			Expect(err).To(BeNil())
+
+			vw, err := schema.Views(db)
+			Expect(vw).To(BeNil())
+			Expect(err).To(BeNil())
+		})
+	})
+})
+
+type fakeDb struct{}
+
+func (_ fakeDb) Open(name string) (driver.Conn, error) {
+	return nil, nil
 }
 
 // pack a string, normalising its whitespace.
