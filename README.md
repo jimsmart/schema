@@ -18,7 +18,7 @@ An effort has been made to support the following drivers, but they are currently
 
 - github.com/gwenn/gosqlite - SQLite
 - github.com/mxk/go-sqlite - SQLite
-- github.com/jackc/pgx/stdlib - Postgres
+- github.com/jackc/pgx - Postgres
 - github.com/jbarham/gopgsqldriver - Postgres
 - github.com/minus5/gofreetds - Microsoft SQL Server
 - gopkg.in/rana/ora.v4 - Oracle
