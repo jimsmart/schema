@@ -6,6 +6,14 @@ schema is a [Go](https://golang.org) package providing database schema metadata 
 
 TODO more docs
 
+Currently supporting the following database engines / SQL dialects:
+
+- SQLite
+- Postgres
+- Microsoft SQL Server
+- Oracle
+- MySQL
+
 The following drivers are supported and fully tested:
 
 - github.com/mattn/go-sqlite3 - SQLite
@@ -27,7 +35,7 @@ An effort has been made to support the following drivers, but they are currently
 
 If you use the schema package with any of these drivers, please open an issue commenting whether it worked or not, to keep this list up-to-date.
 
-If your favourite driver is not featured in either of the above lists, open an issue detailing which driver you use.
+If your favourite driver or database is not featured in either of the above lists, open an issue providing further details.
 
 Pull requests welcome!
 
