@@ -1,4 +1,4 @@
-// Package schema provides access to database schema metadata (for database/sql drivers).
+// Package schema provides access to database schema metadata, for database/sql drivers.
 //
 // For further information about current driver support status, see https://github.com/jimsmart/schema
 //
