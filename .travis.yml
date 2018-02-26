@@ -16,7 +16,7 @@ before_install:
   - sudo mysql_upgrade
   - sudo service mysql restart
   - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT all ON test_db.* TO 'test_user';"
-  - go get -t -v ./...
+#  - go get -t -v ./...
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
 after_success:
