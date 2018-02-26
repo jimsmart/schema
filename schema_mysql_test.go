@@ -12,19 +12,20 @@ import (
 
 // Setup script:
 //
-// create database test_db;
-// create user test_user identified by 'password';
-// grant all on test_db.* to 'test_user';
+// CREATE DATABASE test_db;
+// CREATE USER test_user IDENTIFIED BY 'password';
+// GRANT all ON test_db.* TO 'test_user';
 
-var _ = XDescribe("schema", func() {
+var _ = Describe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {
 
 		const (
 			user = "test_user"
 			pass = "password"
 			host = "localhost"
-			port = "32769"
-			dbs  = "test_db"
+			port = "3306"
+			// port = "32769"
+			dbs = "test_db"
 		)
 
 		var mysql = &testParams{

@@ -10,14 +10,22 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
+// Setup script:
+//
+// CREATE LOGIN test_user WITH PASSWORD = 'Password-123';
+// CREATE USER test_user FOR LOGIN test_user;
+// CREATE SCHEMA test_db AUTHORIZATION test_user;
+// ALTER USER test_user WITH default_schema = test_db;
+// EXEC sp_addrolemember db_ddladmin, test_user;
+
 var _ = XDescribe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
 
 		const (
 			user = "test_user"
-			pass = "aNRV!^5-WCe4hz$3"
+			pass = "Password-123"
 			host = "localhost"
-			port = "32769"
+			port = "32772"
 		)
 
 		var mssql = &testParams{
@@ -42,7 +50,10 @@ var _ = XDescribe("schema", func() {
 				`CREATE INDEX idx_web_resource_url ON web_resource(url)`,
 				`CREATE INDEX idx_web_resource_created_at ON web_resource (created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource (modified_at)`,
-				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`, // TODO gofreetds barfs on this!?
+				// `CREATE VIEW web_resource_view AS SELECT t.id, t.url FROM web_resource t`,
+				// `CREATE VIEW web_resource_view AS (SELECT id, url FROM web_resource)`,
+				// `CREATE VIEW web_resource_view AS (SELECT t.id, t.url FROM web_resource t)`,
 			},
 			DropDDL: []string{
 				`DROP VIEW IF EXISTS web_resource_view`,
