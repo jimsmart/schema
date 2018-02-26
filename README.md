@@ -30,7 +30,7 @@ The following drivers are 'supported', but with issues:
 - github.com/jbarham/gopgsqldriver - Postgres - Driver provides no datatype information for columns.
 - github.com/minus5/gofreetds - Microsoft SQL Server - Driver provides no datatype information for columns. Driver error during test when attempting to CREATE VIEW.
 - gopkg.in/rana/ora.v4 - Oracle - Driver provides datatypes that do not match types used in create DDL (e.g. NVARCHAR2 becomes VARCHAR2).
-- github.com/mattn/go-oci8 - Oracle - Driver provides datatypes that do not match types used in create DDL (e.g. SQLT_CHR - incomplete implementation?).
+- github.com/mattn/go-oci8 - Oracle - Driver provides datatypes that do not match types used in create DDL (e.g. NVARCHAR2 becomes SQLT_CHR - incomplete implementation?).
 - github.com/ziutek/mymysql - MySQL - Driver provides no datatype information for columns.
 
 
