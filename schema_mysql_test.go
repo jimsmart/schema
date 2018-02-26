@@ -37,7 +37,7 @@ var _ = Describe("schema", func() {
 			CreateDDL: []string{`
 				CREATE TABLE IF NOT EXISTS web_resource (
 					id				INTEGER NOT NULL,
-					url				VARCHAR(1024) NOT NULL UNIQUE,
+					url				VARCHAR(255) NOT NULL UNIQUE, -- TODO(js) Earlier MySQL cannot handle UNIQUE with 1024 length.
 					content			BLOB,
 					compressed_size	INTEGER NOT NULL,
 					content_length	INTEGER NOT NULL,
