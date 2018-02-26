@@ -5,7 +5,6 @@ go:
 dist: trusty
 sudo: required
 addons:
-  postgresql: "9.4"
   apt:
     sources:
       - mysql-5.7-trusty
