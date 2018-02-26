@@ -11,6 +11,8 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
+// No setup needed, default database and schema are empty on Postgres.
+
 var _ = Describe("schema", func() {
 	Context("using github.com/lib/pq (Postgres)", func() {
 
