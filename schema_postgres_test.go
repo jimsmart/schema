@@ -27,7 +27,7 @@ var _ = Describe("schema", func() {
 			ConnStr: fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port),
 
 			CreateDDL: []string{`
-				CREATE TABLE IF NOT EXISTS web_resource (
+				CREATE TABLE web_resource (
 					id				INTEGER NOT NULL,
 					url				TEXT NOT NULL UNIQUE,
 					content			BYTEA,
@@ -40,17 +40,17 @@ var _ = Describe("schema", func() {
 					modified_at		TIMESTAMP,
 					PRIMARY KEY (id)
 				)`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_url ON web_resource(url)`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_created_at ON web_resource(created_at)`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_modified_at ON web_resource(modified_at)`,
+				`CREATE INDEX idx_web_resource_url ON web_resource(url)`,
+				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
+				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
 			},
 			DropDDL: []string{
-				`DROP VIEW IF EXISTS web_resource_view`,
-				`DROP INDEX IF EXISTS idx_web_resource_modified_at`,
-				`DROP INDEX IF EXISTS idx_web_resource_created_at`,
-				`DROP INDEX IF EXISTS idx_web_resource_url`,
-				`DROP TABLE IF EXISTS web_resource`,
+				`DROP VIEW web_resource_view`,
+				`DROP INDEX idx_web_resource_modified_at`,
+				`DROP INDEX idx_web_resource_created_at`,
+				`DROP INDEX idx_web_resource_url`,
+				`DROP TABLE web_resource`,
 			},
 
 			TableExpRes: []string{
