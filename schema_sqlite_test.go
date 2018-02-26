@@ -4,7 +4,9 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" // sqlite3
+	// _ "github.com/gwenn/gosqlite" // sqlite3
+	// _ "github.com/mxk/go-sqlite/sqlite3" // sqlite3
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
@@ -39,18 +41,18 @@ var _ = Describe("schema", func() {
 					created_at		DATETIME NOT NULL,
 					modified_at		DATETIME,
 					PRIMARY KEY (id)
-				);`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_url ON web_resource(url);`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_created_at ON web_resource(created_at);`,
-				`CREATE INDEX IF NOT EXISTS idx_web_resource_modified_at ON web_resource(modified_at);`,
-				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource;`,
+				)`,
+				`CREATE INDEX IF NOT EXISTS idx_web_resource_url ON web_resource(url)`,
+				`CREATE INDEX IF NOT EXISTS idx_web_resource_created_at ON web_resource(created_at)`,
+				`CREATE INDEX IF NOT EXISTS idx_web_resource_modified_at ON web_resource(modified_at)`,
+				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
 			},
 			DropDDL: []string{
-				`DROP VIEW web_resource_view;`,
-				`DROP INDEX idx_web_resource_modified_at;`,
-				`DROP INDEX idx_web_resource_created_at;`,
-				`DROP INDEX idx_web_resource_url;`,
-				`DROP TABLE web_resource;`,
+				`DROP VIEW web_resource_view`,
+				`DROP INDEX idx_web_resource_modified_at`,
+				`DROP INDEX idx_web_resource_created_at`,
+				`DROP INDEX idx_web_resource_url`,
+				`DROP TABLE web_resource`,
 			},
 			DropFn: func() {
 				if dbs == ":memory:" {

@@ -3,7 +3,9 @@ package schema_test
 import (
 	"fmt"
 
-	// _ "gopkg.in/goracle.v2"
+	// _ "gopkg.in/goracle.v2" // goracle
+	// _ "github.com/mattn/go-oci8" // oci8
+	// _ "gopkg.in/rana/ora.v4" // ora
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
@@ -16,13 +18,15 @@ var _ = XDescribe("schema", func() {
 			user = "test_user"
 			pass = "password"
 			host = "localhost"
-			port = "32786"
+			port = "32772"
 			dbs  = "xe"
 		)
 
 		var oracle = &testParams{
 			DriverName: "goracle",
-			ConnStr:    fmt.Sprintf("%s/%s@%s:%s/%s", user, pass, host, port, dbs),
+			// DriverName: "oci8",
+			// DriverName: "ora",
+			ConnStr: fmt.Sprintf("%s/%s@%s:%s/%s", user, pass, host, port, dbs),
 
 			CreateDDL: []string{`
 				CREATE TABLE web_resource (

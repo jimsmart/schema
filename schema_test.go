@@ -39,7 +39,7 @@ func SchemaTestRunner(params *testParams) {
 			_, err = db.Exec(ddl)
 			if err != nil {
 				// log.Fatalf("db.Exec (create) error %v", err)
-				log.Printf("db.Exec (create) error %v", err)
+				log.Printf("db.Exec (create) error %v exec %s", err, ddl)
 			}
 		}
 
@@ -48,7 +48,7 @@ func SchemaTestRunner(params *testParams) {
 				_, err = db.Exec(ddl)
 				if err != nil {
 					// log.Fatalf("db.Exec (drop) error %v", err)
-					log.Printf("db.Exec (drop) error %v", err)
+					log.Printf("db.Exec (drop) error %v exec %s", err, ddl)
 				}
 			}
 			err = db.Close()

@@ -3,11 +3,18 @@ package schema_test
 import (
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // mysql
+	// _ "github.com/ziutek/mymysql/godrv" // mymysql
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
 )
+
+// Setup script:
+//
+// create database test_db;
+// create user test_user identified by 'password';
+// grant all on test_db.* to 'test_user';
 
 var _ = XDescribe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {
@@ -16,13 +23,15 @@ var _ = XDescribe("schema", func() {
 			user = "test_user"
 			pass = "password"
 			host = "localhost"
-			port = "32778"
+			port = "32769"
 			dbs  = "test_db"
 		)
 
 		var mysql = &testParams{
 			DriverName: "mysql",
-			ConnStr:    fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbs),
+			// DriverName: "mymysql",
+			ConnStr: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbs), // mysql
+			// ConnStr: fmt.Sprintf("tcp:%s:%s*%s/%s/%s", host, port, dbs, user, pass), // mymysql
 
 			CreateDDL: []string{`
 				CREATE TABLE IF NOT EXISTS web_resource (
@@ -40,12 +49,12 @@ var _ = XDescribe("schema", func() {
 					INDEX (url),
 					INDEX (created_at),
 					INDEX (modified_at)
-				);`,
-				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource;`,
+				)`,
+				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
 			},
 			DropDDL: []string{
-				`DROP VIEW web_resource_view;`,
-				`DROP TABLE web_resource;`,
+				`DROP VIEW web_resource_view`,
+				`DROP TABLE web_resource`,
 			},
 
 			TableExpRes: []string{
