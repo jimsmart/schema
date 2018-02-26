@@ -14,9 +14,9 @@ import (
 //
 // CREATE DATABASE test_db;
 // CREATE USER test_user IDENTIFIED BY 'password';
-// GRANT all ON test_db.* TO 'test_user';
+// GRANT ALL ON test_db.* TO 'test_user';
 
-var _ = Describe("schema", func() {
+var _ = XDescribe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {
 
 		const (

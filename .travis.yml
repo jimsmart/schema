@@ -1,6 +1,11 @@
+language: go
+go:
+  - "1.10.x"
+
 dist: trusty
 sudo: required
 addons:
+  postgresql: "9.4"
   apt:
     sources:
       - mysql-5.7-trusty
@@ -8,15 +13,14 @@ addons:
       - mysql-server
 services:
   - mysql
-#  - postgresql
-language: go
-go:
-  - "1.10.x"
+  - postgresql
+
 before_install:
 #  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
   - sudo mysql_upgrade
   - sudo service mysql restart
-  - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT all ON test_db.* TO 'test_user';"
+  - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT ALL ON test_db.* TO 'test_user';"
+#  - psql -c 'create database travis_ci_test;' -U postgres
   - go get -t -v ./...
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic

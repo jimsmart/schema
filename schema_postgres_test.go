@@ -11,21 +11,20 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
-var _ = XDescribe("schema", func() {
+var _ = Describe("schema", func() {
 	Context("using github.com/lib/pq (Postgres)", func() {
 
 		const (
 			user = "postgres"
-			// pass = ""
 			host = "localhost"
-			port = "32770"
-			dbs  = "postgres"
+			// port = "32774"
+			port = "5432"
 		)
 
 		var postgres = &testParams{
 			DriverName: "postgres",
 			// DriverName: "pgx",
-			ConnStr: fmt.Sprintf("user=%s host=%s port=%s dbname=%s sslmode=disable", user, host, port, dbs),
+			ConnStr: fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port),
 
 			CreateDDL: []string{`
 				CREATE TABLE IF NOT EXISTS web_resource (
