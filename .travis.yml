@@ -6,7 +6,7 @@ addons:
       - mysql-5.7-trusty
     packages:
       - mysql-server
-      - mysql-clientlanguage: go
+#      - mysql-clientlanguage: go
 services:
   - mysql
 #  - postgresql
