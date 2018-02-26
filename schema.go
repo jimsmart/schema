@@ -86,13 +86,13 @@ import (
 
 //
 
-// TableNames returns a list of all table names in the current database/schema
+// TableNames returns a list of all table names in the current schema
 // (not including system tables).
 func TableNames(db *sql.DB) ([]string, error) {
 	return names(db, tableNames)
 }
 
-// ViewNames returns a list of all view names in the current database/schema
+// ViewNames returns a list of all view names in the current schema
 // (not including system views).
 func ViewNames(db *sql.DB) ([]string, error) {
 	return names(db, viewNames)
@@ -167,13 +167,13 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return rows.ColumnTypes()
 }
 
-// Tables returns column type metadata for all tables in the current database/schema
+// Tables returns column type metadata for all tables in the current schema
 // (not including system tables). The returned map is keyed by table name.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return objects(db, TableNames)
 }
 
-// Views returns column type metadata for all views in the current database/schema
+// Views returns column type metadata for all views in the current schema
 // (not including system views). The returned map is keyed by view name.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return objects(db, ViewNames)
