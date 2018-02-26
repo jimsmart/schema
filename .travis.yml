@@ -6,16 +6,15 @@ addons:
       - mysql-5.7-trusty
     packages:
       - mysql-server
-#      - mysql-clientlanguage: go
 services:
   - mysql
 #  - postgresql
 go:
   - "1.10.x"
 before_install:
-  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-  - sudo mysql_upgrade
-  - sudo service mysql restart
+#  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+#  - sudo mysql_upgrade
+#  - sudo service mysql restart
   - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT all ON test_db.* TO 'test_user';"
   - go get -t -v ./...
 script:
