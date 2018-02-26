@@ -1,10 +1,11 @@
 language: go
 go:
   - 1.9.x
-#services:
-#  - mysql
+services:
+  - mysql
 #  - postgresql
 before_install:
+  - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT all ON test_db.* TO 'test_user';"
   - go get -t -v ./...
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
