@@ -19,6 +19,8 @@ Currently supporting the following database engines / SQL dialects:
 - Oracle
 - MySQL
 
+TODO driver capability testing is in the process of being moved to a separate package, [drivercaps](https://github.com/jimsmart/drivercaps)
+
 The following drivers are supported and pass all tests:
 
 - github.com/mattn/go-sqlite3 - SQLite
@@ -42,8 +44,6 @@ The following drivers are 'supported', but with issues:
 If your favourite driver or database is not featured in either of the above lists, open an issue providing further details.
 
 Pull requests welcome!
-
-TODO driver capability testing is in the process of being moved to a separate package, see [github.com/jimsmart/drivercaps](https://github.com/jimsmart/drivercaps)
 
 ## Installation
 ```bash
