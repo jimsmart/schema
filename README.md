@@ -43,6 +43,7 @@ If your favourite driver or database is not featured in either of the above list
 
 Pull requests welcome!
 
+TODO driver capability testing is in the process of being moved to a separate package, see [github.com/jimsmart/drivercaps](https://github.com/jimsmart/drivercaps)
 
 ## Installation
 ```bash
