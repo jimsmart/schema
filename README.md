@@ -21,30 +21,6 @@ Currently supporting the following database engines / SQL dialects:
 
 TODO driver capability testing is in the process of being moved to a separate package, [drivercaps](https://github.com/jimsmart/drivercaps)
 
-The following drivers are supported and pass all tests:
-
-- github.com/mattn/go-sqlite3 - SQLite
-- github.com/gwenn/gosqlite - SQLite
-- github.com/jackc/pgx - Postgres
-- github.com/lib/pq - Postgres
-- github.com/denisenkom/go-mssqldb - Microsoft SQL Server
-- gopkg.in/goracle.v2 - Oracle
-- github.com/go-sql-driver/mysql - MySQL
-
-The following drivers are 'supported', but with issues:
-
-- github.com/mxk/go-sqlite/sqlite3 - SQLite - Driver provides no datatype information for columns.
-- github.com/jbarham/gopgsqldriver - Postgres - Driver provides no datatype information for columns.
-- github.com/minus5/gofreetds - Microsoft SQL Server - Driver provides no datatype information for columns. Driver error during test when attempting to CREATE VIEW.
-- gopkg.in/rana/ora.v4 - Oracle - Driver provides datatypes that do not match types used in create DDL (e.g. NVARCHAR2 becomes VARCHAR2).
-- github.com/mattn/go-oci8 - Oracle - Driver provides datatypes that do not match types used in create DDL (e.g. NVARCHAR2 becomes SQLT_CHR - incomplete implementation?).
-- github.com/ziutek/mymysql - MySQL - Driver provides no datatype information for columns.
-
-
-If your favourite driver or database is not featured in either of the above lists, open an issue providing further details.
-
-Pull requests welcome!
-
 ## Installation
 ```bash
 $ go get github.com/jimsmart/schema
