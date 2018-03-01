@@ -32,7 +32,7 @@ import "github.com/jimsmart/schema"
 
 ### Dependencies
 
-- A supported database driver.
+- A [supported](https://github.com/jimsmart/drivercaps) database driver.
 - Standard library.
 - [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) if you wish to run the tests.
 - Tests also require various database drivers to be installed and configured.
