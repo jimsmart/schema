@@ -13,13 +13,13 @@ TODO more docs
 
 Currently supporting the following database engines / SQL dialects:
 
-- SQLite
-- Postgres
 - Microsoft SQL Server
-- Oracle
 - MySQL
+- Oracle
+- Postgres
+- SQLite
 
-TODO driver capability testing is in the process of being moved to a separate package, [drivercaps](https://github.com/jimsmart/drivercaps)
+For a list of supported drivers, and their capabilities with regards to sql.ColumnType support, see [drivercaps](https://github.com/jimsmart/drivercaps)
 
 ## Installation
 ```bash
@@ -32,7 +32,7 @@ import "github.com/jimsmart/schema"
 
 ### Dependencies
 
-- Some supported database driver from above lists.
+- A supported database driver.
 - Standard library.
 - [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) if you wish to run the tests.
 - Tests also require various database drivers to be installed and configured.
