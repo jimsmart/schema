@@ -10,7 +10,7 @@
 //  	...
 //  // tnames is []string
 //  for i := range tnames {
-//  	fmt.Println("Table: %s", tnames[i])
+//  	fmt.Printf("Table: %s\n", tnames[i])
 //  }
 //
 //  // Output:
@@ -26,7 +26,7 @@
 //  	...
 //  // tcols is []*sql.ColumnInfo
 //  for i := range tcols {
-//  	fmt.Println("Column: %s %s", tcols[i].Name(), tcols[i].DatabaseTypeName())
+//  	fmt.Printf("Column: %s %s\n", tcols[i].Name(), tcols[i].DatabaseTypeName())
 //  }
 //
 //  // Output:
