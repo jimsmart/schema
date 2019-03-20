@@ -29,11 +29,11 @@ var driverDialect map[string]*dialect = map[string]*dialect{
 	"*pgsqldriver.postgresDriver": &postgres, // github.com/jbarham/gopgsqldriver - TODO(js) No datatypes.
 	"*mysql.MySQLDriver":          &mysql,    // github.com/go-sql-driver/mysql
 	"*godrv.Driver":               &mysql,    // github.com/ziutek/mymysql - TODO(js) No datatypes.
-	"*mssql.MssqlDriver":          &mssql,    // github.com/denisenkom/go-mssqldb
+	"*mssql.Driver":               &mssql,    // github.com/denisenkom/go-mssqldb
 	"*freetds.MssqlDriver":        &mssql,    // github.com/minus5/gofreetds - TODO(js) No datatypes. Error on create view.
 	"*goracle.drv":                &oracle,   // gopkg.in/goracle.v2
 	"*ora.Drv":                    &oracle,   // gopkg.in/rana/ora.v4 - TODO(js) Mismatched datatypes.
-	"*oci8.OCI8Driver":            &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
+	"*oci8.OCI8DriverStruct":      &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
 }
 
 // TODO Should we expose a method of registering a driver string/dialect in our registry?
