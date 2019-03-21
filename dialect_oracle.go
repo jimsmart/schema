@@ -10,9 +10,15 @@ var oracle = dialect{
 		pack(`
 			SELECT table_name
 			FROM
-				all_tables
+				table_privileges
 			WHERE
-				owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
+				grantee IN (SELECT sys_context('userenv', 'current_schema') from dual) 
+				AND
+				select_priv='Y'
+			UNION
+			SELECT table_name
+			FROM
+				user_tables
 		`),
 		// viewNames query.
 		pack(`
