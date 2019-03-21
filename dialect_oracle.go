@@ -8,7 +8,7 @@ var oracle = dialect{
 		`SELECT * FROM %s WHERE 1=0`,
 		// tableNames query.
 		pack(`
-			SELECT table_name
+			SELECT owner || '.' || table_name
 			FROM
 				table_privileges
 			WHERE
