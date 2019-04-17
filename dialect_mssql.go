@@ -8,7 +8,7 @@ var mssql = dialect{
 		`SELECT * FROM %s WHERE 1=0`,
 		// tableNames query.
 		pack(`
-			SELECT T.name as name
+			SELECT CONCAT(S.name, '.', T.name) as name
 			FROM
 				sys.tables AS T
 				INNER JOIN sys.schemas AS S ON S.schema_id = T.schema_id
