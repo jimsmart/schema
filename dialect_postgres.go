@@ -6,7 +6,7 @@ var postgres = dialect{
 		`SELECT * FROM %s LIMIT 0`,
 		// tableNames query.
 		pack(`
-			SELECT table_name
+			SELECT table_schema||'.'||table_name
 			FROM
 				information_schema.tables
 			WHERE
