@@ -24,7 +24,7 @@
 //
 //  tcols, err := schema.Table(db, "employee_tbl")
 //  	...
-//  // tcols is []*sql.ColumnInfo
+//  // tcols is []*sql.ColumnType
 //  for i := range tcols {
 //  	fmt.Printf("Column: %s %s\n", tcols[i].Name(), tcols[i].DatabaseTypeName())
 //  }
