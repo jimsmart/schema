@@ -60,3 +60,8 @@ $ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 ## License
 
 Package schema is copyright 2018 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
+
+## History
+
+- 2019-11-04: Fix for renamed driver struct in github.com/mattn/go-oci8 (Oracle)
+- 2019-11-04: Fix for renamed driver struct in github.com/denisenkom/go-mssqldb (MSSQL)
