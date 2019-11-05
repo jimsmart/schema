@@ -63,6 +63,7 @@ Package schema is copyright 2018 by Jim Smart and released under the [BSD 3-Clau
 
 ## History
 
+- v0.0.3: Minor code cleanups.
 - v0.0.2: Added identifier escaping for methods that query sql.ColumnType.
 - v0.0.1: Started using Go modules.
 - 2019-11-04: Fix for renamed driver struct in github.com/mattn/go-oci8 (Oracle)
