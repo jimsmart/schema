@@ -1,6 +1,7 @@
 package schema
 
 var mysql = dialect{
+	escapeIdent: escapeWithBackticks, // `tablename`
 	queries: [3]string{
 		// columnTypes query.
 		`SELECT * FROM %s LIMIT 0`,

@@ -1,6 +1,7 @@
 package schema
 
 var sqlite = dialect{
+	escapeIdent: escapeWithDoubleQuotes, // "tablename"
 	queries: [3]string{
 		// columnTypes query.
 		`SELECT * FROM %s LIMIT 0`,

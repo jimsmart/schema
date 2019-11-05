@@ -14,6 +14,8 @@ const (
 
 // dialect describes how each database 'flavour' provides its metadata.
 type dialect struct {
+	// escapeIdent provides the appropriate method for escaping identifiers.
+	escapeIdent func(string) string
 	// queries for fetching metadata: tableNames, viewNames, columnTypes.
 	queries [3]string
 }
@@ -47,4 +49,45 @@ var driverDialect = map[string]*dialect{
 // pack a string, normalising its whitespace.
 func pack(s string) string {
 	return strings.Join(strings.Fields(s), " ")
+}
+
+// escapeWithDoubleQuotes implements double-quote escaping of a string,
+// in accordance with SQL:1999 standard.
+func escapeWithDoubleQuotes(s string) string {
+	return escape(s, '"', '"')
+}
+
+// escapeWithBackticks implements backtick escaping of a string.
+func escapeWithBackticks(s string) string {
+	return escape(s, '`', '`')
+}
+
+// escapeWithBrackets implements bracket escaping of a string.
+func escapeWithBrackets(s string) string {
+	return escape(s, '[', ']')
+}
+
+// escapeWithBraces implements brace escaping of a string.
+func escapeWithBraces(s string) string {
+	return escape(s, '{', '}')
+}
+
+// escape escapes a string identifier.
+func escape(s string, escBegin, escEnd byte) string {
+	// TODO(js) Correct handling of backslash escaping of identifiers needs
+	// further investigation: different dialects look to handle it differently
+	// - removed for now.
+	// Please file an issue if you encounter a problem regarding backslash escaping.
+
+	var b strings.Builder
+	b.WriteByte(escBegin)
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		b.WriteByte(c)
+		if c == escEnd { // || c == '\\' {
+			b.WriteByte(c)
+		}
+	}
+	b.WriteByte(escEnd)
+	return b.String()
 }

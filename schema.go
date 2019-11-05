@@ -89,21 +89,21 @@ import (
 // TableNames returns a list of all table names in the current schema
 // (not including system tables).
 func TableNames(db *sql.DB) ([]string, error) {
-	return names(db, tableNames)
+	return fetchNames(db, tableNames)
 }
 
 // ViewNames returns a list of all view names in the current schema
 // (not including system views).
 func ViewNames(db *sql.DB) ([]string, error) {
-	return names(db, viewNames)
+	return fetchNames(db, viewNames)
 }
 
-// names queries the database schema metadata and returns
+// fetchNames queries the database schema metadata and returns
 // either a list of table or view names.
 //
 // It uses the database driver name and the passed query type
 // to lookup the appropriate dialect and query.
-func names(db *sql.DB, qt query) ([]string, error) {
+func fetchNames(db *sql.DB, qt query) ([]string, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
@@ -135,20 +135,20 @@ func names(db *sql.DB, qt query) ([]string, error) {
 
 // Table returns the column type metadata for the given table name.
 func Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return object(db, name)
+	return fetchColumnType(db, name)
 }
 
 // View returns the column type metadata for the given view name.
 func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return object(db, name)
+	return fetchColumnType(db, name)
 }
 
-// object queries the database and returns column type metadata
+// fetchColumnType queries the database and returns column type metadata
 // for a single table or view.
 //
 // It uses the database driver name to look up the appropriate
 // dialect, and the passed table/view name to build the query.
-func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
+func fetchColumnType(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
@@ -158,7 +158,7 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Build and run the appropriate query from dialect:
 	// this runs a query that returns no rows, and then
 	// picks off the column type info.
-	q := fmt.Sprintf(d.queries[columnTypes], name)
+	q := fmt.Sprintf(d.queries[columnTypes], d.escapeIdent(name))
 	rows, err := db.Query(q)
 	if err != nil {
 		return nil, err
@@ -170,24 +170,24 @@ func object(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 // Tables returns column type metadata for all tables in the current schema
 // (not including system tables). The returned map is keyed by table name.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return objects(db, TableNames)
+	return fetchColumnTypes(db, TableNames)
 }
 
 // Views returns column type metadata for all views in the current schema
 // (not including system views). The returned map is keyed by view name.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return objects(db, ViewNames)
+	return fetchColumnTypes(db, ViewNames)
 }
 
 // listFn provides a list of names from the database.
 type listFn func(*sql.DB) ([]string, error)
 
-// objects queries the database and returns metadata about the
+// fetchColumnTypes queries the database and returns metadata about the
 // column types for all tables or all views.
 //
 // It uses the passed list provider function to obtain table/view names,
 // and calls object() to fetch the column metadata for each name in the list.
-func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
+func fetchColumnTypes(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
 	names, err := nameFn(db)
 	if err != nil {
 		return nil, err
@@ -197,11 +197,11 @@ func objects(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnType, error) {
 	}
 	m := make(map[string][]*sql.ColumnType, len(names))
 	for _, n := range names {
-		ci, err := object(db, n)
+		ct, err := fetchColumnType(db, n)
 		if err != nil {
 			return nil, err
 		}
-		m[n] = ci
+		m[n] = ct
 	}
 	return m, nil
 }

@@ -3,6 +3,7 @@ package schema
 // TODO(js) Is there some way to filter system tables (like mssql)? Or should we always just be using our own schema?
 
 var oracle = dialect{
+	escapeIdent: escapeWithBraces, // {tablename}
 	queries: [3]string{
 		// columnTypes query.
 		`SELECT * FROM %s WHERE 1=0`,
