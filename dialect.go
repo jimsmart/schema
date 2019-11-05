@@ -20,7 +20,7 @@ type dialect struct {
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.
 // This is somewhat fragile.
-var driverDialect map[string]*dialect = map[string]*dialect{
+var driverDialect = map[string]*dialect{
 	"*sqlite3.SQLiteDriver":       &sqlite,   // github.com/mattn/go-sqlite3
 	"*sqlite.impl":                &sqlite,   // github.com/gwenn/gosqlite
 	"sqlite3.Driver":              &sqlite,   // github.com/mxk/go-sqlite - TODO(js) No datatypes.
