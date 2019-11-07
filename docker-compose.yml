@@ -1,0 +1,66 @@
+version: "3.7"
+services:
+
+  # TODO(js) Port numbers - defaults will likely clash, choose high ones.
+  # TODO(js) User names - put the db name into them: it makes troubleshooting easier.
+
+  # TODO(js) Re-write .travis.yml 
+  #  - update Go version
+  #  - Remove services, switch to using dbs solely in docker
+
+  # TODO(js) Update README.md section on Testing.
+
+  # TODO(js) Cleanup tests
+  # TODO(js) Improve tests
+  # TODO(js) Split test structure: file per driver -> file per dialect
+
+
+  mssql:
+    # See https://hub.docker.com/_/microsoft-mssql-server
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    container_name: schema-test-mssql
+    ports:
+      - 32772:1433
+    volumes:
+      - ../docker-test/docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      - ../docker-test/docker-db-init-mssql.sh:/db-init.sh:ro
+      - ../docker-test/docker-db-init-mssql.sql:/init.sql:ro
+      # - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      # - ./docker-db-init-mssql.sh:/db-init.sh:ro
+      # - ./docker-db-init-mssql.sql:/init.sql:ro
+    command: /bin/bash /entrypoint.sh
+    environment:
+      ACCEPT_EULA: Y 
+      MSSQL_PID: Developer
+      SA_PASSWORD: 7kRZ4mUsSD4XedMq
+
+  mysql:
+    # See https://hub.docker.com/_/mysql
+    image: mysql:latest
+    container_name: schema-test-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: password
+
+  # TODO(js) Oracle
+
+  postgres:
+    # See https://hub.docker.com/_/postgres
+    image: postgres:latest
+    container_name: schema-test-postgres
+    restart: always
+    ports:
+      - 5432:5432
+
+  # adminer:
+  #   image: adminer
+  #   container_name: schema-test-adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080

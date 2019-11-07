@@ -18,7 +18,7 @@ import (
 // ALTER USER test_user WITH default_schema = test_db;
 // EXEC sp_addrolemember db_ddladmin, test_user;
 
-var _ = XDescribe("schema", func() {
+var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
 
 		const (

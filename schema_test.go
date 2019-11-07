@@ -159,6 +159,8 @@ var _ = Describe("schema", func() {
 		db, _ := sql.Open("fakedb", "")
 
 		It("should return nils for every method", func() {
+			// TODO(js) These should all return an error instead of nil (see schema.go:111 and schema.go:156)
+
 			ci, err := schema.Table(db, "web_resource")
 			Expect(ci).To(BeNil())
 			Expect(err).To(BeNil())
