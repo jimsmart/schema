@@ -22,12 +22,12 @@ services:
     ports:
       - 32772:1433
     volumes:
-      - ../docker-test/docker-entrypoint-mssql.sh:/entrypoint.sh:ro
-      - ../docker-test/docker-db-init-mssql.sh:/db-init.sh:ro
-      - ../docker-test/docker-db-init-mssql.sql:/init.sql:ro
-      # - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
-      # - ./docker-db-init-mssql.sh:/db-init.sh:ro
-      # - ./docker-db-init-mssql.sql:/init.sql:ro
+      # - ../docker-test/docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      # - ../docker-test/docker-db-init-mssql.sh:/db-init.sh:ro
+      # - ../docker-test/docker-db-init-mssql.sql:/init.sql:ro
+      - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      - ./docker-db-init-mssql.sh:/db-init.sh:ro
+      - ./docker-db-init-mssql.sql:/init.sql:ro
     command: /bin/bash /entrypoint.sh
     environment:
       ACCEPT_EULA: Y 
