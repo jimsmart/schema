@@ -6,10 +6,21 @@ services:
   # - mysql    43306
   # - postgres 45432
 
-  
+
   # TODO(js) Re-write .travis.yml 
   #  - update Go version
   #  - Remove services, switch to using dbs solely in docker
+  #  - See https://www.rockyourcode.com/docker-compose-postgres-and-travis-ci
+
+# TODO(js) For Travis, we should also:
+# - install microsoft's sql cli tools ?
+# - we should then invoke a local script that performs a similar wait to docker-db-init-mssql.sh ?
+#   (here we'd be waiting outside docker, for mssql to start, before running our tests)
+# - We can maybe use travisretry here?
+#   See https://docs.travis-ci.com/user/common-build-problems/#timeouts-installing-dependencies
+
+# TODO(js) Look into Docker Healthcheck - suggested here https://dzone.com/articles/8-lessons-learned-using-docker-compose
+
 
   # TODO(js) Update README.md section on Testing.
 
@@ -23,7 +34,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     container_name: schema-test-mssql
     ports:
-      - 41433:1433
+      - 127.0.0.1:41433:1433
     volumes:
       - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
       - ./docker-db-init-mssql.sh:/db-init.sh:ro
@@ -41,7 +52,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 43306:3306
+      - 127.0.0.1:43306:3306
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: test_db
@@ -56,7 +67,7 @@ services:
     container_name: schema-test-postgres
     restart: always
     ports:
-      - 45432:5432
+      - 127.0.0.1:45432:5432
 
   # adminer:
   #   image: adminer
