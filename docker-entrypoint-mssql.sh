@@ -1,2 +1,5 @@
-# Start our db-init script and SQLServer
- /bin/bash /db-init.sh & /opt/mssql/bin/sqlservr
+# Start our db-init script in background
+ /bin/bash /db-init.sh &
+ 
+ # Start SQLServer
+ /opt/mssql/bin/sqlservr
