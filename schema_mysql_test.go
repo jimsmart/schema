@@ -20,7 +20,7 @@ var _ = Describe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {
 
 		const (
-			user = "test_user"
+			user = "mysql_test_user"
 			pass = "password"
 			host = "localhost"
 			port = "3306"

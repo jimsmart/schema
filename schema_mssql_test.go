@@ -22,7 +22,7 @@ var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
 
 		const (
-			user = "test_user"
+			user = "mssql_test_user"
 			pass = "Password-123"
 			host = "localhost"
 			port = "32772"
