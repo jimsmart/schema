@@ -19,8 +19,7 @@ var _ = Describe("schema", func() {
 		const (
 			user = "postgres"
 			host = "localhost"
-			// port = "32774"
-			port = "5432"
+			port = "45432"
 		)
 
 		var postgres = &testParams{

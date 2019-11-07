@@ -23,9 +23,8 @@ var _ = Describe("schema", func() {
 			user = "mysql_test_user"
 			pass = "password"
 			host = "localhost"
-			port = "3306"
-			// port = "32769"
-			dbs = "test_db"
+			port = "43306"
+			dbs  = "test_db"
 		)
 
 		var mysql = &testParams{

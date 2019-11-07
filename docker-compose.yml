@@ -1,8 +1,12 @@
 version: "3.7"
 services:
 
-  # TODO(js) Port numbers - defaults will likely clash, choose high ones.
+  # Port numbers (normal port number + 40000):
+  # - mssql    41433
+  # - mysql    43306
+  # - postgres 45432
 
+  
   # TODO(js) Re-write .travis.yml 
   #  - update Go version
   #  - Remove services, switch to using dbs solely in docker
@@ -19,7 +23,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     container_name: schema-test-mssql
     ports:
-      - 32772:1433
+      - 41433:1433
     volumes:
       - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
       - ./docker-db-init-mssql.sh:/db-init.sh:ro
@@ -37,7 +41,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
-      - 3306:3306
+      - 43306:3306
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: test_db
@@ -52,7 +56,7 @@ services:
     container_name: schema-test-postgres
     restart: always
     ports:
-      - 5432:5432
+      - 45432:5432
 
   # adminer:
   #   image: adminer

@@ -25,7 +25,7 @@ var _ = Describe("schema", func() {
 			user = "mssql_test_user"
 			pass = "Password-123"
 			host = "localhost"
-			port = "32772"
+			port = "41433"
 		)
 
 		var mssql = &testParams{
