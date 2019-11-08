@@ -154,43 +154,44 @@ func SchemaTestRunner(params *testParams) {
 }
 
 var _ = Describe("schema", func() {
-	Context("using a fake db driver", func() {
-		sql.Register("fakedb", fakeDb{})
+	Context("using an unsupported (fake) db driver", func() {
+		sql.Register("fakedb", FakeDb{})
 		db, _ := sql.Open("fakedb", "")
 
-		It("should return nils for every method", func() {
-			// TODO(js) These should all return an error instead of nil (see schema.go:111 and schema.go:156)
+		It("should return errors for every method", func() {
+
+			var unknownDriverErr = schema.UnknownDriverError{Driver: "schema_test.FakeDb"}
 
 			ci, err := schema.Table(db, "web_resource")
 			Expect(ci).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 
 			tn, err := schema.TableNames(db)
 			Expect(tn).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 
 			ta, err := schema.Tables(db)
 			Expect(ta).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 
 			ci, err = schema.View(db, "web_resource")
 			Expect(ci).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 
 			vn, err := schema.ViewNames(db)
 			Expect(vn).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 
 			vw, err := schema.Views(db)
 			Expect(vw).To(BeNil())
-			Expect(err).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 		})
 	})
 })
 
-type fakeDb struct{}
+type FakeDb struct{}
 
-func (_ fakeDb) Open(name string) (driver.Conn, error) {
+func (_ FakeDb) Open(name string) (driver.Conn, error) {
 	return nil, nil
 }
 

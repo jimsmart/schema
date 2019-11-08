@@ -1,6 +1,8 @@
 package schema
 
-import "strings"
+import (
+	"strings"
+)
 
 // query defines dialect query types.
 type query int

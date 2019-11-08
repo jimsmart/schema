@@ -49,7 +49,6 @@ package schema
 import (
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 // https://github.com/golang/go/issues/7408
@@ -86,6 +85,23 @@ import (
 
 //
 
+// UnknownDriverError is returned when there is no matching
+// database driver type name in the driverDialect table.
+//
+// Errors of this kind are caused by using an unsupported
+// database driver/dialect, or if/when a database driver
+// developer renames the type underlying calls to db.Driver().
+type UnknownDriverError struct {
+	Driver string
+}
+
+// Error returns a formatted string description.
+func (e UnknownDriverError) Error() string {
+	return fmt.Sprintf("unknown database driver %s", e.Driver)
+}
+
+//
+
 // TableNames returns a list of all table names in the current schema
 // (not including system tables).
 func TableNames(db *sql.DB) ([]string, error) {
@@ -107,9 +123,9 @@ func fetchNames(db *sql.DB, qt query) ([]string, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
-		// TODO(js) This should return an error instead of nil (and should not log?)
-		log.Printf("unknown db driver %s\n", dt)
-		return nil, nil
+		// // TODO(js) This should return an error instead of nil (and should not log?)
+		// log.Printf("unknown db driver %s\n", dt)
+		return nil, UnknownDriverError{Driver: dt}
 	}
 	// Run the appropriate query from dialect:
 	// this runs a query to fetch names of tables/views
@@ -153,9 +169,9 @@ func fetchColumnTypes(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
-		// TODO(js) This should return an error instead of nil (and should not log?)
-		log.Printf("unknown db driver %s\n", dt)
-		return nil, nil
+		// // TODO(js) This should return an error instead of nil (and should not log?)
+		// log.Printf("unknown db driver %s\n", dt)
+		return nil, UnknownDriverError{Driver: dt}
 	}
 	// Build and run the appropriate query from dialect:
 	// this runs a query that returns no rows, and then

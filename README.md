@@ -67,7 +67,7 @@ Package schema is copyright 2018-2019 by Jim Smart and released under the [BSD 3
 
 ## History
 
-- v0.0.4: Test environment now uses Docker.
+- v0.0.4: Improved error handling for unknown DB driver types. Test environment now uses Docker.
 - v0.0.3: Minor code cleanups.
 - v0.0.2: Added identifier escaping for methods that query sql.ColumnType.
 - v0.0.1: Started using Go modules.
