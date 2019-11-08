@@ -20,7 +20,7 @@ services:
     environment:
       ACCEPT_EULA: Y 
       MSSQL_PID: Developer
-      SA_PASSWORD: 7kRZ4mUsSD4XedMq
+      SA_PASSWORD: Passw0rd
 
   mysql:
     # See https://hub.docker.com/_/mysql

@@ -88,6 +88,11 @@ var _ = Describe("schema", func() {
 			TableNamesExpRes: []string{
 				"web_resource",
 				"blanks in name",
+				// "[brackets] in name",
+				// `"d.quotes" in name`,
+				// "'s.quotes' in name",
+				// "{braces} in name",
+				// "`backticks` in name",
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",
