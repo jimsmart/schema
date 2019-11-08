@@ -6,27 +6,6 @@ services:
   # - mysql    43306
   # - postgres 45432
 
-
-  # TODO(js) Re-write .travis.yml 
-  #  - See https://www.rockyourcode.com/docker-compose-postgres-and-travis-ci
-
-# TODO(js) For Travis, should we also:
-# - install microsoft's sql cli tools ?
-# - invoke a local script that performs a similar wait to docker-db-init-mssql.sh ?
-#   (here we'd be waiting outside docker, for mssql to start, before running our tests)
-# - We can maybe use travisretry here?
-#   See https://docs.travis-ci.com/user/common-build-problems/#timeouts-installing-dependencies
-
-# TODO(js) Look into Docker Healthcheck - suggested here https://dzone.com/articles/8-lessons-learned-using-docker-compose
-
-
-  # TODO(js) Update README.md section on Testing.
-
-  # TODO(js) Cleanup tests
-  # TODO(js) Improve tests
-  # TODO(js) Split test structure: file per driver -> file per dialect
-
-
   mssql:
     # See https://hub.docker.com/_/microsoft-mssql-server
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu

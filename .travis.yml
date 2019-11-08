@@ -18,7 +18,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Go get our deps.
-  - go get -t -v ./...
+  - go get -v ./...
 
 before_script:
   - docker-compose up -d
@@ -27,7 +27,7 @@ script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
 
 after_script:
-  - docker-compose down
+  - docker-compose down -v
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

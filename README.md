@@ -35,7 +35,7 @@ import "github.com/jimsmart/schema"
 - A [supported](https://github.com/jimsmart/drivercaps) database driver.
 - Standard library.
 - [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) if you wish to run the tests.
-- Tests also require various database drivers to be installed and configured.
+- Tests also require [Docker Compose](https://docs.docker.com/compose/install/) to be installed.
 
 ## Example
 
@@ -47,7 +47,9 @@ GoDocs [https://godoc.org/github.com/jimsmart/schema](https://godoc.org/github.c
 
 ## Testing
 
-Note that a moderate amount of database setup and configuration is required for successful execution of the tests.
+First, bring up the various databases for the testing environment. 
+
+Execute `docker-compose up` inside the project folder, wait until all of the Docker services have completed their startup (there is no further output in the terminal), and open a second terminal. (In future one may choose to use `docker-compose up -d` instead.)
 
 To run the tests execute `go test` inside the project folder.
 
@@ -57,12 +59,15 @@ For a full coverage report, try:
 $ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 ```
 
+To shutdown the Docker services, execute `docker-compose down -v` inside the project folder.
+
 ## License
 
-Package schema is copyright 2018 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
+Package schema is copyright 2018-2019 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
 
 ## History
 
+- v0.0.4: Test environment now uses Docker.
 - v0.0.3: Minor code cleanups.
 - v0.0.2: Added identifier escaping for methods that query sql.ColumnType.
 - v0.0.1: Started using Go modules.
