@@ -123,8 +123,6 @@ func fetchNames(db *sql.DB, qt query) ([]string, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
-		// // TODO(js) This should return an error instead of nil (and should not log?)
-		// log.Printf("unknown db driver %s\n", dt)
 		return nil, UnknownDriverError{Driver: dt}
 	}
 	// Run the appropriate query from dialect:
@@ -169,8 +167,6 @@ func fetchColumnTypes(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
-		// // TODO(js) This should return an error instead of nil (and should not log?)
-		// log.Printf("unknown db driver %s\n", dt)
 		return nil, UnknownDriverError{Driver: dt}
 	}
 	// Build and run the appropriate query from dialect:
