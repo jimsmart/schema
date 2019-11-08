@@ -1,17 +1,33 @@
 language: go
 go:
-  - "1.10.x"
+  - "1.12.x"
+
+sudo: required
 
 services:
-  - postgresql
-# TODO(js) This might not be needed?
-  - mysql
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.24.1
 
 before_install:
-  - mysql -e "CREATE DATABASE test_db; CREATE USER test_user IDENTIFIED BY 'password'; GRANT ALL ON test_db.* TO 'test_user';"
-#  - psql -c 'create database travis_ci_test;' -U postgres
+  # Update docker-compose.
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  # Go get our deps.
   - go get -t -v ./...
+
+before_script:
+  # - docker-compose up -d --build
+  - docker-compose up -d
+
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
+
+after_script:
+  - docker-compose down
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
