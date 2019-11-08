@@ -72,8 +72,12 @@ var _ = XDescribe("schema", func() {
 				"URL NVARCHAR2",
 			},
 
-			TableNameExpRes: "WEB_RESOURCE",
-			ViewNameExpRes:  "WEB_RESOURCE_VIEW",
+			TableNamesExpRes: []string{
+				"WEB_RESOURCE",
+			},
+			ViewNamesExpRes: []string{
+				"WEB_RESOURCE_VIEW",
+			},
 		}
 
 		SchemaTestRunner(oracle)

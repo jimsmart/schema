@@ -71,8 +71,12 @@ var _ = Describe("schema", func() {
 				"url TEXT",
 			},
 
-			TableNameExpRes: "web_resource",
-			ViewNameExpRes:  "web_resource_view",
+			TableNamesExpRes: []string{
+				"web_resource",
+			},
+			ViewNamesExpRes: []string{
+				"web_resource_view",
+			},
 		}
 
 		SchemaTestRunner(postgres)

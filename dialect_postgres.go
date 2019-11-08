@@ -1,7 +1,7 @@
 package schema
 
 var postgres = dialect{
-	escapeIdent: escapeWithDoubleQuotes, // "tablename"
+	escapeFn: escapeWithDoubleQuotes, // "tablename"
 	queries: [3]string{
 		// columnTypes query.
 		`SELECT * FROM %s LIMIT 0`,

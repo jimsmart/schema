@@ -9,15 +9,15 @@ type query int
 
 // query type enum.
 const (
-	columnTypes query = iota // Index of query to get column type info.
-	tableNames               // Index of query to get table names.
-	viewNames                // Index of query to get view names.
+	columnTypesQuery query = iota // Index of query to get column type info.
+	tableNamesQuery               // Index of query to get table names.
+	viewNamesQuery                // Index of query to get view names.
 )
 
 // dialect describes how each database 'flavour' provides its metadata.
 type dialect struct {
-	// escapeIdent provides the appropriate method for escaping identifiers.
-	escapeIdent func(string) string
+	// escapeFn provides the appropriate method for escaping identifiers.
+	escapeFn func(string) string
 	// queries for fetching metadata: tableNames, viewNames, columnTypes.
 	queries [3]string
 }

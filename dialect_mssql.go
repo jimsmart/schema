@@ -3,7 +3,7 @@ package schema
 // See https://stackoverflow.com/questions/8774928/how-to-exclude-system-table-when-querying-sys-tables
 
 var mssql = dialect{
-	escapeIdent: escapeWithBrackets, // [tablename]
+	escapeFn: escapeWithBrackets, // [tablename]
 	queries: [3]string{
 		// columnTypes query.
 		`SELECT * FROM %s WHERE 1=0`,

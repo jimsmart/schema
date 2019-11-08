@@ -105,13 +105,13 @@ func (e UnknownDriverError) Error() string {
 // TableNames returns a list of all table names in the current schema
 // (not including system tables).
 func TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, tableNames)
+	return fetchNames(db, tableNamesQuery)
 }
 
 // ViewNames returns a list of all view names in the current schema
 // (not including system views).
 func ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, viewNames)
+	return fetchNames(db, viewNamesQuery)
 }
 
 // fetchNames queries the database schema metadata and returns
@@ -158,6 +158,17 @@ func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, name)
 }
 
+// TODO(js) Arguably because both schema.Table() and schema.View() are the same,
+// they could be replaced with a single schema.ColumnTypes() maybe?
+// Except it's a nice API, which balances schema.Tables() and schema.Views().
+// But: I had a bugged test which was actually a copy-paste-edit related error,
+// and during the troubleshooting, I was surprised to find that when passing
+// a table name to View() I actually got results for that table. My copy-paste-edit
+// error would have been caught more quickly if Views returned some kind of not found
+// error if passed the name of something that is not a view. But adding such filtering
+// comes with increased complexity.
+//
+
 // fetchColumnTypes queries the database and returns column's type metadata
 // for a single table or view.
 //
@@ -172,7 +183,7 @@ func fetchColumnTypes(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Build and run the appropriate query from dialect:
 	// this runs a query that returns no rows, and then
 	// picks off the column type info.
-	q := fmt.Sprintf(d.queries[columnTypes], d.escapeIdent(name))
+	q := fmt.Sprintf(d.queries[columnTypesQuery], d.escapeFn(name))
 	rows, err := db.Query(q)
 	if err != nil {
 		return nil, err
@@ -207,6 +218,9 @@ func fetchColumnTypesAll(db *sql.DB, nameFn listFn) (map[string][]*sql.ColumnTyp
 		return nil, err
 	}
 	if len(names) == 0 {
+		// A db table isn't welformed if it has not got any columns,
+		// and the db engine will likely never be able to get into this state.
+		// So perhaps this can never happen?
 		return nil, nil
 	}
 	m := make(map[string][]*sql.ColumnType, len(names))

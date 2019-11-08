@@ -4,14 +4,12 @@ import "testing"
 
 // Tests for internal methods.
 
-type test struct {
-	input  string
-	expect string
-}
-
 func TestEscapeWithDoubleQuotes(t *testing.T) {
 
-	tests := []test{
+	tests := []struct {
+		input  string
+		expect string
+	}{
 		{input: `foo`, expect: `"foo"`},
 		{input: `fo"o`, expect: `"fo""o"`},
 		{input: `foo"`, expect: `"foo"""`},
@@ -26,7 +24,10 @@ func TestEscapeWithDoubleQuotes(t *testing.T) {
 }
 func TestEscapeWithBackticks(t *testing.T) {
 
-	tests := []test{
+	tests := []struct {
+		input  string
+		expect string
+	}{
 		{input: "foo", expect: "`foo`"},
 		{input: "fo`o", expect: "`fo``o`"},
 		{input: "foo`", expect: "`foo```"},
@@ -42,7 +43,10 @@ func TestEscapeWithBackticks(t *testing.T) {
 
 func TestEscapeWithBrackets(t *testing.T) {
 
-	tests := []test{
+	tests := []struct {
+		input  string
+		expect string
+	}{
 		{input: "foo", expect: "[foo]"},
 		{input: "fo]o", expect: "[fo]]o]"},
 		{input: "foo]", expect: "[foo]]]"},
@@ -58,7 +62,10 @@ func TestEscapeWithBrackets(t *testing.T) {
 
 func TestEscapeWithBraces(t *testing.T) {
 
-	tests := []test{
+	tests := []struct {
+		input  string
+		expect string
+	}{
 		{input: "foo", expect: "{foo}"},
 		{input: "fo}o", expect: "{fo}}o}"},
 		{input: "foo}", expect: "{foo}}}"},

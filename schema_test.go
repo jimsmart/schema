@@ -23,8 +23,8 @@ type testParams struct {
 	TableExpRes []string
 	ViewExpRes  []string
 
-	TableNameExpRes string
-	ViewNameExpRes  string
+	TableNamesExpRes []string
+	ViewNamesExpRes  []string
 }
 
 func SchemaTestRunner(params *testParams) {
@@ -67,11 +67,11 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the column type info for an existing table", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.Table(db, "web_resource")
+			ct, err := schema.Table(db, "web_resource")
 			Expect(err).To(BeNil())
-			Expect(ci).To(HaveLen(10))
+			Expect(ct).To(HaveLen(10))
 			var list []string
-			for _, c := range ci {
+			for _, c := range ct {
 				list = append(list, c.Name()+" "+c.DatabaseTypeName())
 			}
 			Expect(list).To(Equal(params.TableExpRes))
@@ -94,8 +94,22 @@ func SchemaTestRunner(params *testParams) {
 
 			sn, err := schema.TableNames(db)
 			Expect(err).To(BeNil())
-			Expect(sn).To(HaveLen(1))
-			Expect(sn).To(Equal([]string{params.TableNameExpRes}))
+			Expect(sn).To(ConsistOf(params.TableNamesExpRes))
+		})
+
+		It("should return no table names for an empty database", func() {
+			db, err := sql.Open(params.DriverName, params.ConnStr)
+			Expect(err).To(BeNil())
+			defer func() {
+				err = db.Close()
+				Expect(err).To(BeNil())
+				if params.DropFn != nil {
+					params.DropFn()
+				}
+			}()
+			sn, err := schema.TableNames(db)
+			Expect(err).To(BeNil())
+			Expect(sn).To(HaveLen(0))
 		})
 	})
 
@@ -106,9 +120,9 @@ func SchemaTestRunner(params *testParams) {
 			sc, err := schema.Tables(db)
 			Expect(err).To(BeNil())
 			Expect(sc).To(HaveLen(1))
-			ci, ok := sc[params.TableNameExpRes]
+			ct, ok := sc["web_resource"]
 			Expect(ok).To(BeTrue())
-			Expect(ci).To(HaveLen(10))
+			Expect(ct).To(HaveLen(10))
 		})
 	})
 
@@ -116,11 +130,11 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the column type info for the view", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.View(db, "web_resource_view")
+			ct, err := schema.View(db, "web_resource_view")
 			Expect(err).To(BeNil())
-			Expect(ci).To(HaveLen(2))
+			Expect(ct).To(HaveLen(2))
 			var list []string
-			for _, c := range ci {
+			for _, c := range ct {
 				list = append(list, c.Name()+" "+c.DatabaseTypeName())
 			}
 			Expect(list).To(Equal(params.ViewExpRes))
@@ -133,8 +147,22 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			sn, err := schema.ViewNames(db)
 			Expect(err).To(BeNil())
-			Expect(sn).To(HaveLen(1))
-			Expect(sn).To(Equal([]string{params.ViewNameExpRes}))
+			Expect(sn).To(ConsistOf(params.ViewNamesExpRes))
+		})
+
+		It("should return no view names for an empty database", func() {
+			db, err := sql.Open(params.DriverName, params.ConnStr)
+			Expect(err).To(BeNil())
+			defer func() {
+				err = db.Close()
+				Expect(err).To(BeNil())
+				if params.DropFn != nil {
+					params.DropFn()
+				}
+			}()
+			sn, err := schema.ViewNames(db)
+			Expect(err).To(BeNil())
+			Expect(sn).To(HaveLen(0))
 		})
 	})
 
@@ -145,9 +173,9 @@ func SchemaTestRunner(params *testParams) {
 			sc, err := schema.Views(db)
 			Expect(err).To(BeNil())
 			Expect(sc).To(HaveLen(1))
-			ci, ok := sc[params.ViewNameExpRes]
+			ct, ok := sc["web_resource_view"]
 			Expect(ok).To(BeTrue())
-			Expect(ci).To(HaveLen(2))
+			Expect(ct).To(HaveLen(2))
 		})
 	})
 
@@ -162,8 +190,8 @@ var _ = Describe("schema", func() {
 
 			var unknownDriverErr = schema.UnknownDriverError{Driver: "schema_test.FakeDb"}
 
-			ci, err := schema.Table(db, "web_resource")
-			Expect(ci).To(BeNil())
+			ct, err := schema.Table(db, "web_resource")
+			Expect(ct).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
 			tn, err := schema.TableNames(db)
@@ -174,8 +202,8 @@ var _ = Describe("schema", func() {
 			Expect(ta).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
-			ci, err = schema.View(db, "web_resource")
-			Expect(ci).To(BeNil())
+			ct, err = schema.View(db, "web_resource")
+			Expect(ct).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
 			vn, err := schema.ViewNames(db)
@@ -185,6 +213,10 @@ var _ = Describe("schema", func() {
 			vw, err := schema.Views(db)
 			Expect(vw).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
+
+			errm := err.Error()
+			Expect(errm).To(ContainSubstring("unknown"))
+			Expect(errm).To(ContainSubstring(" schema_test.FakeDb"))
 		})
 	})
 })
