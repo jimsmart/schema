@@ -49,7 +49,7 @@ GoDocs [https://godoc.org/github.com/jimsmart/schema](https://godoc.org/github.c
 
 Database services for testing against are hosted in Docker.
 
-Bring up the database services: execute `docker-compose up` inside the project folder, and wait until all of the Docker services have completed their startup (i.e. there is no further output in the terminal), then open a second terminal. (In future one may choose to use `docker-compose up -d` instead)
+To bring up the database services: execute `docker-compose up` inside the project folder, and wait until all of the Docker services have completed their startup (i.e. there is no further output in the terminal), then open a second terminal. (In future one may choose to use `docker-compose up -d` instead)
 
 To run the tests execute `go test` inside the project folder.
 
