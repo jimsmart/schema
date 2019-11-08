@@ -10,13 +10,8 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
-// Setup script:
-//
-// CREATE LOGIN test_user WITH PASSWORD = 'Password-123';
-// CREATE USER test_user FOR LOGIN test_user;
-// CREATE SCHEMA test_db AUTHORIZATION test_user;
-// ALTER USER test_user WITH default_schema = test_db;
-// EXEC sp_addrolemember db_ddladmin, test_user;
+// Setup of test db is performed on Docker startup
+// via script: docker-db-init-mssql.sql
 
 var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
@@ -51,9 +46,6 @@ var _ = Describe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource (created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource (modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`, // TODO gofreetds barfs on this!?
-				// `CREATE VIEW web_resource_view AS SELECT t.id, t.url FROM web_resource t`,
-				// `CREATE VIEW web_resource_view AS (SELECT id, url FROM web_resource)`,
-				// `CREATE VIEW web_resource_view AS (SELECT t.id, t.url FROM web_resource t)`,
 				`CREATE TABLE [blanks in name] (
 					id INTEGER NOT NULL,
 					PRIMARY KEY (id)
