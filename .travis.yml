@@ -8,7 +8,9 @@ services:
   - docker
 
 env:
-  DOCKER_COMPOSE_VERSION: 1.24.1
+  - DOCKER_COMPOSE_VERSION: 1.24.1
+  - GO111MODULE=on
+  # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
 
 before_install:
   # Update docker-compose.
@@ -20,7 +22,6 @@ before_install:
   - go get -t -v ./...
 
 before_script:
-  # - docker-compose up -d --build
   - docker-compose up -d
 
 script:
@@ -31,3 +32,4 @@ after_script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
