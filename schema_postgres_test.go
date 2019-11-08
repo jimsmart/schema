@@ -27,8 +27,8 @@ var _ = Describe("schema", func() {
 			// DriverName: "pgx",
 			ConnStr: fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port),
 
-			CreateDDL: []string{`
-				CREATE TABLE web_resource (
+			CreateDDL: []string{
+				`CREATE TABLE web_resource (
 					id				INTEGER NOT NULL,
 					url				TEXT NOT NULL UNIQUE,
 					content			BYTEA,
@@ -45,8 +45,13 @@ var _ = Describe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE "blanks in name" (
+					id INTEGER NOT NULL,
+					PRIMARY KEY (id)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE "blanks in name"`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -73,6 +78,7 @@ var _ = Describe("schema", func() {
 
 			TableNamesExpRes: []string{
 				"web_resource",
+				"blanks in name",
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",

@@ -33,8 +33,8 @@ var _ = Describe("schema", func() {
 			ConnStr: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, pass, host, port, dbs), // mysql
 			// ConnStr: fmt.Sprintf("tcp:%s:%s*%s/%s/%s", host, port, dbs, user, pass), // mymysql
 
-			CreateDDL: []string{`
-				CREATE TABLE IF NOT EXISTS web_resource (
+			CreateDDL: []string{
+				`CREATE TABLE IF NOT EXISTS web_resource (
 					id				INTEGER NOT NULL,
 					url				VARCHAR(255) NOT NULL UNIQUE, -- TODO(js) Earlier MySQL cannot handle UNIQUE with 1024 length.
 					content			BLOB,
@@ -51,8 +51,13 @@ var _ = Describe("schema", func() {
 					INDEX (modified_at)
 				)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				"CREATE TABLE IF NOT EXISTS `blanks in name` (" + `
+					id INTEGER NOT NULL,
+					PRIMARY KEY (id)
+				)`,
 			},
 			DropDDL: []string{
+				"DROP TABLE `blanks in name`",
 				`DROP VIEW web_resource_view`,
 				`DROP TABLE web_resource`,
 			},
@@ -76,6 +81,7 @@ var _ = Describe("schema", func() {
 
 			TableNamesExpRes: []string{
 				"web_resource",
+				"blanks in name",
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",

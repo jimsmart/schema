@@ -51,6 +51,29 @@ func SchemaTestRunner(params *testParams) {
 					log.Printf("db.Exec (drop) error %v exec %s", err, ddl)
 				}
 			}
+
+			// Ensure our tests have properly deleted their tables and views.
+			tableNames, err := schema.TableNames(db)
+			if err != nil {
+				log.Printf("schema.TableNames (after drop) error %v", err)
+			}
+			if len(tableNames) != 0 {
+				log.Println("schema.TableNames reports undeleted tables (test has bad drop ddl?)")
+				for _, name := range tableNames {
+					log.Println(name)
+				}
+			}
+			viewNames, err := schema.ViewNames(db)
+			if err != nil {
+				log.Printf("schema.ViewNames (after drop) error %v", err)
+			}
+			if len(viewNames) != 0 {
+				log.Println("schema.ViewNames reports undeleted views (test has bad drop ddl?)")
+				for _, name := range viewNames {
+					log.Println(name)
+				}
+			}
+
 			err = db.Close()
 			if err != nil {
 				log.Printf("db.Close error %v", err)
@@ -119,7 +142,7 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			sc, err := schema.Tables(db)
 			Expect(err).To(BeNil())
-			Expect(sc).To(HaveLen(1))
+			Expect(sc).To(HaveLen(len(params.TableNamesExpRes)))
 			ct, ok := sc["web_resource"]
 			Expect(ok).To(BeTrue())
 			Expect(ct).To(HaveLen(10))
@@ -172,7 +195,7 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			sc, err := schema.Views(db)
 			Expect(err).To(BeNil())
-			Expect(sc).To(HaveLen(1))
+			Expect(sc).To(HaveLen(len(params.ViewNamesExpRes)))
 			ct, ok := sc["web_resource_view"]
 			Expect(ok).To(BeTrue())
 			Expect(ct).To(HaveLen(2))

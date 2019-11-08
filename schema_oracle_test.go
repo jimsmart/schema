@@ -28,8 +28,8 @@ var _ = XDescribe("schema", func() {
 			// DriverName: "ora",
 			ConnStr: fmt.Sprintf("%s/%s@%s:%s/%s", user, pass, host, port, dbs),
 
-			CreateDDL: []string{`
-				CREATE TABLE web_resource (
+			CreateDDL: []string{
+				`CREATE TABLE web_resource (
 					id				NUMBER NOT NULL,
 					url				NVARCHAR2(1024) NOT NULL UNIQUE,
 					content			BLOB,
@@ -46,8 +46,13 @@ var _ = XDescribe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE {blanks in name} (
+					id NUMBER NOT NULL,
+					PRIMARY KEY (id)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE {blanks in name}`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -74,6 +79,7 @@ var _ = XDescribe("schema", func() {
 
 			TableNamesExpRes: []string{
 				"WEB_RESOURCE",
+				"BLANKS IN NAME",
 			},
 			ViewNamesExpRes: []string{
 				"WEB_RESOURCE_VIEW",

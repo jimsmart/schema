@@ -33,8 +33,8 @@ var _ = Describe("schema", func() {
 			ConnStr:    fmt.Sprintf("user id=%s;password=%s;server=%s;port=%s", user, pass, host, port),
 			// ConnStr: fmt.Sprintf("user id=%s;password=%s;server=%s:%s", user, pass, host, port), // gofreetds
 
-			CreateDDL: []string{`
-				CREATE TABLE web_resource (
+			CreateDDL: []string{
+				`CREATE TABLE web_resource (
 					id				INTEGER NOT NULL,
 					url				NVARCHAR NOT NULL UNIQUE,
 					content			VARBINARY,
@@ -54,8 +54,13 @@ var _ = Describe("schema", func() {
 				// `CREATE VIEW web_resource_view AS SELECT t.id, t.url FROM web_resource t`,
 				// `CREATE VIEW web_resource_view AS (SELECT id, url FROM web_resource)`,
 				// `CREATE VIEW web_resource_view AS (SELECT t.id, t.url FROM web_resource t)`,
+				`CREATE TABLE [blanks in name] (
+					id INTEGER NOT NULL,
+					PRIMARY KEY (id)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE [blanks in name]`,
 				`DROP VIEW IF EXISTS web_resource_view`,
 				`DROP INDEX IF EXISTS idx_web_resource_modified_at ON web_resource`,
 				`DROP INDEX IF EXISTS idx_web_resource_created_at ON web_resource`,
@@ -82,6 +87,7 @@ var _ = Describe("schema", func() {
 
 			TableNamesExpRes: []string{
 				"web_resource",
+				"blanks in name",
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",
