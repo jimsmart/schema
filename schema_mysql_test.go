@@ -36,7 +36,7 @@ var _ = Describe("schema", func() {
 			CreateDDL: []string{
 				`CREATE TABLE IF NOT EXISTS web_resource (
 					id				INTEGER NOT NULL,
-					url				VARCHAR(255) NOT NULL UNIQUE, -- TODO(js) Earlier MySQL cannot handle UNIQUE with 1024 length.
+					url				VARCHAR(255) NOT NULL UNIQUE,
 					content			BLOB,
 					compressed_size	INTEGER NOT NULL,
 					content_length	INTEGER NOT NULL,
@@ -50,16 +50,24 @@ var _ = Describe("schema", func() {
 					INDEX (created_at),
 					INDEX (modified_at)
 				)`,
-				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
-				"CREATE TABLE IF NOT EXISTS `blanks in name` (" + `
-					id INTEGER NOT NULL,
-					PRIMARY KEY (id)
-				)`,
+				"CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource",
+				// Tests for correct identifer escaping.
+				"CREATE TABLE IF NOT EXISTS `blanks in name` (id INTEGER, PRIMARY KEY (id))",
+				"CREATE TABLE `[brackets] in name` (id INTEGER, PRIMARY KEY (id))",
+				"CREATE TABLE `\"d.quotes\" in name` (id INTEGER, PRIMARY KEY (id))",
+				"CREATE TABLE `'s.quotes' in name` (id INTEGER, PRIMARY KEY (id))",
+				"CREATE TABLE `{braces} in name` (id INTEGER, PRIMARY KEY (id))",
+				"CREATE TABLE ```backticks`` in name` (id INTEGER, PRIMARY KEY (id))",
 			},
 			DropDDL: []string{
+				"DROP TABLE ```backticks`` in name`",
+				"DROP TABLE `{braces} in name`",
+				"DROP TABLE `'s.quotes' in name`",
+				"DROP TABLE `\"d.quotes\" in name`",
+				"DROP TABLE `[brackets] in name`",
 				"DROP TABLE `blanks in name`",
-				`DROP VIEW web_resource_view`,
-				`DROP TABLE web_resource`,
+				"DROP VIEW web_resource_view",
+				"DROP TABLE web_resource",
 			},
 
 			TableExpRes: []string{
@@ -81,7 +89,13 @@ var _ = Describe("schema", func() {
 
 			TableNamesExpRes: []string{
 				"web_resource",
+				// Tests for correct identifer escaping.
 				"blanks in name",
+				"[brackets] in name",
+				`"d.quotes" in name`,
+				"'s.quotes' in name",
+				"{braces} in name",
+				"`backticks` in name",
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",

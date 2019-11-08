@@ -38,7 +38,6 @@ func SchemaTestRunner(params *testParams) {
 		for _, ddl := range params.CreateDDL {
 			_, err = db.Exec(ddl)
 			if err != nil {
-				// log.Fatalf("db.Exec (create) error %v", err)
 				log.Printf("db.Exec (create) error %v exec %s", err, ddl)
 			}
 		}
@@ -47,7 +46,6 @@ func SchemaTestRunner(params *testParams) {
 			for _, ddl := range params.DropDDL {
 				_, err = db.Exec(ddl)
 				if err != nil {
-					// log.Fatalf("db.Exec (drop) error %v", err)
 					log.Printf("db.Exec (drop) error %v exec %s", err, ddl)
 				}
 			}
@@ -104,6 +102,23 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			_, err := schema.Table(db, "XXX-NO-SUCH-TABLE-XXX")
 			Expect(err).ToNot(BeNil())
+		})
+		It("should handle tables with unusual names (escaping)", func() {
+			tableNames := []string{
+				"blanks in name",
+				"[brackets] in name",
+				`"d.quotes" in name`,
+				"'s.quotes' in name",
+				"{braces} in name",
+				"`backticks` in name",
+			}
+			db, done := setup()
+			defer done()
+			for _, tn := range tableNames {
+				ct, err := schema.Table(db, tn)
+				Expect(err).To(BeNil())
+				Expect(ct).To(HaveLen(1))
+			}
 		})
 	})
 
