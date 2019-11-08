@@ -34,7 +34,7 @@ import "github.com/jimsmart/schema"
 
 - A [supported](https://github.com/jimsmart/drivercaps) database driver.
 - Standard library.
-- [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) if you wish to run the tests.
+- [Ginkgo](https://onsi.github.io/ginkgo/) and [Gomega](https://onsi.github.io/gomega/) are used in the tests.
 - Tests also require [Docker Compose](https://docs.docker.com/compose/install/) to be installed.
 
 ## Example
