@@ -6,7 +6,8 @@ import (
 
 	// mssql
 	gomssqldb "github.com/denisenkom/go-mssqldb" // DriverName: mssql
-	// DriverName: mssql
+	// gofreetds "github.com/minus5/gofreetds"      // DriverName: mssql
+
 	// mysql
 	_ "github.com/go-sql-driver/mysql"  // DriverName: mysql
 	_ "github.com/ziutek/mymysql/godrv" // DriverName: mymysql
