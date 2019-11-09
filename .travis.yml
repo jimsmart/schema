@@ -9,7 +9,7 @@ services:
 
 env:
   - DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=on
-  - DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=auto
+  - DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=off
   # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
 
 before_install:
@@ -19,7 +19,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Go get our deps.
-  - go get -v ./...
+  - go get -v -t ./...
 
 before_script:
   - docker-compose up -d
