@@ -20,9 +20,6 @@ type testParams struct {
 	DropDDL   []string
 	DropFn    func()
 
-	TableExpRes []string
-	ViewExpRes  []string
-
 	TableNamesExpRes []string
 	ViewNamesExpRes  []string
 }
@@ -91,11 +88,6 @@ func SchemaTestRunner(params *testParams) {
 			ct, err := schema.Table(db, "web_resource")
 			Expect(err).To(BeNil())
 			Expect(ct).To(HaveLen(10))
-			var list []string
-			for _, c := range ct {
-				list = append(list, c.Name()+" "+c.DatabaseTypeName())
-			}
-			Expect(list).To(Equal(params.TableExpRes))
 		})
 		It("should return an error for a non-existing table", func() {
 			db, done := setup()
@@ -172,11 +164,6 @@ func SchemaTestRunner(params *testParams) {
 			ct, err := schema.View(db, "web_resource_view")
 			Expect(err).To(BeNil())
 			Expect(ct).To(HaveLen(2))
-			var list []string
-			for _, c := range ct {
-				list = append(list, c.Name()+" "+c.DatabaseTypeName())
-			}
-			Expect(list).To(Equal(params.ViewExpRes))
 		})
 	})
 
