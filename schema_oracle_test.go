@@ -53,8 +53,10 @@ var _ = XDescribe("schema", func() {
 				"CREATE TABLE {'s.quotes' in name} (id INTEGER, PRIMARY KEY (id))",
 				"CREATE TABLE {{braces}} in name} (id INTEGER, PRIMARY KEY (id))",
 				"CREATE TABLE {`backticks` in name} (id INTEGER, PRIMARY KEY (id))",
+				`CREATE TABLE {backslashes\in\name} (id INTEGER, PRIMARY KEY (id))`,
 			},
 			DropDDL: []string{
+				`DROP TABLE {backslashes\in\name}`,
 				"DROP TABLE {`backticks` in name}",
 				"DROP TABLE {{braces}} in name}",
 				"DROP TABLE {'s.quotes' in name}",
@@ -94,6 +96,7 @@ var _ = XDescribe("schema", func() {
 				"'S.QUOTES' IN NAME",
 				"{BRACES} IN NAME",
 				"`BACKTICKS` IN NAME",
+				`BACKSLASHES\IN\NAME`,
 			},
 			ViewNamesExpRes: []string{
 				"WEB_RESOURCE_VIEW",

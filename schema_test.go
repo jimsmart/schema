@@ -111,6 +111,7 @@ func SchemaTestRunner(params *testParams) {
 				"'s.quotes' in name",
 				"{braces} in name",
 				"`backticks` in name",
+				`backslashes\in\name`,
 			}
 			db, done := setup()
 			defer done()

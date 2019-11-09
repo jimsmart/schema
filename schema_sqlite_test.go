@@ -48,13 +48,15 @@ var _ = Describe("schema", func() {
 				"CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource",
 				// Tests for correct identifer escaping.
 				`CREATE TABLE IF NOT EXISTS "blanks in name" (id INTEGER, PRIMARY KEY (id))`,
-				`CREATE TABLE "[brackets] in name" (id INTEGER, PRIMARY KEY (id))`,
-				`CREATE TABLE """d.quotes"" in name" (id INTEGER, PRIMARY KEY (id))`,
-				`CREATE TABLE "'s.quotes' in name" (id INTEGER, PRIMARY KEY (id))`,
-				`CREATE TABLE "{braces} in name" (id INTEGER, PRIMARY KEY (id))`,
-				"CREATE TABLE \"`backticks` in name\" (id INTEGER, PRIMARY KEY (id))",
+				`CREATE TABLE IF NOT EXISTS "[brackets] in name" (id INTEGER, PRIMARY KEY (id))`,
+				`CREATE TABLE IF NOT EXISTS """d.quotes"" in name" (id INTEGER, PRIMARY KEY (id))`,
+				`CREATE TABLE IF NOT EXISTS "'s.quotes' in name" (id INTEGER, PRIMARY KEY (id))`,
+				`CREATE TABLE IF NOT EXISTS "{braces} in name" (id INTEGER, PRIMARY KEY (id))`,
+				"CREATE TABLE IF NOT EXISTS \"`backticks` in name\" (id INTEGER, PRIMARY KEY (id))",
+				`CREATE TABLE IF NOT EXISTS "backslashes\in\name" (id INTEGER, PRIMARY KEY (id))`,
 			},
 			DropDDL: []string{
+				`DROP TABLE "backslashes\in\name"`,
 				"DROP TABLE \"`backticks` in name\"",
 				`DROP TABLE "{braces} in name"`,
 				`DROP TABLE "'s.quotes' in name"`,
@@ -103,6 +105,7 @@ var _ = Describe("schema", func() {
 				"'s.quotes' in name",
 				"{braces} in name",
 				"`backticks` in name",
+				`backslashes\in\name`,
 			},
 			ViewNamesExpRes: []string{
 				"web_resource_view",

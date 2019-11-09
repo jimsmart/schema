@@ -76,17 +76,12 @@ func escapeWithBraces(s string) string {
 
 // escape escapes a string identifier.
 func escape(s string, escBegin, escEnd byte) string {
-	// TODO(js) Correct handling of backslash escaping of identifiers needs
-	// further investigation: different dialects look to handle it differently
-	// - removed for now.
-	// Please file an issue if you encounter a problem regarding backslash escaping.
-
 	var b strings.Builder
 	b.WriteByte(escBegin)
 	for i := 0; i < len(s); i++ {
 		c := s[i]
 		b.WriteByte(c)
-		if c == escEnd { // || c == '\\' {
+		if c == escEnd {
 			b.WriteByte(c)
 		}
 	}
