@@ -35,7 +35,8 @@ before_install:
   - echo "$OCR_PASSWORD" | docker login -u "$OCR_USERNAME" --password-stdin container-registry.oracle.com
 
 before_script:
-  - docker-compose up -d $DB
+  # - docker-compose up -d $DB
+  - ./docker-compose-up-travis.sh $DB
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
