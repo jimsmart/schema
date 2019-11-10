@@ -31,8 +31,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # Go get our deps.
   - go get -v -t ./...
-  # Login to Oracle Container Registry.
-  - echo "$OCR_PASSWORD" | docker login -u "$OCR_USERNAME" --password-stdin container-registry.oracle.com
+  # # Login to Oracle Container Registry.
+  # - echo "$OCR_PASSWORD" | docker login -u "$OCR_USERNAME" --password-stdin container-registry.oracle.com
 
 before_script:
   # - docker-compose up -d $DB
