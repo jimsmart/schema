@@ -1,11 +1,10 @@
 package schema_test
 
 import (
-	"database/sql"
 	"fmt"
 
 	// mssql
-	gomssqldb "github.com/denisenkom/go-mssqldb" // DriverName: mssql
+	_ "github.com/denisenkom/go-mssqldb" // DriverName: mssql
 	// gofreetds "github.com/minus5/gofreetds"      // DriverName: mssql
 
 	// mysql
@@ -19,11 +18,12 @@ import (
 
 	// postgres
 	_ "github.com/jackc/pgx/stdlib" // DriverName: pgx
+	_ "github.com/lib/pq"           // DriverName: pg
+
 	// _ "github.com/jbarham/gopgsqldriver" // DriverName: postgres
-	"github.com/lib/pq" // DriverName: postgres
 
 	// sqlite
-	mattn "github.com/mattn/go-sqlite3" // DriverName: sqlite3
+	_ "github.com/mattn/go-sqlite3" // DriverName: sqlite3
 	// _ "github.com/gwenn/gosqlite" // DriverName: sqlite3
 	// _ "github.com/mxk/go-sqlite/sqlite3" // DriverName: sqlite3
 
@@ -42,11 +42,8 @@ var _ = Describe("schema", func() {
 		)
 
 		Context("using driver github.com/denisenkom/go-mssqldb", func() {
-
-			sql.Register("gomssqldb", &gomssqldb.Driver{}) // TODO(js) These don't work.
-
 			var params = mssqlDialect
-			params.DriverName = "gomssqldb"
+			params.DriverName = "mssql"
 			params.ConnStr = fmt.Sprintf("user id=%s;password=%s;server=%s;port=%s", user, pass, host, port)
 			SchemaTestRunner(&params)
 		})
@@ -118,11 +115,8 @@ var _ = Describe("schema", func() {
 		)
 
 		Context("using github.com/lib/pq", func() {
-
-			sql.Register("pq", &pq.Driver{})
-
 			var params = postgresDialect
-			params.DriverName = "pq"
+			params.DriverName = "postgres"
 			// params.DriverName = "pgx"
 			params.ConnStr = fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port)
 			SchemaTestRunner(&params)
@@ -161,12 +155,10 @@ var _ = Describe("schema", func() {
 		)
 		Context("using github.com/mattn/go-sqlite3", func() {
 
-			sql.Register("mattn", &mattn.SQLiteDriver{})
-
 			// TODO(js) I think dbs connect string needs uniquing for SQLite?
 
 			var params = sqliteDialect
-			params.DriverName = "mattn"
+			params.DriverName = "sqlite3"
 			params.ConnStr = dbs
 
 			SchemaTestRunner(&params)
