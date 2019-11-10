@@ -8,9 +8,20 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=on
-  - DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=off
-  # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
+  global:
+    - DOCKER_COMPOSE_VERSION=1.24.1
+  jobs:
+    - GO111MODULE=on DB=mssql
+    - GO111MODULE=on DB=mysql
+    - GO111MODULE=on DB=oracle
+    - GO111MODULE=on DB=postgres
+    - GO111MODULE=on DB=sqlite
+    # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
+    - GO111MODULE=off DB=mssql
+    - GO111MODULE=off DB=mysql
+    - GO111MODULE=off DB=oracle
+    - GO111MODULE=off DB=postgres
+    - GO111MODULE=off DB=sqlite
 
 before_install:
   # Update docker-compose.
@@ -24,7 +35,7 @@ before_install:
   - echo "$OCR_PASSWORD" | docker login -u "$OCR_USERNAME" --password-stdin container-registry.oracle.com
 
 before_script:
-  - docker-compose up -d
+  - docker-compose up -d $DB
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
