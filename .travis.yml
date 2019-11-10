@@ -36,7 +36,7 @@ before_install:
 
 before_script:
   # - docker-compose up -d $DB
-  - ./docker-compose-up-travis.sh $DB
+  - bash docker-compose-up-travis.sh $DB
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic
