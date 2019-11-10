@@ -38,6 +38,18 @@ services:
 
   # TODO(js) Oracle
 
+  oracle:
+    # See https://container-registry.oracle.com/pls/apex/f?p=113:4:8927682379073::NO:4:P4_REPOSITORY,AI_REPOSITORY,AI_REPOSITORY_NAME,P4_REPOSITORY_NAME,P4_EULA_ID,P4_BUSINESS_AREA_ID:8,8,Oracle%20Database%20Standard%20Edition%202,Oracle%20Database%20Standard%20Edition%202,1,0&cs=3cDGR5voeQ_ibR2ikj2b_WfYR--iaAVTrRI4aNmrNDouMwy4DP7_fzkUWFX3oT31AxGnYFVpV6yBYTTthhpFZQQ
+    image: container-registry.oracle.com/database/standard:12.1.0.2
+    container_name: schema-test-oracle
+    restart: always
+    # volumes:
+    #   - /home/oracle/oradata:/opt/oracle/oradata # persistent oracle database data.
+    ports:
+      - 127.0.0.1:41521:1521
+      #- 8080:8080
+      #- 5500:5500
+
   postgres:
     # See https://hub.docker.com/_/postgres
     image: postgres:latest
