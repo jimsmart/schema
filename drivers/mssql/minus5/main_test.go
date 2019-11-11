@@ -23,7 +23,7 @@ var _ = Describe("schema", func() {
 			port = "41433"
 		)
 
-		// TODO(js) This driver seems buggy. :/
+		// TODO(js) This driver (gofreetds) seems buggy. :/
 		XContext("using driver github.com/minus5/gofreetds", func() {
 
 			var params = drivers.MssqlDialect
