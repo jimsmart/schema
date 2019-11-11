@@ -31,19 +31,19 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # Go get our deps.
   - go get -v -t ./...
-  # # Login to Oracle Container Registry.
-  # - echo "$OCR_PASSWORD" | docker login -u "$OCR_USERNAME" --password-stdin container-registry.oracle.com
 
 before_script:
-  # - docker-compose up -d $DB
-  - bash docker-compose-up-travis.sh $DB
+  - bash db-up.sh $DB
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test && go test -p 1 ./drivers/$DB/...
+# - go test && go test -p 1 -race -coverprofile=coverage.txt -covermode=atomic ./drivers/$DB/...
+#  - go test -race -coverprofile=coverage.txt -covermode=atomic
 
 after_script:
   - docker-compose down -v
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+# TODO(js) What is the best thing to do about coverage now we have a bazallion test?
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
 

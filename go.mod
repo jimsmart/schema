@@ -8,6 +8,7 @@ require (
 	github.com/jackc/pgx v3.6.0+incompatible
 	github.com/lib/pq v1.2.0
 	github.com/mattn/go-sqlite3 v1.11.0
+	github.com/minus5/gofreetds v0.0.0-20190219163700-c92a62efdcd5
 	github.com/onsi/ginkgo v1.10.3
 	github.com/onsi/gomega v1.7.1
 	github.com/pkg/errors v0.8.1 // indirect
