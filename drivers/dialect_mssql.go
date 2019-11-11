@@ -23,7 +23,8 @@ var MssqlDialect = TestParams{
 		"CREATE INDEX idx_web_resource_created_at ON web_resource (created_at)",
 		"CREATE INDEX idx_web_resource_modified_at ON web_resource (modified_at)",
 		"CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource", // TODO gofreetds barfs on this!?
-		// TODO(js) One way to avoid this: put all of this setup into sql scripts, which avoids going through bad drivers.
+		// Possibly related? https://stackoverflow.com/questions/48795459/using-tbl-with-in-schema-creating-syntax-error-using-freetds
+
 		// Tests for correct identifer escaping.
 		"CREATE TABLE [blanks in name] (id INTEGER, PRIMARY KEY (id))",
 		"CREATE TABLE [[brackets]] in name] (id INTEGER, PRIMARY KEY (id))",

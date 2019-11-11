@@ -24,6 +24,9 @@ var _ = XDescribe("schema", func() {
 		)
 
 		// TODO(js) This driver (gofreetds) seems buggy. :/
+
+		// Possibly related? https://stackoverflow.com/questions/48795459/using-tbl-with-in-schema-creating-syntax-error-using-freetds
+
 		Context("using driver github.com/minus5/gofreetds", func() {
 
 			var params = drivers.MssqlDialect
