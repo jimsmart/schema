@@ -1,4 +1,4 @@
-if [ "$0" != "sqlite" ]; then
+if [ "$0" = "sqlite" ]; then
     exit 0;
 fi
 if [ "$0" = "oracle" ]; then
