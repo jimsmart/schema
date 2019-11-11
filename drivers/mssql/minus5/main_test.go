@@ -23,7 +23,7 @@ var _ = Describe("schema", func() {
 			port = "41433"
 		)
 
-		XContext("using driver github.com/minus5/gofreetds", func() {
+		Context("using driver github.com/minus5/gofreetds", func() {
 
 			var params = drivers.MssqlDialect
 			params.DriverName = "mssql"
