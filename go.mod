@@ -12,5 +12,6 @@ require (
 	github.com/onsi/ginkgo v1.10.3
 	github.com/onsi/gomega v1.7.1
 	github.com/pkg/errors v0.8.1 // indirect
+	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/ziutek/mymysql v1.5.4
 )

@@ -12,7 +12,7 @@ import (
 	"github.com/jimsmart/schema/drivers"
 )
 
-var _ = Describe("schema", func() {
+var _ = XDescribe("schema", func() {
 
 	Context("using Microsoft SQL-Server", func() {
 		// TODO(js) De-dupe this.
@@ -24,7 +24,7 @@ var _ = Describe("schema", func() {
 		)
 
 		// TODO(js) This driver (gofreetds) seems buggy. :/
-		XContext("using driver github.com/minus5/gofreetds", func() {
+		Context("using driver github.com/minus5/gofreetds", func() {
 
 			var params = drivers.MssqlDialect
 			params.DriverName = "mssql"
