@@ -29,10 +29,12 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  # FreeTDS
+  # Install other deps.
   - sudo apt-get update
+  - sudo apt-get -y install golang-ginkgo-dev
+  # FreeTDS.
   - sudo apt-get -y install freetds-dev
-  # Go get our deps.
+  # Go get our Go deps.
   - go get -v -t ./...
 
 before_script:
