@@ -2,42 +2,29 @@ package main_test
 
 import (
 	"fmt"
-	"testing"
-
-	_ "github.com/minus5/gofreetds" // DriverName: mssql
-
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 
 	"github.com/jimsmart/schema/drivers"
+	. "github.com/onsi/ginkgo"
+
+	_ "github.com/minus5/gofreetds" // DriverName: mssql
 )
 
-var _ = XDescribe("schema", func() {
+var _ = XDescribe("driver github.com/minus5/gofreetds", func() {
 
-	Context("using Microsoft SQL-Server", func() {
-		// TODO(js) De-dupe this.
-		const (
-			user = "mssql_test_user"
-			pass = "Password-123"
-			host = "localhost"
-			port = "41433"
-		)
+	// TODO(js) De-dupe this.
+	const (
+		user = "mssql_test_user"
+		pass = "Password-123"
+		host = "localhost"
+		port = "41433"
+	)
 
-		// TODO(js) This driver (gofreetds) seems buggy. :/
+	// TODO(js) This driver (gofreetds) seems buggy. :/
 
-		// Possibly related? https://stackoverflow.com/questions/48795459/using-tbl-with-in-schema-creating-syntax-error-using-freetds
+	// Possibly related? https://stackoverflow.com/questions/48795459/using-tbl-with-in-schema-creating-syntax-error-using-freetds
 
-		Context("using driver github.com/minus5/gofreetds", func() {
-
-			var params = drivers.MssqlDialect
-			params.DriverName = "mssql"
-			params.ConnStr = fmt.Sprintf("user id=%s;password=%s;server=%s:%s", user, pass, host, port)
-			drivers.SchemaTestRunner(&params)
-		})
-	})
+	var params = drivers.MssqlDialect
+	params.DriverName = "mssql"
+	params.ConnStr = fmt.Sprintf("user id=%s;password=%s;server=%s:%s", user, pass, host, port)
+	drivers.SchemaTestRunner(&params)
 })
-
-func TestSchema(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Schema Suite")
-}
