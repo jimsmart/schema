@@ -2,14 +2,21 @@ package main_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/jimsmart/schema/drivers"
 	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	_ "github.com/go-sql-driver/mysql" // DriverName: mysql
 )
 
-var _ = Describe("driver github.com/go-sql-driver/mysql", func() {
+func TestDriver(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Driver github.com/go-sql-driver/mysql (mysql)")
+}
+
+var _ = Describe("Using driver github.com/go-sql-driver/mysql (mysql)", func() {
 
 	// TODO(js) De-dupe this.
 	const (

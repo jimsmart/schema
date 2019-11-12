@@ -31,7 +31,11 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # Install other deps.
   - sudo apt-get update
-  - sudo apt-get -y install golang-ginkgo-dev
+  - go get -v github.com/onsi/ginkgo/ginkgo
+  - go get -v github.com/onsi/gomega
+#  - go get -v -t ./...
+  - export PATH=$PATH:$HOME/gopath/bin
+#  - sudo apt-get -y install golang-ginkgo-dev
   # FreeTDS.
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
@@ -41,7 +45,7 @@ before_script:
   - bash db-up.sh $DB
 
 script:
-  - go test && ginkgo -r ./drivers/$DB
+  - go test && ginkgo -r --randomizeAllSpecs --randomizeSuites ./drivers/$DB
 #  - go test && go test -p 1 ./drivers/$DB/...
 #  - go test && go test -p 1 -race -coverprofile=coverage.txt -covermode=atomic ./drivers/$DB/...
 #  - go test -race -coverprofile=coverage.txt -covermode=atomic

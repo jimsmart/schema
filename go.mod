@@ -6,6 +6,7 @@ require (
 	github.com/denisenkom/go-mssqldb v0.0.0-20191001013358-cfbb681360f0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/jackc/pgx v3.6.0+incompatible
+	github.com/jbarham/gopgsqldriver v0.0.0-20120227112153-f8287ee9bfe2
 	github.com/lib/pq v1.2.0
 	github.com/mattn/go-sqlite3 v1.11.0
 	github.com/minus5/gofreetds v0.0.0-20190219163700-c92a62efdcd5

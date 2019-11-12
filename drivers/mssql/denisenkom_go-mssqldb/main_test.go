@@ -2,14 +2,21 @@ package main_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/jimsmart/schema/drivers"
 	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 
 	_ "github.com/denisenkom/go-mssqldb" // DriverName: mssql
 )
 
-var _ = Describe("driver github.com/denisenkom/go-mssqldb", func() {
+func TestDriver(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Driver github.com/denisenkom/go-mssqldb (mssql)")
+}
+
+var _ = Describe("Using driver github.com/denisenkom/go-mssqldb (mssql)", func() {
 
 	// TODO(js) De-dupe this.
 	const (

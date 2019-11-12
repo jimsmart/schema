@@ -4,6 +4,7 @@ services:
   # Port numbers (normal port number + 40000):
   # - mssql    41433
   # - mysql    43306
+  # - oracle   41521
   # - postgres 45432
 
   mssql:
@@ -50,13 +51,13 @@ services:
   #     #- 8080:8080
   #     #- 5500:5500
 
-  # postgres:
-  #   # See https://hub.docker.com/_/postgres
-  #   image: postgres:latest
-  #   container_name: schema-test-postgres
-  #   restart: always
-  #   ports:
-  #     - 127.0.0.1:45432:5432
+  postgres:
+    # See https://hub.docker.com/_/postgres
+    image: postgres:latest
+    container_name: schema-test-postgres
+    restart: always
+    ports:
+      - 127.0.0.1:45432:5432
 
   # adminer:
   #   image: adminer
