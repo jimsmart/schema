@@ -31,14 +31,9 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Install other deps.
-#  - go get -v github.com/onsi/ginkgo/ginkgo
-#  - go get -v github.com/onsi/gomega
-#  - export PATH=$PATH:$HOME/gopath/bin
-#  - sudo apt-get -y install golang-ginkgo-dev
   # TODO(js) This driver does not currently build (github.com/jbarham/gopgsqldriver)
   # # Setup for github.com/jbarham/gopgsqldriver
   # - sudo apt-get install libpq-dev
-  # - go get github.com/jbarham/gopgsqldriver
   # Setup for github.com/minus5/gofreetds
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
@@ -47,7 +42,7 @@ before_install:
 before_script:
   # - bash db-up.sh $DB 
   # # TODO(js) This sleep will probably prove to be flakey - it's an attempt to workaround slow VM startups.
-  - bash db-up.sh $DB && sleep 5m
+  - bash db-up.sh $DB && sleep 1m
 
 script:
   - go test && go test -p 1 ./drivers/$DB/...
