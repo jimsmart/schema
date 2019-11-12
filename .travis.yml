@@ -35,9 +35,10 @@ before_install:
 #  - go get -v github.com/onsi/gomega
 #  - export PATH=$PATH:$HOME/gopath/bin
 #  - sudo apt-get -y install golang-ginkgo-dev
-  # github.com/jbarham/gopgsqldriver needs this
+  # Setp for github.com/jbarham/gopgsqldriver
   - sudo apt-get install libpq-dev
-  # github.com/minus5/gofreetds needs this
+  - go get github.com/jbarham/gopgsqldriver
+  # Setup for github.com/minus5/gofreetds
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
   - go get -v -t ./...
