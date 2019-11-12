@@ -11,12 +11,14 @@ env:
   global:
     - DOCKER_COMPOSE_VERSION=1.24.1
   jobs:
+    # TODO(js) Build per driver, not per db.
+    # Builds with Go Modules enabled.
     - GO111MODULE=on DB=mssql
     - GO111MODULE=on DB=mysql
     - GO111MODULE=on DB=oracle
     - GO111MODULE=on DB=postgres
     - GO111MODULE=on DB=sqlite
-    # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
+    # Builds with Go Modules disabled.
     - GO111MODULE=off DB=mssql
     - GO111MODULE=off DB=mysql
     - GO111MODULE=off DB=oracle
@@ -30,7 +32,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  # Install other deps.
+  # Install deps.
   # TODO(js) This driver does not currently build (github.com/jbarham/gopgsqldriver)
   # # Setup for github.com/jbarham/gopgsqldriver
   # - sudo apt-get install libpq-dev
