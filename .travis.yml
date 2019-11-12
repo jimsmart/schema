@@ -45,9 +45,9 @@ before_install:
   - go get -v -t ./...
 
 before_script:
-  - bash db-up.sh $DB 
+  # - bash db-up.sh $DB 
   # # TODO(js) This sleep will probably prove to be flakey - it's an attempt to workaround slow VM startups.
-  # - bash db-up.sh $DB && sleep 60s
+  - bash db-up.sh $DB && sleep 60s
 
 script:
   - go test && go test -p 1 ./drivers/$DB/...
