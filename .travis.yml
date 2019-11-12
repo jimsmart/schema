@@ -24,31 +24,35 @@ env:
     - GO111MODULE=off DB=sqlite
 
 before_install:
+  - sudo apt-get update
   # Update docker-compose.
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Install other deps.
-  - sudo apt-get update
-  - go get -v github.com/onsi/ginkgo/ginkgo
-  - go get -v github.com/onsi/gomega
-#  - go get -v -t ./...
-  - export PATH=$PATH:$HOME/gopath/bin
+#  - go get -v github.com/onsi/ginkgo/ginkgo
+#  - go get -v github.com/onsi/gomega
+#  - export PATH=$PATH:$HOME/gopath/bin
 #  - sudo apt-get -y install golang-ginkgo-dev
-  # FreeTDS.
+  # github.com/jbarham/gopgsqldriver needs this
+  - sudo apt-get install libpq-dev
+  # github.com/minus5/gofreetds needs this
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
   - go get -v -t ./...
 
 before_script:
-  - bash db-up.sh $DB
+  - bash db-up.sh $DB 
+  # # TODO(js) This sleep will probably prove to be flakey - it's an attempt to workaround slow VM startups.
+  # - bash db-up.sh $DB && sleep 60s
 
 script:
-  - go test && ginkgo -r --randomizeAllSpecs --randomizeSuites ./drivers/$DB
-#  - go test && go test -p 1 ./drivers/$DB/...
-#  - go test && go test -p 1 -race -coverprofile=coverage.txt -covermode=atomic ./drivers/$DB/...
-#  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test && go test -p 1 ./drivers/$DB/...
+  # - go test && ginkgo -r --randomizeAllSpecs --randomizeSuites ./drivers/$DB
+  # - go test && go test -p 1 ./drivers/$DB/...
+  # - go test && go test -p 1 -race -coverprofile=coverage.txt -covermode=atomic ./drivers/$DB/...
+  # - go test -race -coverprofile=coverage.txt -covermode=atomic
 
 after_script:
   - docker-compose down -v
