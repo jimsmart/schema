@@ -11,6 +11,7 @@ services:
     # See https://hub.docker.com/_/microsoft-mssql-server
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     container_name: schema-test-mssql
+    restart: always
     ports:
       - 127.0.0.1:41433:1433
     volumes:
@@ -27,8 +28,8 @@ services:
     # See https://hub.docker.com/_/mysql
     image: mysql:latest
     container_name: schema-test-mysql
-    command: --default-authentication-plugin=mysql_native_password
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     ports:
       - 127.0.0.1:43306:3306
     environment:
