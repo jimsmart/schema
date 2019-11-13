@@ -25,7 +25,7 @@ env:
     # - GO111MODULE=on DB=oracle DRIVER=go-goracle_goracle
     # - GO111MODULE=on DB=oracle DRIVER=mattn_go-oci8
     # - GO111MODULE=on DB=oracle DRIVER=rana_ora
-    - GO111MODULE=on DB=postgres DRIVER=jbarham_gopgsqldriver
+    - GO111MODULE=on DB=postgres DRIVER=jbarham_gopgsqldriver CGO_CFLAGS="-I/usr/include/postgresql"
     # - GO111MODULE=on DB=postgres DRIVER=jackc_pgx
     # - GO111MODULE=on DB=postgres DRIVER=lib_pq
     # - GO111MODULE=on DB=sqlite DRIVER=gwenn_gosqlite
@@ -63,11 +63,7 @@ before_install:
   # Setup for github.com/jbarham/gopgsqldriver
   - sudo apt-get install libpq-dev
   # Find the referenced header file
-  # - sudo apt-get install apt-file
-  # - sudo apt-file update
-  # - apt-file search libpq-fe.h
-  # Looks like apt-file is broken.
-  - find / -iname libpq-fe.h
+  # - find / -iname libpq-fe.h
   # Setup for github.com/minus5/gofreetds
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
