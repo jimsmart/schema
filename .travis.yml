@@ -25,7 +25,7 @@ env:
     - GO111MODULE=on DB=oracle DRIVER=go-goracle_goracle
     - GO111MODULE=on DB=oracle DRIVER=mattn_go-oci8
     - GO111MODULE=on DB=oracle DRIVER=rana_ora
-    # - GO111MODULE=on DB=postgres DRIVER=jbarham_gopgsqldriver
+    - GO111MODULE=on DB=postgres DRIVER=jbarham_gopgsqldriver
     - GO111MODULE=on DB=postgres DRIVER=jackc_pgx
     - GO111MODULE=on DB=postgres DRIVER=lib_pq
     - GO111MODULE=on DB=sqlite DRIVER=gwenn_gosqlite
@@ -44,7 +44,7 @@ env:
     - GO111MODULE=off DB=oracle DRIVER=go-goracle_goracle
     - GO111MODULE=off DB=oracle DRIVER=mattn_go-oci8
     - GO111MODULE=off DB=oracle DRIVER=rana_ora
-    # - GO111MODULE=off DB=postgres DRIVER=jbarham_gopgsqldriver
+    - GO111MODULE=off DB=postgres DRIVER=jbarham_gopgsqldriver
     - GO111MODULE=off DB=postgres DRIVER=jackc_pgx
     - GO111MODULE=off DB=postgres DRIVER=lib_pq
     - GO111MODULE=off DB=sqlite DRIVER=gwenn_gosqlite
