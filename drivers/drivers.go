@@ -17,7 +17,6 @@ type TestParams struct {
 
 	CreateDDL []string
 	DropDDL   []string
-	DropFn    func()
 
 	TableNamesExpRes []string
 	ViewNamesExpRes  []string
@@ -71,9 +70,6 @@ func SchemaTestRunner(params *TestParams) {
 			err = db.Close()
 			if err != nil {
 				log.Printf("db.Close error %v", err)
-			}
-			if params.DropFn != nil {
-				params.DropFn()
 			}
 		}
 
@@ -133,9 +129,6 @@ func SchemaTestRunner(params *TestParams) {
 			defer func() {
 				err = db.Close()
 				Expect(err).To(BeNil())
-				if params.DropFn != nil {
-					params.DropFn()
-				}
 			}()
 			sn, err := schema.TableNames(db)
 			Expect(err).To(BeNil())
@@ -181,9 +174,6 @@ func SchemaTestRunner(params *TestParams) {
 			defer func() {
 				err = db.Close()
 				Expect(err).To(BeNil())
-				if params.DropFn != nil {
-					params.DropFn()
-				}
 			}()
 			sn, err := schema.ViewNames(db)
 			Expect(err).To(BeNil())

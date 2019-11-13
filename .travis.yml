@@ -11,13 +11,7 @@ env:
   global:
     - DOCKER_COMPOSE_VERSION=1.24.1
   jobs:
-    # TODO(js) Build per driver, not per db.
     # Builds with Go Modules enabled.
-    # # - GO111MODULE=on DB=mssql 
-    # # - GO111MODULE=on DB=mysql 
-    # # - GO111MODULE=on DB=oracle 
-    # # - GO111MODULE=on DB=postgres
-    # # - GO111MODULE=on DB=sqlite
     # - GO111MODULE=on DB=mssql DRIVER=denisenkom_go-mssqldb
     # - GO111MODULE=on DB=mssql DRIVER=minus5_gofreetds
     # - GO111MODULE=on DB=mysql DRIVER=go-sql-driver_mysql
@@ -32,11 +26,6 @@ env:
     # - GO111MODULE=on DB=sqlite DRIVER=mattn_go-sqlite3
     # - GO111MODULE=on DB=sqlite DRIVER=mxk_go-sqlite
     # # Builds with Go Modules disabled.
-    # # - GO111MODULE=off DB=mssql 
-    # # - GO111MODULE=off DB=mysql 
-    # # - GO111MODULE=off DB=oracle 
-    # # - GO111MODULE=off DB=postgres
-    # # - GO111MODULE=off DB=sqlite
     # - GO111MODULE=off DB=mssql DRIVER=denisenkom_go-mssqldb
     # - GO111MODULE=off DB=mssql DRIVER=minus5_gofreetds
     # - GO111MODULE=off DB=mysql DRIVER=go-sql-driver_mysql

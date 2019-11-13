@@ -29,6 +29,6 @@ var _ = Describe("Using driver github.com/jbarham/gopgsqldriver (postgres)", fun
 
 	var params = drivers.PostgresDialect
 	params.DriverName = "postgres"
-	params.ConnStr = fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port)
+	params.ConnStr = fmt.Sprintf("user=%s host=%s port=%s sslmode=disable database=postgres", user, host, port)
 	drivers.SchemaTestRunner(&params)
 })
