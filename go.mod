@@ -8,6 +8,7 @@ require (
 	github.com/gwenn/gosqlite v0.0.0-20191109174648-311659bf1898
 	github.com/gwenn/yacr v0.0.0-20191106185025-6d448d8b3e87 // indirect
 	github.com/jackc/pgx v3.6.0+incompatible
+	github.com/jbarham/gopgsqldriver v0.0.0-20120227112153-f8287ee9bfe2
 	github.com/lib/pq v1.2.0
 	github.com/mattn/go-oci8 v0.0.0-20191108001511-cbd8d5bc1da0
 	github.com/mattn/go-sqlite3 v1.11.0

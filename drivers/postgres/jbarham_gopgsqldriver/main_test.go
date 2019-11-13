@@ -25,6 +25,8 @@ var _ = Describe("Using driver github.com/jbarham/gopgsqldriver (postgres)", fun
 		port = "45432"
 	)
 
+	// TODO(js) This driver does not currently build (github.com/jbarham/gopgsqldriver)
+
 	var params = drivers.PostgresDialect
 	params.DriverName = "postgres"
 	params.ConnStr = fmt.Sprintf("user=%s host=%s port=%s sslmode=disable", user, host, port)

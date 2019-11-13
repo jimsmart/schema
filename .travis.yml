@@ -60,8 +60,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   # Install deps.
   # TODO(js) This driver does not currently build (github.com/jbarham/gopgsqldriver)
-  # # Setup for github.com/jbarham/gopgsqldriver
-  # - sudo apt-get install libpq-dev
+  # Setup for github.com/jbarham/gopgsqldriver
+  - sudo apt-get install libpq-dev
   # Setup for github.com/minus5/gofreetds
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
