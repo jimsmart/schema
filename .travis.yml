@@ -63,9 +63,11 @@ before_install:
   # Setup for github.com/jbarham/gopgsqldriver
   - sudo apt-get install libpq-dev
   # Find the referenced header file
-  - sudo apt-get install apt-file
-  - sudo apt-file update
-  - apt-file search libpq-fe.h
+  # - sudo apt-get install apt-file
+  # - sudo apt-file update
+  # - apt-file search libpq-fe.h
+  # Looks like apt-file is broken.
+  - find / -iname libpq-fe.h
   # Setup for github.com/minus5/gofreetds
   - sudo apt-get -y install freetds-dev
   # Go get our Go deps.
