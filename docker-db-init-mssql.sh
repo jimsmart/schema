@@ -1,7 +1,7 @@
 # Based upon comments here https://github.com/Microsoft/mssql-docker/issues/11
 
 echo "db-init.sh waiting for SQL Server to start."
-while [ true ]; do
+while :; do
     sleep 1s
     /opt/mssql-tools/bin/sqlcmd -l 30 -S localhost -h-1 -V1 -U sa -P "$SA_PASSWORD" -Q "select name from sys.databases where state_desc != 'ONLINE'" 2>/dev/null | grep --quiet '0 rows affected'
     if [ $? -eq 0 ]; then
