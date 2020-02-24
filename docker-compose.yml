@@ -45,7 +45,9 @@ services:
     restart: always
     ports:
       - 127.0.0.1:45432:5432
-
+    environment:
+        POSTGRES_HOST_AUTH_METHOD: trust
+  
   # adminer:
   #   image: adminer
   #   container_name: schema-test-adminer

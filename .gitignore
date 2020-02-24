@@ -2,3 +2,4 @@ TODO
 coverage.out
 *.sublime-project
 *.sublime-workspace
+*.code-workspace
