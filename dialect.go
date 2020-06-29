@@ -25,22 +25,22 @@ type dialect struct {
 // driverDialect is a registry, mapping database/sql driver names to database dialects.
 // This is somewhat fragile.
 var driverDialect = map[string]*dialect{
-	"*sqlite3.SQLiteDriver":        &sqlite,   // github.com/mattn/go-sqlite3
-	"*sqlite.impl":                 &sqlite,   // github.com/gwenn/gosqlite
-	"sqlite3.Driver":               &sqlite,   // github.com/mxk/go-sqlite - TODO(js) No datatypes.
-	"*pq.Driver":                   &postgres, // github.com/lib/pq
-	"*stdlib.Driver":               &postgres, // github.com/jackc/pgx
-	"*pgsqldriver.postgresDriver":  &postgres, // github.com/jbarham/gopgsqldriver - TODO(js) No datatypes.
-	"*gosnowflake.SnowflakeDriver": &postgres, // github.com/snowflakedb/gosnowflake
-	"*mysql.MySQLDriver":           &mysql,    // github.com/go-sql-driver/mysql
-	"*godrv.Driver":                &mysql,    // github.com/ziutek/mymysql - TODO(js) No datatypes.
-	"*mssql.Driver":                &mssql,    // github.com/denisenkom/go-mssqldb
-	"*mssql.MssqlDriver":           &mssql,    // github.com/denisenkom/go-mssqldb
-	"*freetds.MssqlDriver":         &mssql,    // github.com/minus5/gofreetds - TODO(js) No datatypes. Error on create view.
-	"*goracle.drv":                 &oracle,   // gopkg.in/goracle.v2
-	"*ora.Drv":                     &oracle,   // gopkg.in/rana/ora.v4 - TODO(js) Mismatched datatypes.
-	"*oci8.OCI8DriverStruct":       &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
-	"*oci8.OCI8Driver":             &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
+	"*sqlite3.SQLiteDriver":        &sqlite,    // github.com/mattn/go-sqlite3
+	"*sqlite.impl":                 &sqlite,    // github.com/gwenn/gosqlite
+	"sqlite3.Driver":               &sqlite,    // github.com/mxk/go-sqlite - TODO(js) No datatypes.
+	"*pq.Driver":                   &postgres,  // github.com/lib/pq
+	"*stdlib.Driver":               &postgres,  // github.com/jackc/pgx
+	"*pgsqldriver.postgresDriver":  &postgres,  // github.com/jbarham/gopgsqldriver - TODO(js) No datatypes.
+	"*gosnowflake.SnowflakeDriver": &snowflake, // github.com/snowflakedb/gosnowflake
+	"*mysql.MySQLDriver":           &mysql,     // github.com/go-sql-driver/mysql
+	"*godrv.Driver":                &mysql,     // github.com/ziutek/mymysql - TODO(js) No datatypes.
+	"*mssql.Driver":                &mssql,     // github.com/denisenkom/go-mssqldb
+	"*mssql.MssqlDriver":           &mssql,     // github.com/denisenkom/go-mssqldb
+	"*freetds.MssqlDriver":         &mssql,     // github.com/minus5/gofreetds - TODO(js) No datatypes. Error on create view.
+	"*goracle.drv":                 &oracle,    // gopkg.in/goracle.v2
+	"*ora.Drv":                     &oracle,    // gopkg.in/rana/ora.v4 - TODO(js) Mismatched datatypes.
+	"*oci8.OCI8DriverStruct":       &oracle,    // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
+	"*oci8.OCI8Driver":             &oracle,    // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
 }
 
 // TODO Should we expose a method of registering a driver string/dialect in our registry?
@@ -73,6 +73,11 @@ func escapeWithBrackets(s string) string {
 // escapeWithBraces implements brace escaping of a string.
 func escapeWithBraces(s string) string {
 	return escape(s, '{', '}')
+}
+
+// noEscape does not modify the string
+func noEscape(s string) string {
+	return s
 }
 
 // escape escapes a string identifier.
