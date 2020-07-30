@@ -17,6 +17,7 @@ Currently supporting the following database engines / SQL dialects:
 - MySQL
 - Oracle
 - Postgres
+- Snowflake
 - SQLite
 
 For a list of supported drivers, and their capabilities with regards to sql.ColumnType support, see [drivercaps](https://github.com/jimsmart/drivercaps)
@@ -67,6 +68,7 @@ Package schema is copyright 2018-2019 by Jim Smart and released under the [BSD 3
 
 ## History
 
+- v0.0.5: Added dialect alias for Snowflake driver github.com/snowflakedb/gosnowflake.
 - v0.0.4: Improved error handling for unknown DB driver types. Test environment now uses Docker.
 - v0.0.3: Minor code cleanups.
 - v0.0.2: Added identifier escaping for methods that query sql.ColumnType.
