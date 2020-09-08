@@ -38,6 +38,7 @@ var driverDialect = map[string]*dialect{
 	"*mssql.MssqlDriver":           &mssql,    // github.com/denisenkom/go-mssqldb
 	"*freetds.MssqlDriver":         &mssql,    // github.com/minus5/gofreetds - TODO(js) No datatypes. Error on create view.
 	"*goracle.drv":                 &oracle,   // gopkg.in/goracle.v2
+	"*godror.drv":                  &oracle,   // github.com/godror/godror
 	"*ora.Drv":                     &oracle,   // gopkg.in/rana/ora.v4 - TODO(js) Mismatched datatypes.
 	"*oci8.OCI8DriverStruct":       &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
 	"*oci8.OCI8Driver":             &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
