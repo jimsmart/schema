@@ -39,7 +39,7 @@
 //
 // See also https://golang.org/pkg/database/sql/#ColumnType
 //
-// Underlying driver support for column type metadata is implementation specific and somewhat variable.
+// Underlying support for column type metadata is driver implementation specific and somewhat variable.
 //
 // View Metadata
 //
@@ -54,7 +54,7 @@
 //
 // To obtain a list of columns making up the primary key for a given table:
 //
-//  pks, err := schema.PrimaryKeys(db, "employee_tbl")
+//  pks, err := schema.PrimaryKey(db, "employee_tbl")
 //  	...
 //  // pks is []string
 //  for i := range pks {
