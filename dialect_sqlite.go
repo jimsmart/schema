@@ -31,18 +31,10 @@ func (sqliteDialect) TableNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, sqliteTableNames, "")
 }
 
-func (d sqliteDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
 func (d sqliteDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, sqliteAllColumns, name, d.escapeIdent)
 }
 
 func (sqliteDialect) ViewNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, sqliteViewNames, "")
-}
-
-func (d sqliteDialect) Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.ViewNames, d.View)
 }

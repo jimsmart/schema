@@ -67,18 +67,10 @@ func (postgresDialect) TableNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, postgresTableNames, "")
 }
 
-func (d postgresDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
 func (d postgresDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 }
 
 func (postgresDialect) ViewNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, postgresViewNames, "")
-}
-
-func (d postgresDialect) Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.ViewNames, d.View)
 }

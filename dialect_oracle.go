@@ -65,18 +65,10 @@ func (oracleDialect) TableNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, oracleTableNames, "")
 }
 
-func (d oracleDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
 func (d oracleDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
 }
 
 func (oracleDialect) ViewNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, oracleViewNames, "")
-}
-
-func (d oracleDialect) Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.ViewNames, d.View)
 }

@@ -67,18 +67,10 @@ func (mysqlDialect) TableNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, mysqlTableNames, "")
 }
 
-func (d mysqlDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
 func (d mysqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
 }
 
 func (mysqlDialect) ViewNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, mysqlViewNames, "")
-}
-
-func (d mysqlDialect) Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.ViewNames, d.View)
 }

@@ -94,18 +94,10 @@ func (mssqlDialect) TableNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, mssqlTableNames, "")
 }
 
-func (d mssqlDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
 func (d mssqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
 }
 
 func (mssqlDialect) ViewNames(db *sql.DB) ([]string, error) {
 	return fetchNames(db, mssqlViewNames, "")
-}
-
-func (d mssqlDialect) Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	return fetchColumnTypesAll(db, d.ViewNames, d.View)
 }
