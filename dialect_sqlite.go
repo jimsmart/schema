@@ -20,6 +20,10 @@ func (sqliteDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
+func (sqliteDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, sqlitePrimaryKey, name)
+}
+
 func (d sqliteDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	q := fmt.Sprintf(sqliteAllColumns, d.escapeIdent(name))
 	return fetchColumnTypes(db, q)
@@ -31,10 +35,6 @@ func (sqliteDialect) TableNames(db *sql.DB) ([]string, error) {
 
 func (d sqliteDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
-func (sqliteDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, sqlitePrimaryKey, name)
 }
 
 func (d sqliteDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {

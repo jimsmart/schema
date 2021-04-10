@@ -7,10 +7,10 @@ import (
 
 type dialect interface {
 	escapeIdent(ident string) string
+	PrimaryKey(db *sql.DB, name string) ([]string, error)
 	Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
 	TableNames(db *sql.DB) ([]string, error)
 	Tables(db *sql.DB) (map[string][]*sql.ColumnType, error)
-	PrimaryKey(db *sql.DB, name string) ([]string, error)
 	View(db *sql.DB, name string) ([]*sql.ColumnType, error)
 	ViewNames(db *sql.DB) ([]string, error)
 	Views(db *sql.DB) (map[string][]*sql.ColumnType, error)

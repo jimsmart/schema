@@ -6,6 +6,7 @@
 //
 // The schema package works alongside database/sql and its underlying driver to provide schema metadata.
 //
+//  // Fetch names of all tables
 //  tnames, err := schema.TableNames(db)
 //  	...
 //  // tnames is []string
@@ -20,8 +21,9 @@
 //
 // Both user permissions and current database/schema effect table visibility.
 //
-// To query column type metadata for a single table, use schema.Table().
+// Use schema.Table() to query column type metadata for a single table:
 //
+//  // Fetch column metadata for given table
 //  tcols, err := schema.Table(db, "employee_tbl")
 //  	...
 //  // tcols is []*sql.ColumnType
@@ -39,21 +41,27 @@
 //
 // See also https://golang.org/pkg/database/sql/#ColumnType
 //
-// Underlying support for column type metadata is driver implementation specific and somewhat variable.
+// Note: underlying support for column type metadata is driver implementation specific and somewhat variable.
 //
 // View Metadata
 //
-// The same metadata can also be queried for views.
+// The same metadata can also be queried for views also:
 //
+//  // Fetch names of all views
 //  vnames, err := schema.ViewNames(db)
 //  	...
+//  // Fetch column metadata for given view
 //  vcols, err := schema.View(db, "monthly_sales_view")
+//  	...
+//  // Fetch column metadata for all views
+//  views, err := schema.Views(db)
 //  	...
 //
 // Primary Key Metadata
 //
 // To obtain a list of columns making up the primary key for a given table:
 //
+//  // Fetch primary key for given table
 //  pks, err := schema.PrimaryKey(db, "employee_tbl")
 //  	...
 //  // pks is []string

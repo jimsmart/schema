@@ -56,6 +56,10 @@ func (postgresDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
+func (postgresDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, postgresPrimaryKey, name)
+}
+
 func (d postgresDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	q := fmt.Sprintf(postgresAllColumns, d.escapeIdent(name))
 	return fetchColumnTypes(db, q)
@@ -67,10 +71,6 @@ func (postgresDialect) TableNames(db *sql.DB) ([]string, error) {
 
 func (d postgresDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
-func (postgresDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, postgresPrimaryKey, name)
 }
 
 func (d postgresDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {

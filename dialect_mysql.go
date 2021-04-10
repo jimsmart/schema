@@ -56,6 +56,10 @@ func (mysqlDialect) escapeIdent(ident string) string {
 	return escapeWithBackticks(ident)
 }
 
+func (mysqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, mysqlPrimaryKey, name)
+}
+
 func (d mysqlDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	q := fmt.Sprintf(mysqlAllColumns, d.escapeIdent(name))
 	return fetchColumnTypes(db, q)
@@ -67,10 +71,6 @@ func (mysqlDialect) TableNames(db *sql.DB) ([]string, error) {
 
 func (d mysqlDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return fetchColumnTypesAll(db, d.TableNames, d.Table)
-}
-
-func (mysqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, mysqlPrimaryKey, name)
 }
 
 func (d mysqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
