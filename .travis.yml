@@ -8,7 +8,7 @@ services:
   - docker
 
 env:
-  DOCKER_COMPOSE_VERSION=1.24.1 GO111MODULE=on
+  DOCKER_COMPOSE_VERSION=1.29.0 GO111MODULE=on
   # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
 
 before_install:
