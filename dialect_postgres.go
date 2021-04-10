@@ -2,7 +2,6 @@ package schema
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 const postgresAllColumns = `SELECT * FROM %s LIMIT 0`
@@ -61,8 +60,7 @@ func (postgresDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
 }
 
 func (d postgresDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(postgresAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 }
 
 func (postgresDialect) TableNames(db *sql.DB) ([]string, error) {
@@ -74,8 +72,7 @@ func (d postgresDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error
 }
 
 func (d postgresDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(postgresAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 }
 
 func (postgresDialect) ViewNames(db *sql.DB) ([]string, error) {

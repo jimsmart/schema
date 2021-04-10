@@ -2,7 +2,6 @@ package schema
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 // TODO(js) Is there some way to filter system tables (like mssql)? Or should we always just be using our own schema?
@@ -59,8 +58,7 @@ func (oracleDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
 }
 
 func (d oracleDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(oracleAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
 }
 
 func (oracleDialect) TableNames(db *sql.DB) ([]string, error) {
@@ -72,8 +70,7 @@ func (d oracleDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) 
 }
 
 func (d oracleDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(oracleAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
 }
 
 func (oracleDialect) ViewNames(db *sql.DB) ([]string, error) {

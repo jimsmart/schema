@@ -2,7 +2,6 @@ package schema
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 const sqliteAllColumns = `SELECT * FROM %s LIMIT 0`
@@ -25,8 +24,7 @@ func (sqliteDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
 }
 
 func (d sqliteDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(sqliteAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, sqliteAllColumns, name, d.escapeIdent)
 }
 
 func (sqliteDialect) TableNames(db *sql.DB) ([]string, error) {
@@ -38,8 +36,7 @@ func (d sqliteDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) 
 }
 
 func (d sqliteDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(sqliteAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, sqliteAllColumns, name, d.escapeIdent)
 }
 
 func (sqliteDialect) ViewNames(db *sql.DB) ([]string, error) {

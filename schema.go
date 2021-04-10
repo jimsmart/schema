@@ -198,7 +198,8 @@ func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 
 // fetchColumnTypes queries the database and returns column's type metadata
 // for a single table or view.
-func fetchColumnTypes(db *sql.DB, query string) ([]*sql.ColumnType, error) {
+func fetchColumnTypes(db *sql.DB, query, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
+	query = fmt.Sprintf(query, escapeIdent(name))
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

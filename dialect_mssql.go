@@ -2,7 +2,6 @@ package schema
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 const mssqlAllColumns = `SELECT * FROM %s WHERE 1=0`
@@ -88,8 +87,7 @@ func (mssqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
 }
 
 func (d mssqlDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(mssqlAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
 }
 
 func (mssqlDialect) TableNames(db *sql.DB) ([]string, error) {
@@ -101,8 +99,7 @@ func (d mssqlDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 }
 
 func (d mssqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(mssqlAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
 }
 
 func (mssqlDialect) ViewNames(db *sql.DB) ([]string, error) {

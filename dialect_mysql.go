@@ -2,7 +2,6 @@ package schema
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 const mysqlAllColumns = `SELECT * FROM %s LIMIT 0`
@@ -61,8 +60,7 @@ func (mysqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
 }
 
 func (d mysqlDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(mysqlAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
 }
 
 func (mysqlDialect) TableNames(db *sql.DB) ([]string, error) {
@@ -74,8 +72,7 @@ func (d mysqlDialect) Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 }
 
 func (d mysqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	q := fmt.Sprintf(mysqlAllColumns, d.escapeIdent(name))
-	return fetchColumnTypes(db, q)
+	return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
 }
 
 func (mysqlDialect) ViewNames(db *sql.DB) ([]string, error) {
