@@ -96,7 +96,7 @@ Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3
 
 ## History
 
-- v0.0.8: Disabled Oracle tests (because Travis).
+- v0.0.8: Disabled Oracle tests on Travis.
 - v0.0.7: Added PrimaryKey method. TableNames and ViewNames are now sorted. Improved Oracle testing. Refactored dialect handling.
 - v0.0.6: Fix Oracle quoting strategy. Added support for driver github.com/godror/godror.
 - v0.0.5: Added dialect alias for Snowflake driver github.com/snowflakedb/gosnowflake.
