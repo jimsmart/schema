@@ -14,8 +14,11 @@ services:
     ports:
       - 127.0.0.1:41433:1433
     volumes:
+      # Override the normal entry point, to call our own db-init.sh
       - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      # Script to do init after startup is complete.
       - ./docker-db-init-mssql.sh:/db-init.sh:ro
+      # SQL script executed at startup.
       - ./docker-db-init-mssql.sql:/init.sql:ro
     command: /bin/bash /entrypoint.sh
     environment:
@@ -43,7 +46,9 @@ services:
     ports:
       - 127.0.0.1:41521:1521
     volumes:
+      # Script to do init after initial setup is complete (not on every startup).
       - ./docker-db-init-oracle.sql:/opt/oracle/scripts/setup/init.sql:ro
+      # - ./docker-db-init-oracle.sql:/opt/oracle/scripts/startup/init.sql:ro
 
   postgres:
     # See https://hub.docker.com/_/postgres
