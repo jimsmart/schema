@@ -6,7 +6,7 @@ import (
 	// _ "github.com/mattn/go-oci8" // oci8
 	// _ "gopkg.in/rana/ora.v4" // ora
 
-	_ "github.com/godror/godror" // godror
+	// _ "github.com/godror/godror" // godror
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
@@ -14,7 +14,7 @@ import (
 
 // See README.md to learn how to set up Oracle for testing purposes.
 
-var _ = Describe("schema", func() {
+var _ = XDescribe("schema", func() {
 	Context("using github.com/godror/godror (Oracle)", func() {
 
 		const (
