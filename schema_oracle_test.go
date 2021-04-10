@@ -16,6 +16,8 @@ import (
 
 // See README.md to learn how to set up Oracle for testing purposes.
 
+// Database/user setup script, run by Docker: docker-db-init-oracle.sql
+
 var _ = Describe("schema", func() {
 	Context("using github.com/godror/godror (Oracle)", func() {
 

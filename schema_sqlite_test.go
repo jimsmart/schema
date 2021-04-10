@@ -16,10 +16,6 @@ var _ = Describe("schema", func() {
 	Context("using github.com/mattn/go-sqlite3 (SQLite)", func() {
 
 		const (
-			// user = ""
-			// pass = ""
-			// host = ""
-			// port = ""
 			dbs = ":memory:"
 			// dbs = "./test.sqlite"
 		)

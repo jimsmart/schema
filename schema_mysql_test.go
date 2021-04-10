@@ -10,11 +10,7 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
-// Setup script:
-//
-// CREATE DATABASE test_db;
-// CREATE USER test_user IDENTIFIED BY 'password';
-// GRANT ALL ON test_db.* TO 'test_user';
+// Database/user setup by Docker in: docker-compose.yml
 
 var _ = Describe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {

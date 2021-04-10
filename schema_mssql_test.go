@@ -10,13 +10,7 @@ import (
 	// . "github.com/onsi/gomega"
 )
 
-// Setup script:
-//
-// CREATE LOGIN test_user WITH PASSWORD = 'Password-123';
-// CREATE USER test_user FOR LOGIN test_user;
-// CREATE SCHEMA test_db AUTHORIZATION test_user;
-// ALTER USER test_user WITH default_schema = test_db;
-// EXEC sp_addrolemember db_ddladmin, test_user;
+// Database/user setup script, run by Docker: docker-db-init-mssql.sql
 
 var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
