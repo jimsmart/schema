@@ -1,48 +1,41 @@
 package schema
 
 import (
+	"database/sql"
 	"strings"
 )
 
-// query defines dialect query types.
-type query int
-
-// query type enum.
-const (
-	columnTypes     query = iota // Index of query to get column type info.
-	tableNames                   // Index of query to get table names.
-	viewNames                    // Index of query to get view names.
-	primaryKeyNames              // Index of query to get primary key names.
-)
-
-// dialect describes how each database 'flavour' provides its metadata.
-type dialect struct {
-	// escapeIdent provides the appropriate method for escaping identifiers.
-	escapeIdent func(string) string
-	// queries for fetching metadata: columnTypes, tableNames, viewNames, primaryKeyNames.
-	queries [4]string
+type dialect interface {
+	escapeIdent(ident string) string
+	Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
+	TableNames(db *sql.DB) ([]string, error)
+	Tables(db *sql.DB) (map[string][]*sql.ColumnType, error)
+	PrimaryKey(db *sql.DB, name string) ([]string, error)
+	View(db *sql.DB, name string) ([]*sql.ColumnType, error)
+	ViewNames(db *sql.DB) ([]string, error)
+	Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.
 // This is somewhat fragile.
-var driverDialect = map[string]*dialect{
-	"*sqlite3.SQLiteDriver":        &sqlite,   // github.com/mattn/go-sqlite3
-	"*sqlite.impl":                 &sqlite,   // github.com/gwenn/gosqlite
-	"sqlite3.Driver":               &sqlite,   // github.com/mxk/go-sqlite - TODO(js) No datatypes.
-	"*pq.Driver":                   &postgres, // github.com/lib/pq
-	"*stdlib.Driver":               &postgres, // github.com/jackc/pgx
-	"*pgsqldriver.postgresDriver":  &postgres, // github.com/jbarham/gopgsqldriver - TODO(js) No datatypes.
-	"*gosnowflake.SnowflakeDriver": &postgres, // github.com/snowflakedb/gosnowflake
-	"*mysql.MySQLDriver":           &mysql,    // github.com/go-sql-driver/mysql
-	"*godrv.Driver":                &mysql,    // github.com/ziutek/mymysql - TODO(js) No datatypes.
-	"*mssql.Driver":                &mssql,    // github.com/denisenkom/go-mssqldb
-	"*mssql.MssqlDriver":           &mssql,    // github.com/denisenkom/go-mssqldb
-	"*freetds.MssqlDriver":         &mssql,    // github.com/minus5/gofreetds - TODO(js) No datatypes. Error on create view.
-	"*goracle.drv":                 &oracle,   // gopkg.in/goracle.v2
-	"*godror.drv":                  &oracle,   // github.com/godror/godror
-	"*ora.Drv":                     &oracle,   // gopkg.in/rana/ora.v4 - TODO(js) Mismatched datatypes.
-	"*oci8.OCI8DriverStruct":       &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
-	"*oci8.OCI8Driver":             &oracle,   // github.com/mattn/go-oci8 - TODO(js) Mismatched datatypes.
+var driverDialect = map[string]dialect{
+	"*sqlite3.SQLiteDriver":        sqliteDialect{},   // github.com/mattn/go-sqlite3
+	"*sqlite.impl":                 sqliteDialect{},   // github.com/gwenn/gosqlite
+	"sqlite3.Driver":               sqliteDialect{},   // github.com/mxk/go-sqlite
+	"*pq.Driver":                   postgresDialect{}, // github.com/lib/pq
+	"*stdlib.Driver":               postgresDialect{}, // github.com/jackc/pgx
+	"*pgsqldriver.postgresDriver":  postgresDialect{}, // github.com/jbarham/gopgsqldriver
+	"*gosnowflake.SnowflakeDriver": postgresDialect{}, // github.com/snowflakedb/gosnowflake
+	"*mysql.MySQLDriver":           mysqlDialect{},    // github.com/go-sql-driver/mysql
+	"*godrv.Driver":                mysqlDialect{},    // github.com/ziutek/mymysql
+	"*mssql.Driver":                mssqlDialect{},    // github.com/denisenkom/go-mssqldb
+	"*mssql.MssqlDriver":           mssqlDialect{},    // github.com/denisenkom/go-mssqldb
+	"*freetds.MssqlDriver":         mssqlDialect{},    // github.com/minus5/gofreetds
+	"*goracle.drv":                 oracleDialect{},   // gopkg.in/goracle.v2
+	"*godror.drv":                  oracleDialect{},   // github.com/godror/godror
+	"*ora.Drv":                     oracleDialect{},   // gopkg.in/rana/ora.v4
+	"*oci8.OCI8DriverStruct":       oracleDialect{},   // github.com/mattn/go-oci8
+	"*oci8.OCI8Driver":             oracleDialect{},   // github.com/mattn/go-oci8
 }
 
 // TODO Should we expose a method of registering a driver string/dialect in our registry?
