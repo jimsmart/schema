@@ -46,7 +46,7 @@ services:
     ports:
       - 127.0.0.1:41521:1521
     volumes:
-      # Script to do init after initial setup is complete (not on every startup).
+      # SQL script executed after initial setup (not on every startup).
       - ./docker-db-init-oracle.sql:/opt/oracle/scripts/setup/init.sql:ro
       # - ./docker-db-init-oracle.sql:/opt/oracle/scripts/startup/init.sql:ro
 
