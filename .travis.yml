@@ -25,7 +25,7 @@ before_script:
   - docker-compose up -d mssql mysql postgres
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test -race -coverprofile=coverage.txt -covermode=atomic -tags=travis
 
 after_script:
   - docker-compose down -v
