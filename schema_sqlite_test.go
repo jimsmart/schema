@@ -46,8 +46,14 @@ var _ = Describe("schema", func() {
 				`CREATE INDEX IF NOT EXISTS idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX IF NOT EXISTS idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE IF NOT EXISTS person (
+					given_name		TEXT NOT NULL,
+					family_name		TEXT NOT NULL,
+					PRIMARY KEY (family_name, given_name)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE person`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -65,24 +71,26 @@ var _ = Describe("schema", func() {
 			},
 
 			TableExpRes: []string{
-				"id INTEGER",
-				"url TEXT",
-				"content BLOB",
-				"compressed_size INTEGER",
-				"content_length INTEGER",
-				"content_type TEXT",
-				"etag TEXT",
-				"last_modified TEXT",
-				"created_at DATETIME",
-				"modified_at DATETIME",
+				"id",
+				"url",
+				"content",
+				"compressed_size",
+				"content_length",
+				"content_type",
+				"etag",
+				"last_modified",
+				"created_at",
+				"modified_at",
 			},
 			ViewExpRes: []string{
-				"id INTEGER",
-				"url TEXT",
+				"id",
+				"url",
 			},
 
-			TableNameExpRes: "web_resource",
-			ViewNameExpRes:  "web_resource_view",
+			TableNamesExpRes: []string{"person", "web_resource"},
+			ViewNameExpRes:   "web_resource_view",
+
+			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}
 
 		SchemaTestRunner(sqlite)

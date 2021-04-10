@@ -23,8 +23,9 @@ Currently supporting the following database engines / SQL dialects:
 For a list of supported drivers, and their capabilities with regards to sql.ColumnType support, see [drivercaps](https://github.com/jimsmart/drivercaps)
 
 ## Installation
+
 ```bash
-$ go get github.com/jimsmart/schema
+go get github.com/jimsmart/schema
 ```
 
 ```go
@@ -57,17 +58,45 @@ To run the tests execute `go test` inside the project folder.
 For a full coverage report, try:
 
 ```bash
-$ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 ```
 
 To shutdown the Docker services, execute `docker-compose down -v` inside the project folder.
 
+### Oracle Setup Checklist
+
+#### Build Docker Image
+
+Build a Docker image for Oracle, by executing script:
+
+```bash
+./build_oracle_docker_image.sh
+```
+
+#### Increase Docker's RAM limits
+
+By default, Docker allocates 2gb RAM to each container. To prevent out-of-memory errors when running Oracle, increase Docker's RAM limits.
+
+Docker -> Preferences -> Resources -> Advanced -> Memory, change to 4gb, click Apply & Restart.
+
+#### Install Oracle Client
+
+Oracle database drivers require dynamic libraries that are part of the Oracle Client installation.
+
+##### Mac
+
+```bash
+brew tap InstantClientTap/instantclient
+brew install instantclient-basic
+```
+
 ## License
 
-Package schema is copyright 2018-2019 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
+Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
 
 ## History
 
+- v0.0.7: Added PrimaryKey method. TableNames and ViewNames are now sorted. Improved Oracle testing.
 - v0.0.6: Fix Oracle quoting strategy. Added support for driver github.com/godror/godror.
 - v0.0.5: Added dialect alias for Snowflake driver github.com/snowflakedb/gosnowflake.
 - v0.0.4: Improved error handling for unknown DB driver types. Test environment now uses Docker.

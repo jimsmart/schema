@@ -45,8 +45,14 @@ var _ = Describe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE person (
+					given_name		TEXT NOT NULL,
+					family_name		TEXT NOT NULL,
+					PRIMARY KEY (family_name, given_name)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE person`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -55,24 +61,26 @@ var _ = Describe("schema", func() {
 			},
 
 			TableExpRes: []string{
-				"id INT4",
-				"url TEXT",
-				"content BYTEA",
-				"compressed_size INT4",
-				"content_length INT4",
-				"content_type TEXT",
-				"etag TEXT",
-				"last_modified TEXT",
-				"created_at TIMESTAMP",
-				"modified_at TIMESTAMP",
+				"id",
+				"url",
+				"content",
+				"compressed_size",
+				"content_length",
+				"content_type",
+				"etag",
+				"last_modified",
+				"created_at",
+				"modified_at",
 			},
 			ViewExpRes: []string{
-				"id INT4",
-				"url TEXT",
+				"id",
+				"url",
 			},
 
-			TableNameExpRes: "web_resource",
-			ViewNameExpRes:  "web_resource_view",
+			TableNamesExpRes: []string{"person", "web_resource"},
+			ViewNameExpRes:   "web_resource_view",
+
+			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}
 
 		SchemaTestRunner(postgres)

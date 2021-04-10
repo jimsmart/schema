@@ -23,8 +23,10 @@ type testParams struct {
 	TableExpRes []string
 	ViewExpRes  []string
 
-	TableNameExpRes string
-	ViewNameExpRes  string
+	TableNamesExpRes []string
+	ViewNameExpRes   string
+
+	PrimaryKeysExpRes []string
 }
 
 func SchemaTestRunner(params *testParams) {
@@ -67,12 +69,11 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the column type info for an existing table", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.Table(db, "web_resource")
+			ci, err := schema.Table(db, params.TableNamesExpRes[1])
 			Expect(err).To(BeNil())
-			Expect(ci).To(HaveLen(10))
 			var list []string
 			for _, c := range ci {
-				list = append(list, c.Name()+" "+c.DatabaseTypeName())
+				list = append(list, c.Name())
 			}
 			Expect(list).To(Equal(params.TableExpRes))
 		})
@@ -88,14 +89,9 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the table names", func() {
 			db, done := setup()
 			defer done()
-
-			// err := oraDump(db)
-			// Expect(err).To(BeNil())
-
 			sn, err := schema.TableNames(db)
 			Expect(err).To(BeNil())
-			Expect(sn).To(HaveLen(1))
-			Expect(sn).To(Equal([]string{params.TableNameExpRes}))
+			Expect(sn).To(Equal(params.TableNamesExpRes))
 		})
 	})
 
@@ -105,8 +101,10 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			sc, err := schema.Tables(db)
 			Expect(err).To(BeNil())
-			Expect(sc).To(HaveLen(1))
-			ci, ok := sc[params.TableNameExpRes]
+			Expect(sc).To(HaveLen(2))
+			// TODO(js) Improve / cleanup tests.
+			// Expect(sc).To(HaveKey())
+			ci, ok := sc[params.TableNamesExpRes[1]]
 			Expect(ok).To(BeTrue())
 			Expect(ci).To(HaveLen(10))
 		})
@@ -116,12 +114,11 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the column type info for the view", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.View(db, "web_resource_view")
+			ci, err := schema.View(db, params.ViewNameExpRes)
 			Expect(err).To(BeNil())
-			Expect(ci).To(HaveLen(2))
 			var list []string
 			for _, c := range ci {
-				list = append(list, c.Name()+" "+c.DatabaseTypeName())
+				list = append(list, c.Name())
 			}
 			Expect(list).To(Equal(params.ViewExpRes))
 		})
@@ -148,6 +145,16 @@ func SchemaTestRunner(params *testParams) {
 			ci, ok := sc[params.ViewNameExpRes]
 			Expect(ok).To(BeTrue())
 			Expect(ci).To(HaveLen(2))
+		})
+	})
+
+	Describe("PrimaryKey", func() {
+		It("should return the primary key", func() {
+			db, done := setup()
+			defer done()
+			pk, err := schema.PrimaryKey(db, params.TableNamesExpRes[0])
+			Expect(err).To(BeNil())
+			Expect(pk).To(Equal(params.PrimaryKeysExpRes))
 		})
 	})
 

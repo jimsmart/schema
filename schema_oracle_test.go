@@ -3,27 +3,30 @@ package schema_test
 import (
 	"fmt"
 
-	// _ "gopkg.in/goracle.v2" // goracle
 	// _ "github.com/mattn/go-oci8" // oci8
 	// _ "gopkg.in/rana/ora.v4" // ora
+
+	_ "github.com/godror/godror" // godror
 
 	. "github.com/onsi/ginkgo"
 	// . "github.com/onsi/gomega"
 )
 
-var _ = XDescribe("schema", func() {
-	Context("using github.com/go-goracle/goracle (Oracle)", func() {
+// See README.md to learn how to set up Oracle for testing purposes.
+
+var _ = Describe("schema", func() {
+	Context("using github.com/godror/godror (Oracle)", func() {
 
 		const (
 			user = "test_user"
-			pass = "password"
+			pass = "Password123"
 			host = "localhost"
-			port = "32772"
+			port = "41521"
 			dbs  = "xe"
 		)
 
 		var oracle = &testParams{
-			DriverName: "goracle",
+			DriverName: "godror",
 			// DriverName: "oci8",
 			// DriverName: "ora",
 			ConnStr: fmt.Sprintf("%s/%s@%s:%s/%s", user, pass, host, port, dbs),
@@ -46,8 +49,14 @@ var _ = XDescribe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE person (
+					given_name		NVARCHAR2(128) NOT NULL,
+					family_name		NVARCHAR2(128) NOT NULL,
+					PRIMARY KEY (family_name, given_name)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE person`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -56,24 +65,26 @@ var _ = XDescribe("schema", func() {
 			},
 
 			TableExpRes: []string{
-				"ID NUMBER",
-				"URL NVARCHAR2",
-				"CONTENT BLOB",
-				"COMPRESSED_SIZE NUMBER",
-				"CONTENT_LENGTH NUMBER",
-				"CONTENT_TYPE NVARCHAR2",
-				"ETAG NVARCHAR2",
-				"LAST_MODIFIED NVARCHAR2",
-				"CREATED_AT TIMESTAMP WITH TIMEZONE",
-				"MODIFIED_AT TIMESTAMP WITH TIMEZONE",
+				"ID",
+				"URL",
+				"CONTENT",
+				"COMPRESSED_SIZE",
+				"CONTENT_LENGTH",
+				"CONTENT_TYPE",
+				"ETAG",
+				"LAST_MODIFIED",
+				"CREATED_AT",
+				"MODIFIED_AT",
 			},
 			ViewExpRes: []string{
-				"ID NUMBER",
-				"URL NVARCHAR2",
+				"ID",
+				"URL",
 			},
 
-			TableNameExpRes: "WEB_RESOURCE",
-			ViewNameExpRes:  "WEB_RESOURCE_VIEW",
+			TableNamesExpRes: []string{"PERSON", "WEB_RESOURCE"},
+			ViewNameExpRes:   "WEB_RESOURCE_VIEW",
+
+			PrimaryKeysExpRes: []string{"FAMILY_NAME", "GIVEN_NAME"},
 		}
 
 		SchemaTestRunner(oracle)

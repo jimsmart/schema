@@ -10,7 +10,7 @@
 //  	...
 //  // tnames is []string
 //  for i := range tnames {
-//  	fmt.Printf("Table: %s\n", tnames[i])
+//  	fmt.Println("Table:", tnames[i])
 //  }
 //
 //  // Output:
@@ -26,7 +26,7 @@
 //  	...
 //  // tcols is []*sql.ColumnType
 //  for i := range tcols {
-//  	fmt.Printf("Column: %s %s\n", tcols[i].Name(), tcols[i].DatabaseTypeName())
+//  	fmt.Println("Column:", tcols[i].Name(), tcols[i].DatabaseTypeName())
 //  }
 //
 //  // Output:
@@ -44,6 +44,26 @@
 // View Metadata
 //
 // The same metadata can also be queried for views.
+//
+//  vnames, err := schema.ViewNames(db)
+//  	...
+//  vcols, err := schema.View(db, "monthly_sales_view")
+//  	...
+//
+// Primary Key Metadata
+//
+// To obtain a list of columns making up the primary key for a given table:
+//
+//  pks, err := schema.PrimaryKeys(db, "employee_tbl")
+//  	...
+//  // pks is []string
+//  for i := range pks {
+//  	fmt.Println("Primary Key:", pks[i])
+//  }
+//
+//  // Output:
+//  // Primary Key: employee_id
+//
 package schema
 
 import (
@@ -55,25 +75,7 @@ import (
 //
 // https://github.com/golang/go/issues/7408#issuecomment-252046876
 //
-// Last proposed API:-
-//
-//  SchemaNames(db *sql.DB) ([]string, error)
-//  SchemaObject(db *sql.DB, name string) ([]sql.ColumnType, error)
-//  Schema(db *sql.DB) (map[string][]sql.ColumnType, error)
-//
-//
-// After some refactoring, this is where it's at:-
-//
-//  TableNames(db *sql.DB) ([]string, error)
-//  Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
-//  Tables(db *sql.DB) (map[string][]*sql.ColumnType, error)
-//
-//  ViewNames(db *sql.DB) ([]string, error)
-//  View(db *sql.DB, name string) ([]*sql.ColumnType, error)
-//  Views(db *sql.DB) (map[string][]*sql.ColumnType, error)
-//
-//
-// If this package were to be part of database/sql, then the API would become:-
+// If this package were to be part of database/sql, then the API would become like:-
 //
 //  func (db *DB) Table(name string) ([]*ColumnType, error)
 //  func (db *DB) TableNames() ([]string, error)
@@ -102,35 +104,47 @@ func (e UnknownDriverError) Error() string {
 
 //
 
-// TableNames returns a list of all table names in the current schema
-// (not including system tables).
+// TableNames returns a list of all table names in the current schema.
 func TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, tableNames)
+	return fetchNames(db, tableNames, "")
 }
 
-// ViewNames returns a list of all view names in the current schema
-// (not including system views).
+// ViewNames returns a list of all view names in the current schema.
 func ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, viewNames)
+	return fetchNames(db, viewNames, "")
+}
+
+// PrimaryKey returns a list of column names making up the primary
+// key for the given table name.
+func PrimaryKey(db *sql.DB, name string) ([]string, error) {
+	return fetchNames(db, primaryKeyNames, name)
 }
 
 // fetchNames queries the database schema metadata and returns
-// either a list of table or view names.
+// a list of table/view/column names.
 //
 // It uses the database driver name and the passed query type
 // to lookup the appropriate dialect and query.
-func fetchNames(db *sql.DB, qt query) ([]string, error) {
+//
+// The name parameter (if not "") is passed as a parameter to db.Query.
+func fetchNames(db *sql.DB, qt query, name string) ([]string, error) {
 	dt := fmt.Sprintf("%T", db.Driver())
 	d, ok := driverDialect[dt]
 	if !ok {
 		return nil, UnknownDriverError{Driver: dt}
 	}
 	// Run the appropriate query from dialect:
-	// this runs a query to fetch names of tables/views
+	// this runs a query to fetch names of tables/views/columns
 	// from tables that contain db metadata.
 	// It's different for every dialect.
 	q := d.queries[qt]
-	rows, err := db.Query(q)
+	var rows *sql.Rows
+	var err error
+	if len(name) > 0 {
+		rows, err = db.Query(q, name)
+	} else {
+		rows, err = db.Query(q)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +186,8 @@ func fetchColumnTypes(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	// Build and run the appropriate query from dialect:
 	// this runs a query that returns no rows, and then
 	// picks off the column type info.
-	q := fmt.Sprintf(d.queries[columnTypes], d.escapeIdent(name))
+	q := d.queries[columnTypes]
+	q = fmt.Sprintf(q, d.escapeIdent(name))
 	rows, err := db.Query(q)
 	if err != nil {
 		return nil, err

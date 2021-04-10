@@ -9,17 +9,18 @@ type query int
 
 // query type enum.
 const (
-	columnTypes query = iota // Index of query to get column type info.
-	tableNames               // Index of query to get table names.
-	viewNames                // Index of query to get view names.
+	columnTypes     query = iota // Index of query to get column type info.
+	tableNames                   // Index of query to get table names.
+	viewNames                    // Index of query to get view names.
+	primaryKeyNames              // Index of query to get primary key names.
 )
 
 // dialect describes how each database 'flavour' provides its metadata.
 type dialect struct {
 	// escapeIdent provides the appropriate method for escaping identifiers.
 	escapeIdent func(string) string
-	// queries for fetching metadata: tableNames, viewNames, columnTypes.
-	queries [3]string
+	// queries for fetching metadata: columnTypes, tableNames, viewNames, primaryKeyNames.
+	queries [4]string
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.

@@ -4,32 +4,75 @@ package schema
 
 var mssql = dialect{
 	escapeIdent: escapeWithBrackets, // [tablename]
-	queries: [3]string{
+	queries: [4]string{
 		// columnTypes query.
 		`SELECT * FROM %s WHERE 1=0`,
 		// tableNames query.
 		pack(`
-			SELECT T.name as name
+			SELECT
+				t.name
 			FROM
-				sys.tables AS T
-				INNER JOIN sys.schemas AS S ON S.schema_id = T.schema_id
-				LEFT JOIN sys.extended_properties AS EP ON EP.major_id = T.[object_id]
+				sys.tables t
+			INNER JOIN
+				sys.schemas s
+			ON	s.schema_id = t.schema_id
+			LEFT JOIN
+				sys.extended_properties ep
+			ON	ep.major_id = t.[object_id]
 			WHERE
-				T.is_ms_shipped = 0 AND
-				(EP.class_desc IS NULL OR (EP.class_desc <> 'OBJECT_OR_COLUMN' AND
-				EP.[name] <> 'microsoft_database_tools_support'))
+				t.schema_id = SCHEMA_ID() AND
+				t.is_ms_shipped = 0 AND
+				(ep.class_desc IS NULL OR (ep.class_desc <> 'OBJECT_OR_COLUMN' AND
+					ep.[name] <> 'microsoft_database_tools_support'))
+			ORDER BY
+				t.name
 		`),
 		// viewNames query.
 		pack(`
-			SELECT T.name as name
+			SELECT
+				t.name
 			FROM
-				sys.views AS T
-				INNER JOIN sys.schemas AS S ON S.schema_id = T.schema_id
-				LEFT JOIN sys.extended_properties AS EP ON EP.major_id = T.[object_id]
+				sys.views t
+			INNER JOIN
+				sys.schemas s
+			ON	s.schema_id = t.schema_id
+			LEFT JOIN
+				sys.extended_properties ep
+			ON	ep.major_id = t.[object_id]
 			WHERE
-				T.is_ms_shipped = 0 AND
-				(EP.class_desc IS NULL OR (EP.class_desc <> 'OBJECT_OR_COLUMN' AND
-				EP.[name] <> 'microsoft_database_tools_support'))
+				t.schema_id = SCHEMA_ID() AND
+				t.is_ms_shipped = 0 AND
+				(ep.class_desc IS NULL OR (ep.class_desc <> 'OBJECT_OR_COLUMN' AND
+					ep.[name] <> 'microsoft_database_tools_support'))
+			ORDER BY
+				t.name
+			`),
+		// primaryKeyNames query.
+		pack(`
+			SELECT
+				tc.name
+			FROM
+				sys.schemas s
+			INNER JOIN
+				sys.tables t
+			ON	s.schema_id = t.schema_id
+			INNER JOIN
+				sys.indexes i
+			ON	t.object_id = i.object_id
+			INNER JOIN
+				sys.index_columns ic
+			ON	i.object_id = ic.object_id AND
+				i.index_id = ic.index_id
+			INNER JOIN
+				sys.columns tc
+			ON	ic.object_id = tc.object_id AND
+				ic.column_id = tc.column_id
+			WHERE
+				i.is_primary_key = 1 AND
+				s.schema_id = SCHEMA_ID() AND
+				t.name = ?
+			ORDER BY
+				ic.key_ordinal
 		`),
 	},
 }

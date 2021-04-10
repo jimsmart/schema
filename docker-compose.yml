@@ -5,6 +5,7 @@ services:
   # - mssql    41433
   # - mysql    43306
   # - postgres 45432
+  # - oracle   41521
 
   mssql:
     # See https://hub.docker.com/_/microsoft-mssql-server
@@ -27,30 +28,28 @@ services:
     image: mysql:latest
     container_name: schema-test-mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
     ports:
       - 127.0.0.1:43306:3306
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: test_db
-      MYSQL_USER: mysql_test_user
-      MYSQL_PASSWORD: password
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: password-123
 
-  # TODO(js) Oracle
+  oracle:
+    # See https://www.petefreitag.com/item/886.cfm
+    image: oracle/database:18.4.0-xe
+    container_name: schema-test-oracle
+    ports:
+      - 127.0.0.1:41521:1521
+    volumes:
+      - ./docker-db-init-oracle.sql:/opt/oracle/scripts/setup/init.sql:ro
 
   postgres:
     # See https://hub.docker.com/_/postgres
     image: postgres:latest
     container_name: schema-test-postgres
-    restart: always
     ports:
       - 127.0.0.1:45432:5432
     environment:
         POSTGRES_HOST_AUTH_METHOD: trust
-  
-  # adminer:
-  #   image: adminer
-  #   container_name: schema-test-adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080

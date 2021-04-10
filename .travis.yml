@@ -21,7 +21,8 @@ before_install:
   - go get -v ./...
 
 before_script:
-  - docker-compose up -d
+  # Start everything except oracle servvice.
+  - docker-compose up -d mssql mysql postgres
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic

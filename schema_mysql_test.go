@@ -20,8 +20,8 @@ var _ = Describe("schema", func() {
 	Context("using github.com/go-sql-driver/mysql (MySQL)", func() {
 
 		const (
-			user = "mysql_test_user"
-			pass = "password"
+			user = "test_user"
+			pass = "password-123"
 			host = "localhost"
 			port = "43306"
 			dbs  = "test_db"
@@ -51,31 +51,39 @@ var _ = Describe("schema", func() {
 					INDEX (modified_at)
 				)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE TABLE IF NOT EXISTS person (
+					given_name		VARCHAR(128) NOT NULL,
+					family_name		VARCHAR(128) NOT NULL,
+					PRIMARY KEY (family_name, given_name)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE person`,
 				`DROP VIEW web_resource_view`,
 				`DROP TABLE web_resource`,
 			},
 
 			TableExpRes: []string{
-				"id INT",
-				"url VARCHAR",
-				"content BLOB",
-				"compressed_size INT",
-				"content_length INT",
-				"content_type VARCHAR",
-				"etag VARCHAR",
-				"last_modified VARCHAR",
-				"created_at TIMESTAMP",
-				"modified_at TIMESTAMP",
+				"id",
+				"url",
+				"content",
+				"compressed_size",
+				"content_length",
+				"content_type",
+				"etag",
+				"last_modified",
+				"created_at",
+				"modified_at",
 			},
 			ViewExpRes: []string{
-				"id INT",
-				"url VARCHAR",
+				"id",
+				"url",
 			},
 
-			TableNameExpRes: "web_resource",
-			ViewNameExpRes:  "web_resource_view",
+			TableNamesExpRes: []string{"person", "web_resource"},
+			ViewNameExpRes:   "web_resource_view",
+
+			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}
 
 		SchemaTestRunner(mysql)

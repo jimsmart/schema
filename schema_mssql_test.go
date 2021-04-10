@@ -22,7 +22,8 @@ var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
 
 		const (
-			user = "mssql_test_user"
+			// user = "mssql_test_user"
+			user = "test_user"
 			pass = "Password-123"
 			host = "localhost"
 			port = "41433"
@@ -54,8 +55,14 @@ var _ = Describe("schema", func() {
 				// `CREATE VIEW web_resource_view AS SELECT t.id, t.url FROM web_resource t`,
 				// `CREATE VIEW web_resource_view AS (SELECT id, url FROM web_resource)`,
 				// `CREATE VIEW web_resource_view AS (SELECT t.id, t.url FROM web_resource t)`,
+				`CREATE TABLE person (
+					given_name		NVARCHAR NOT NULL,
+					family_name		NVARCHAR NOT NULL,
+					PRIMARY KEY (family_name, given_name)
+				)`,
 			},
 			DropDDL: []string{
+				`DROP TABLE person`,
 				`DROP VIEW IF EXISTS web_resource_view`,
 				`DROP INDEX IF EXISTS idx_web_resource_modified_at ON web_resource`,
 				`DROP INDEX IF EXISTS idx_web_resource_created_at ON web_resource`,
@@ -64,24 +71,26 @@ var _ = Describe("schema", func() {
 			},
 
 			TableExpRes: []string{
-				"id INT",
-				"url NVARCHAR",
-				"content VARBINARY",
-				"compressed_size INT",
-				"content_length INT",
-				"content_type NVARCHAR",
-				"etag NVARCHAR",
-				"last_modified NVARCHAR",
-				"created_at DATETIME",
-				"modified_at DATETIME",
+				"id",
+				"url",
+				"content",
+				"compressed_size",
+				"content_length",
+				"content_type",
+				"etag",
+				"last_modified",
+				"created_at",
+				"modified_at",
 			},
 			ViewExpRes: []string{
-				"id INT",
-				"url NVARCHAR",
+				"id",
+				"url",
 			},
 
-			TableNameExpRes: "web_resource",
-			ViewNameExpRes:  "web_resource_view",
+			TableNamesExpRes: []string{"person", "web_resource"},
+			ViewNameExpRes:   "web_resource_view",
+
+			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}
 
 		SchemaTestRunner(mssql)
