@@ -7,19 +7,19 @@ import (
 
 type dialect interface {
 	escapeIdent(ident string) string
-	PrimaryKey(db *sql.DB, name string) ([]string, error)
-	Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
-	TableNames(db *sql.DB) ([]string, error)
-	View(db *sql.DB, name string) ([]*sql.ColumnType, error)
-	ViewNames(db *sql.DB) ([]string, error)
+	// PrimaryKey(db *sql.DB, name string) ([]string, error)
+	// Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
+	// TableNames(db *sql.DB) ([]string, error)
+	// View(db *sql.DB, name string) ([]*sql.ColumnType, error)
+	// ViewNames(db *sql.DB) ([]string, error)
 
 	//
 
-	PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error)
-	TableNamesWithSchema(db *sql.DB) ([][2]string, error)
-	TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
-	ViewNamesWithSchema(db *sql.DB) ([][2]string, error)
-	ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
+	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
+	TableNames(db *sql.DB) ([][2]string, error)
+	Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
+	ViewNames(db *sql.DB) ([][2]string, error)
+	View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.

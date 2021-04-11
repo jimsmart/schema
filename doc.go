@@ -11,7 +11,7 @@
 //  	...
 //  // tnames is []string
 //  for i := range tnames {
-//  	fmt.Println("Table:", tnames[i])
+//  	fmt.Println("Table:", tnames[i][1])
 //  }
 //
 //  // Output:
@@ -24,7 +24,7 @@
 // Use schema.Table() to query column type metadata for a single table:
 //
 //  // Fetch column metadata for given table
-//  tcols, err := schema.Table(db, "employee_tbl")
+//  tcols, err := schema.Table(db, "", "employee_tbl")
 //  	...
 //  // tcols is []*sql.ColumnType
 //  for i := range tcols {
@@ -51,7 +51,7 @@
 //  vnames, err := schema.ViewNames(db)
 //  	...
 //  // Fetch column metadata for given view
-//  vcols, err := schema.View(db, "monthly_sales_view")
+//  vcols, err := schema.View(db, "", "monthly_sales_view")
 //  	...
 //  // Fetch column metadata for all views
 //  views, err := schema.Views(db)
@@ -62,7 +62,7 @@
 // To obtain a list of columns making up the primary key for a given table:
 //
 //  // Fetch primary key for given table
-//  pks, err := schema.PrimaryKey(db, "employee_tbl")
+//  pks, err := schema.PrimaryKey(db, "", "employee_tbl")
 //  	...
 //  // pks is []string
 //  for i := range pks {

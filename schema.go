@@ -38,8 +38,60 @@ func (e UnknownDriverError) Error() string {
 
 //
 
-// TableNames returns a list of all table names in the current schema.
-func TableNames(db *sql.DB) ([]string, error) {
+// Tables returns column type metadata for all tables in the current schema.
+// The returned map is keyed by table name.
+func Tables(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	names, err := d.TableNames(db)
+	if err != nil {
+		return nil, err
+	}
+	if len(names) == 0 {
+		return nil, nil
+	}
+	m := make(map[[2]string][]*sql.ColumnType, len(names))
+	for _, n := range names {
+		ct, err := d.Table(db, n[0], n[1])
+		if err != nil {
+			return nil, err
+		}
+		m[n] = ct
+	}
+	return m, nil
+}
+
+// Views returns column type metadata for all views in the current schema.
+// The returned map is keyed by view name.
+func Views(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	names, err := d.ViewNames(db)
+	if err != nil {
+		return nil, err
+	}
+	if len(names) == 0 {
+		return nil, nil
+	}
+	m := make(map[[2]string][]*sql.ColumnType, len(names))
+	for _, n := range names {
+		ct, err := d.View(db, n[0], n[1])
+		if err != nil {
+			return nil, err
+		}
+		m[n] = ct
+	}
+	return m, nil
+}
+
+// TODO(js) Improve comments.
+
+// TableNames returns a list of all table names.
+func TableNames(db *sql.DB) ([][2]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
@@ -47,8 +99,8 @@ func TableNames(db *sql.DB) ([]string, error) {
 	return d.TableNames(db)
 }
 
-// ViewNames returns a list of all view names in the current schema.
-func ViewNames(db *sql.DB) ([]string, error) {
+// ViewNames returns a list of all view names.
+func ViewNames(db *sql.DB) ([][2]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
@@ -56,17 +108,33 @@ func ViewNames(db *sql.DB) ([]string, error) {
 	return d.ViewNames(db)
 }
 
-// PrimaryKey returns a list of column names making up the primary
-// key for the given table name.
-func PrimaryKey(db *sql.DB, name string) ([]string, error) {
+// Table returns the column type metadata for the given table name.
+func Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.PrimaryKey(db, name)
+	return d.Table(db, schema, name)
 }
 
-// TODO(js) Rewrite comment.
+// View returns the column type metadata for the given view name.
+func View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.View(db, schema, name)
+}
+
+// PrimaryKey returns a list of column names making up the primary
+// key for the given table name.
+func PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.PrimaryKey(db, schema, name)
+}
 
 // fetchNames executes the given query with an optional name parameter,
 // and returns a list of table/view/column names.
@@ -97,117 +165,6 @@ func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 		names = append(names, n)
 	}
 	return names, nil
-}
-
-func getDialect(db *sql.DB) (dialect, error) {
-	dt := fmt.Sprintf("%T", db.Driver())
-	d, ok := driverDialect[dt]
-	if !ok {
-		return nil, UnknownDriverError{Driver: dt}
-	}
-	return d, nil
-}
-
-// Table returns the column type metadata for the given table name.
-func Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.Table(db, name)
-}
-
-// View returns the column type metadata for the given view name.
-func View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.View(db, name)
-}
-
-// fetchColumnTypes queries the database and returns column's type metadata
-// for a single table or view.
-func fetchColumnTypes(db *sql.DB, query, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
-	query = fmt.Sprintf(query, escapeIdent(name))
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	return rows.ColumnTypes()
-}
-
-// Tables returns column type metadata for all tables in the current schema.
-// The returned map is keyed by table name.
-func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	names, err := d.TableNames(db)
-	if err != nil {
-		return nil, err
-	}
-	if len(names) == 0 {
-		return nil, nil
-	}
-	m := make(map[string][]*sql.ColumnType, len(names))
-	for _, n := range names {
-		ct, err := d.Table(db, n)
-		if err != nil {
-			return nil, err
-		}
-		m[n] = ct
-	}
-	return m, nil
-}
-
-// Views returns column type metadata for all views in the current schema.
-// The returned map is keyed by view name.
-func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	names, err := d.ViewNames(db)
-	if err != nil {
-		return nil, err
-	}
-	if len(names) == 0 {
-		return nil, nil
-	}
-	m := make(map[string][]*sql.ColumnType, len(names))
-	for _, n := range names {
-		ct, err := d.View(db, n)
-		if err != nil {
-			return nil, err
-		}
-		m[n] = ct
-	}
-	return m, nil
-}
-
-// With schema.
-
-// TODO(js) Improve comments.
-
-// TableNamesWithSchema returns a list of all table names.
-func TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.TableNamesWithSchema(db)
-}
-
-// ViewNamesWithSchema returns a list of all view names.
-func ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.ViewNamesWithSchema(db)
 }
 
 // fetchNames executes the given query with an optional name parameter,
@@ -242,22 +199,27 @@ func fetchNamesWithSchema(db *sql.DB, query, schema, name string) ([][2]string, 
 	return names, nil
 }
 
-// TableWithSchema returns the column type metadata for the given table name.
-func TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
+func getDialect(db *sql.DB) (dialect, error) {
+	dt := fmt.Sprintf("%T", db.Driver())
+	d, ok := driverDialect[dt]
+	if !ok {
+		return nil, UnknownDriverError{Driver: dt}
 	}
-	return d.TableWithSchema(db, schema, name)
+	return d, nil
 }
 
-// ViewWithSchema returns the column type metadata for the given view name.
-func ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	d, err := getDialect(db)
+// TODO(js) DRY this.
+
+// fetchColumnTypes queries the database and returns column's type metadata
+// for a single table or view.
+func fetchColumnTypes(db *sql.DB, query, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
+	query = fmt.Sprintf(query, escapeIdent(name))
+	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	return d.ViewWithSchema(db, schema, name)
+	defer rows.Close()
+	return rows.ColumnTypes()
 }
 
 // fetchColumnTypesWithSchema queries the database and returns column's type metadata
@@ -271,14 +233,4 @@ func fetchColumnTypesWithSchema(db *sql.DB, query, schema, name string, escapeId
 	}
 	defer rows.Close()
 	return rows.ColumnTypes()
-}
-
-// PrimaryKeyWithSchema returns a list of column names making up the primary
-// key for the given table name.
-func PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.PrimaryKeyWithSchema(db, schema, name)
 }

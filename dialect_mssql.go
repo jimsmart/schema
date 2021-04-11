@@ -139,7 +139,7 @@ const mssqlPrimaryKeyWithSchema = `
 		ic.column_id = tc.column_id
 	WHERE
 		i.is_primary_key = 1 AND
-		s.schema_id = ? AND
+		s.schema_id = SCHEMA_ID(?) AND
 		t.name = ?
 	ORDER BY
 		ic.key_ordinal
@@ -152,51 +152,31 @@ func (mssqlDialect) escapeIdent(ident string) string {
 	return escapeWithBrackets(ident)
 }
 
-func (mssqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, mssqlPrimaryKey, "", name)
-}
-
-func (mssqlDialect) PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+func (mssqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, mssqlPrimaryKey, "", name)
 	}
 	return fetchNames(db, mssqlPrimaryKeyWithSchema, schema, name)
 }
 
-func (d mssqlDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
-}
-
-func (d mssqlDialect) TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d mssqlDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
-func (mssqlDialect) TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, mssqlTableNames, "", "")
-}
-
-func (mssqlDialect) TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (mssqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, mssqlTableNamesWithSchema, "", "")
 }
 
-func (d mssqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
-}
-
-func (d mssqlDialect) ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d mssqlDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
-func (mssqlDialect) ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, mssqlViewNames, "", "")
-}
-
-func (mssqlDialect) ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (mssqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, mssqlViewNamesWithSchema, "", "")
 }

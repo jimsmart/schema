@@ -85,18 +85,15 @@ var _ = Describe("schema", func() {
 				"URL",
 			},
 
-			TableNamesExpRes: []string{"PERSON", "WEB_RESOURCE"},
-			ViewNamesExpRes:  []string{"WEB_RESOURCE_VIEW"},
-
-			PrimaryKeysExpRes: []string{"FAMILY_NAME", "GIVEN_NAME"},
-
-			TableNamesWithSchemaExpRes: [][2]string{
+			TableNamesExpRes: [][2]string{
 				{"TEST_USER", "PERSON"},
 				{"TEST_USER", "WEB_RESOURCE"},
 			},
-			ViewNamesWithSchemaExpRes: [][2]string{
+			ViewNamesExpRes: [][2]string{
 				{"TEST_USER", "WEB_RESOURCE_VIEW"},
 			},
+
+			PrimaryKeysExpRes: []string{"FAMILY_NAME", "GIVEN_NAME"},
 		}
 
 		SchemaTestRunner(oracle)

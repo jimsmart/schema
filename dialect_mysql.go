@@ -100,51 +100,31 @@ func (mysqlDialect) escapeIdent(ident string) string {
 	return escapeWithBackticks(ident)
 }
 
-func (mysqlDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, mysqlPrimaryKey, "", name)
-}
-
-func (mysqlDialect) PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+func (mysqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, mysqlPrimaryKey, "", name)
 	}
 	return fetchNames(db, mysqlPrimaryKeyWithSchema, schema, name)
 }
 
-func (d mysqlDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
-}
-
-func (d mysqlDialect) TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d mysqlDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, mysqlAllColumns, schema, name, d.escapeIdent)
 }
 
-func (mysqlDialect) TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, mysqlTableNames, "", "")
-}
-
-func (mysqlDialect) TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, mysqlTableNamesWithSchema, "", "")
 }
 
-func (d mysqlDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
-}
-
-func (d mysqlDialect) ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d mysqlDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, mysqlAllColumns, schema, name, d.escapeIdent)
 }
 
-func (mysqlDialect) ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, mysqlViewNames, "", "")
-}
-
-func (mysqlDialect) ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, mysqlViewNamesWithSchema, "", "")
 }

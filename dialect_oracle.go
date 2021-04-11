@@ -95,51 +95,31 @@ func (oracleDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
-func (oracleDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, oraclePrimaryKey, "", name)
-}
-
-func (oracleDialect) PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, oraclePrimaryKey, "", name)
 	}
 	return fetchNames(db, oraclePrimaryKeyWithSchema, schema, name)
 }
 
-func (d oracleDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
-}
-
-func (d oracleDialect) TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d oracleDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
-func (oracleDialect) TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, oracleTableNames, "", "")
-}
-
-func (oracleDialect) TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, oracleTableNamesWithSchema, "", "")
 }
 
-func (d oracleDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
-}
-
-func (d oracleDialect) ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d oracleDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
-func (oracleDialect) ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, oracleViewNames, "", "")
-}
-
-func (oracleDialect) ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (oracleDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, oracleViewNamesWithSchema, "", "")
 }

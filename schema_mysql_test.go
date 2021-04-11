@@ -76,18 +76,15 @@ var _ = Describe("schema", func() {
 				"url",
 			},
 
-			TableNamesExpRes: []string{"person", "web_resource"},
-			ViewNamesExpRes:  []string{"web_resource_view"},
-
-			PrimaryKeysExpRes: []string{"family_name", "given_name"},
-
-			TableNamesWithSchemaExpRes: [][2]string{
+			TableNamesExpRes: [][2]string{
 				{"test_db", "person"},
 				{"test_db", "web_resource"},
 			},
-			ViewNamesWithSchemaExpRes: [][2]string{
+			ViewNamesExpRes: [][2]string{
 				{"test_db", "web_resource_view"},
 			},
+
+			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}
 
 		SchemaTestRunner(mysql)

@@ -100,51 +100,31 @@ func (postgresDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
-func (postgresDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, postgresPrimaryKey, "", name)
-}
-
-func (postgresDialect) PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, postgresPrimaryKey, "", name)
 	}
 	return fetchNames(db, postgresPrimaryKeyWithSchema, schema, name)
 }
 
-func (d postgresDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
-}
-
-func (d postgresDialect) TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d postgresDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
-func (postgresDialect) TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, postgresTableNames, "", "")
-}
-
-func (postgresDialect) TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, postgresTableNamesWithSchema, "", "")
 }
 
-func (d postgresDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
-}
-
-func (d postgresDialect) ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+func (d postgresDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	if schema == "" {
 		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 	}
 	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
-func (postgresDialect) ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, postgresViewNames, "", "")
-}
-
-func (postgresDialect) ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, postgresViewNamesWithSchema, "", "")
 }
