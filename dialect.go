@@ -78,6 +78,11 @@ func escapeWithBraces(s string) string {
 
 // escape escapes a string identifier.
 func escape(s string, escBegin, escEnd byte) string {
+	// It would be nice to know when not to escape,
+	// but a regex (e.g. "^[a-zA-Z_][a-zA-Z0-9_#@$]*$")
+	// doesn't solve this, because it would not catch keywords.
+	// Which is why we simply always escape identifiers.
+
 	// TODO(js) Correct handling of backslash escaping of identifiers needs
 	// further investigation: different dialects look to handle it differently
 	// - removed for now.
