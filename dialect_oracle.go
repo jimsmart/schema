@@ -79,10 +79,7 @@ func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 }
 
 func (d oracleDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, oracleAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
 func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
@@ -90,10 +87,7 @@ func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 func (d oracleDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, oracleAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, oracleAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
 func (oracleDialect) ViewNames(db *sql.DB) ([][2]string, error) {

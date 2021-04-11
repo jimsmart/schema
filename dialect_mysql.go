@@ -26,8 +26,7 @@ const mysqlViewNamesWithSchema = `
 	FROM
 		information_schema.tables
 	WHERE
-		table_type = 'VIEW' AND
-		table_schema = database()
+		table_type = 'VIEW'
 	ORDER BY
 		table_schema,
 		table_name
@@ -84,10 +83,7 @@ func (mysqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error
 }
 
 func (d mysqlDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, mysqlAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, mysqlAllColumns, schema, name, d.escapeIdent)
 }
 
 func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
@@ -95,10 +91,7 @@ func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 func (d mysqlDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, mysqlAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, mysqlAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, mysqlAllColumns, schema, name, d.escapeIdent)
 }
 
 func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {

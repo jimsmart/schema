@@ -56,10 +56,7 @@ func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 }
 
 func (d sqliteDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, sqliteAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, sqliteAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
 }
 
 func (sqliteDialect) TableNames(db *sql.DB) ([][2]string, error) {
@@ -67,10 +64,7 @@ func (sqliteDialect) TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 func (d sqliteDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, sqliteAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, sqliteAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
 }
 
 func (sqliteDialect) ViewNames(db *sql.DB) ([][2]string, error) {

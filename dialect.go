@@ -7,13 +7,6 @@ import (
 
 type dialect interface {
 	escapeIdent(ident string) string
-	// PrimaryKey(db *sql.DB, name string) ([]string, error)
-	// Table(db *sql.DB, name string) ([]*sql.ColumnType, error)
-	// TableNames(db *sql.DB) ([]string, error)
-	// View(db *sql.DB, name string) ([]*sql.ColumnType, error)
-	// ViewNames(db *sql.DB) ([]string, error)
-
-	//
 
 	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
 	TableNames(db *sql.DB) ([][2]string, error)

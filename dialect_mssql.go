@@ -121,10 +121,7 @@ func (mssqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error
 }
 
 func (d mssqlDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, mssqlAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
 func (mssqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
@@ -132,10 +129,7 @@ func (mssqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 func (d mssqlDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, mssqlAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, mssqlAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
 func (mssqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {

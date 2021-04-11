@@ -87,10 +87,7 @@ func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, er
 }
 
 func (d postgresDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
 func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
@@ -98,10 +95,7 @@ func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 func (d postgresDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	if schema == "" {
-		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
-	}
-	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
+	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
 func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {

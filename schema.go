@@ -11,12 +11,12 @@ import (
 //
 // If this package were to be part of database/sql, then the API would become like:-
 //
-//  func (db *DB) Table(name string) ([]*ColumnType, error)
-//  func (db *DB) TableNames() ([]string, error)
-//  func (db *DB) Tables() (map[string][]*ColumnType, error)
-//  func (db *DB) View(name string) ([]*ColumnType, error)
-//  func (db *DB) ViewNames() ([]string, error)
-//  func (db *DB) Views() (map[string][]*ColumnType, error)
+//  func (db *DB) Table(schema, table string) ([]*ColumnType, error)
+//  func (db *DB) TableNames() ([][2]string, error)
+//  func (db *DB) Tables() (map[[2]string][]*ColumnType, error)
+//  func (db *DB) View(schema, view string) ([]*ColumnType, error)
+//  func (db *DB) ViewNames() ([][2]string, error)
+//  func (db *DB) Views() (map[[2]string][]*ColumnType, error)
 //
 
 //
@@ -216,25 +216,15 @@ func getDialect(db *sql.DB) (dialect, error) {
 	return d, nil
 }
 
-// TODO(js) DRY this.
-
 // fetchColumnTypes queries the database and returns column's type metadata
 // for a single table or view.
-func fetchColumnTypes(db *sql.DB, query, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
-	query = fmt.Sprintf(query, escapeIdent(name))
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
+func fetchColumnTypes(db *sql.DB, query, schema, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
+	if schema == "" {
+		query = fmt.Sprintf(query, escapeIdent(name))
+	} else {
+		n := fmt.Sprintf("%s.%s", escapeIdent(schema), escapeIdent(name))
+		query = fmt.Sprintf(query, n)
 	}
-	defer rows.Close()
-	return rows.ColumnTypes()
-}
-
-// fetchColumnTypesWithSchema queries the database and returns column's type metadata
-// for a single table or view.
-func fetchColumnTypesWithSchema(db *sql.DB, query, schema, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
-	n := fmt.Sprintf("%s.%s", escapeIdent(schema), escapeIdent(name))
-	query = fmt.Sprintf(query, n)
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
