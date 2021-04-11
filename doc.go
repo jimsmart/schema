@@ -9,7 +9,7 @@
 //  // Fetch names of all tables
 //  tnames, err := schema.TableNames(db)
 //  	...
-//  // tnames is []string
+//  // tnames is [][2]string
 //  for i := range tnames {
 //  	fmt.Println("Table:", tnames[i][1])
 //  }
