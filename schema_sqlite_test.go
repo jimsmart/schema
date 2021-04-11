@@ -84,9 +84,17 @@ var _ = Describe("schema", func() {
 			},
 
 			TableNamesExpRes: []string{"person", "web_resource"},
-			ViewNameExpRes:   "web_resource_view",
+			ViewNamesExpRes:  []string{"web_resource_view"},
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
+
+			TableNamesWithSchemaExpRes: [][2]string{
+				{"", "person"},
+				{"", "web_resource"},
+			},
+			ViewNamesWithSchemaExpRes: [][2]string{
+				{"", "web_resource_view"},
+			},
 		}
 
 		SchemaTestRunner(sqlite)

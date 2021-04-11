@@ -66,14 +66,18 @@ func PrimaryKey(db *sql.DB, name string) ([]string, error) {
 	return d.PrimaryKey(db, name)
 }
 
+// TODO(js) Rewrite comment.
+
 // fetchNames executes the given query with an optional name parameter,
 // and returns a list of table/view/column names.
 //
 // The name parameter (if not "") is passed as a parameter to db.Query.
-func fetchNames(db *sql.DB, query, name string) ([]string, error) {
+func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 	var rows *sql.Rows
 	var err error
-	if len(name) > 0 {
+	if len(name) > 0 && len(schema) > 0 {
+		rows, err = db.Query(query, schema, name)
+	} else if len(name) > 0 {
 		rows, err = db.Query(query, name)
 	} else {
 		rows, err = db.Query(query)
@@ -182,4 +186,99 @@ func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 		m[n] = ct
 	}
 	return m, nil
+}
+
+// With schema.
+
+// TODO(js) Improve comments.
+
+// TableNamesWithSchema returns a list of all table names.
+func TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.TableNamesWithSchema(db)
+}
+
+// ViewNamesWithSchema returns a list of all view names.
+func ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.ViewNamesWithSchema(db)
+}
+
+// fetchNames executes the given query with an optional name parameter,
+// and returns a list of table/view/column names.
+//
+// The name parameter (if not "") is passed as a parameter to db.Query.
+func fetchNamesWithSchema(db *sql.DB, query, schema, name string) ([][2]string, error) {
+	var rows *sql.Rows
+	var err error
+	if len(name) > 0 && len(schema) > 0 {
+		rows, err = db.Query(query, schema, name)
+	} else if len(name) > 0 {
+		rows, err = db.Query(query, name)
+	} else {
+		rows, err = db.Query(query)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	// Scan result into list of names.
+	var names [][2]string
+	s := ""
+	n := ""
+	for rows.Next() {
+		err = rows.Scan(&s, &n)
+		if err != nil {
+			return nil, err
+		}
+		names = append(names, [2]string{s, n})
+	}
+	return names, nil
+}
+
+// TableWithSchema returns the column type metadata for the given table name.
+func TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.TableWithSchema(db, schema, name)
+}
+
+// ViewWithSchema returns the column type metadata for the given view name.
+func ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.ViewWithSchema(db, schema, name)
+}
+
+// fetchColumnTypesWithSchema queries the database and returns column's type metadata
+// for a single table or view.
+func fetchColumnTypesWithSchema(db *sql.DB, query, schema, name string, escapeIdent func(string) string) ([]*sql.ColumnType, error) {
+	n := fmt.Sprintf("%s.%s", escapeIdent(schema), escapeIdent(name))
+	query = fmt.Sprintf(query, n)
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	return rows.ColumnTypes()
+}
+
+// PrimaryKeyWithSchema returns a list of column names making up the primary
+// key for the given table name.
+func PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.PrimaryKeyWithSchema(db, schema, name)
 }

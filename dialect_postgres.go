@@ -17,6 +17,19 @@ const postgresTableNames = `
 	ORDER BY
 		table_name
 `
+const postgresTableNamesWithSchema = `
+	SELECT
+		table_schema,
+		table_name
+	FROM
+		information_schema.tables
+	WHERE
+		table_type = 'BASE TABLE' AND
+		table_schema NOT IN ('pg_catalog', 'information_schema')
+	ORDER BY
+		table_schema,
+		table_name
+`
 
 const postgresViewNames = `
 	SELECT
@@ -27,6 +40,20 @@ const postgresViewNames = `
 		table_type = 'VIEW' AND
 		table_schema = current_schema()
 	ORDER BY
+		table_name
+`
+
+const postgresViewNamesWithSchema = `
+	SELECT
+		table_schema,
+		table_name
+	FROM
+		information_schema.tables
+	WHERE
+		table_type = 'VIEW' AND
+		table_schema NOT IN ('pg_catalog', 'information_schema')
+	ORDER BY
+		table_schema,
 		table_name
 `
 
@@ -48,6 +75,24 @@ const postgresPrimaryKey = `
 		kcu.ordinal_position
 `
 
+const postgresPrimaryKeyWithSchema = `
+	SELECT
+		kcu.column_name
+	FROM
+		information_schema.table_constraints tco
+	JOIN
+		information_schema.key_column_usage kcu
+	ON	kcu.constraint_name = tco.constraint_name AND
+		kcu.constraint_schema = tco.constraint_schema AND
+		kcu.constraint_name = tco.constraint_name
+	WHERE
+		tco.constraint_type = 'PRIMARY KEY' AND
+		kcu.table_schema = $1 AND
+		kcu.table_name = $2
+	ORDER BY
+		kcu.ordinal_position
+`
+
 type postgresDialect struct{}
 
 func (postgresDialect) escapeIdent(ident string) string {
@@ -56,21 +101,50 @@ func (postgresDialect) escapeIdent(ident string) string {
 }
 
 func (postgresDialect) PrimaryKey(db *sql.DB, name string) ([]string, error) {
-	return fetchNames(db, postgresPrimaryKey, name)
+	return fetchNames(db, postgresPrimaryKey, "", name)
+}
+
+func (postgresDialect) PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error) {
+	if schema == "" {
+		return fetchNames(db, postgresPrimaryKey, "", name)
+	}
+	return fetchNames(db, postgresPrimaryKeyWithSchema, schema, name)
 }
 
 func (d postgresDialect) Table(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 }
 
+func (d postgresDialect) TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	if schema == "" {
+		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
+	}
+	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
+}
+
 func (postgresDialect) TableNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, postgresTableNames, "")
+	return fetchNames(db, postgresTableNames, "", "")
+}
+
+func (postgresDialect) TableNamesWithSchema(db *sql.DB) ([][2]string, error) {
+	return fetchNamesWithSchema(db, postgresTableNamesWithSchema, "", "")
 }
 
 func (d postgresDialect) View(db *sql.DB, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
 }
 
+func (d postgresDialect) ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	if schema == "" {
+		return fetchColumnTypes(db, postgresAllColumns, name, d.escapeIdent)
+	}
+	return fetchColumnTypesWithSchema(db, postgresAllColumns, schema, name, d.escapeIdent)
+}
+
 func (postgresDialect) ViewNames(db *sql.DB) ([]string, error) {
-	return fetchNames(db, postgresViewNames, "")
+	return fetchNames(db, postgresViewNames, "", "")
+}
+
+func (postgresDialect) ViewNamesWithSchema(db *sql.DB) ([][2]string, error) {
+	return fetchNamesWithSchema(db, postgresViewNamesWithSchema, "", "")
 }

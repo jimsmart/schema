@@ -12,6 +12,14 @@ type dialect interface {
 	TableNames(db *sql.DB) ([]string, error)
 	View(db *sql.DB, name string) ([]*sql.ColumnType, error)
 	ViewNames(db *sql.DB) ([]string, error)
+
+	//
+
+	PrimaryKeyWithSchema(db *sql.DB, schema, name string) ([]string, error)
+	TableNamesWithSchema(db *sql.DB) ([][2]string, error)
+	TableWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
+	ViewNamesWithSchema(db *sql.DB) ([][2]string, error)
+	ViewWithSchema(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.

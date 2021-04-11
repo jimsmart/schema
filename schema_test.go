@@ -24,7 +24,10 @@ type testParams struct {
 	ViewExpRes  []string
 
 	TableNamesExpRes []string
-	ViewNameExpRes   string
+	ViewNamesExpRes  []string
+
+	TableNamesWithSchemaExpRes [][2]string
+	ViewNamesWithSchemaExpRes  [][2]string
 
 	PrimaryKeysExpRes []string
 }
@@ -95,6 +98,16 @@ func SchemaTestRunner(params *testParams) {
 		})
 	})
 
+	Describe("TableNamesWithSchema", func() {
+		It("should return the schema and table names", func() {
+			db, done := setup()
+			defer done()
+			sn, err := schema.TableNamesWithSchema(db)
+			Expect(err).To(BeNil())
+			Expect(sn).To(Equal(params.TableNamesWithSchemaExpRes))
+		})
+	})
+
 	Describe("Tables", func() {
 		It("should return the column type info for all tables", func() {
 			db, done := setup()
@@ -114,7 +127,7 @@ func SchemaTestRunner(params *testParams) {
 		It("should return the column type info for the view", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.View(db, params.ViewNameExpRes)
+			ci, err := schema.View(db, params.ViewNamesExpRes[0])
 			Expect(err).To(BeNil())
 			var list []string
 			for _, c := range ci {
@@ -130,8 +143,17 @@ func SchemaTestRunner(params *testParams) {
 			defer done()
 			sn, err := schema.ViewNames(db)
 			Expect(err).To(BeNil())
-			Expect(sn).To(HaveLen(1))
-			Expect(sn).To(Equal([]string{params.ViewNameExpRes}))
+			Expect(sn).To(Equal(params.ViewNamesExpRes))
+		})
+	})
+
+	Describe("ViewNamesWithSchema", func() {
+		It("should return the schema and view names", func() {
+			db, done := setup()
+			defer done()
+			sn, err := schema.ViewNamesWithSchema(db)
+			Expect(err).To(BeNil())
+			Expect(sn).To(Equal(params.ViewNamesWithSchemaExpRes))
 		})
 	})
 
@@ -142,7 +164,7 @@ func SchemaTestRunner(params *testParams) {
 			sc, err := schema.Views(db)
 			Expect(err).To(BeNil())
 			Expect(sc).To(HaveLen(1))
-			ci, ok := sc[params.ViewNameExpRes]
+			ci, ok := sc[params.ViewNamesExpRes[0]]
 			Expect(ok).To(BeTrue())
 			Expect(ci).To(HaveLen(2))
 		})
