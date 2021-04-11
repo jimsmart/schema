@@ -134,8 +134,8 @@ func fetchColumnTypes(db *sql.DB, query, name string, escapeIdent func(string) s
 	return rows.ColumnTypes()
 }
 
-// Tables returns column type metadata for all tables in the current schema
-// (not including system tables). The returned map is keyed by table name.
+// Tables returns column type metadata for all tables in the current schema.
+// The returned map is keyed by table name.
 func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
@@ -159,8 +159,8 @@ func Tables(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	return m, nil
 }
 
-// Views returns column type metadata for all views in the current schema
-// (not including system views). The returned map is keyed by view name.
+// Views returns column type metadata for all views in the current schema.
+// The returned map is keyed by view name.
 func Views(db *sql.DB) (map[string][]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
