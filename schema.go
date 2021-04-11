@@ -39,7 +39,8 @@ func (e UnknownDriverError) Error() string {
 //
 
 // Tables returns column type metadata for all tables in the current schema.
-// The returned map is keyed by table name.
+//
+// The returned map is keyed by table name tuples.
 func Tables(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
@@ -64,7 +65,8 @@ func Tables(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 }
 
 // Views returns column type metadata for all views in the current schema.
-// The returned map is keyed by view name.
+//
+// The returned map is keyed by view name tuples.
 func Views(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
@@ -88,9 +90,9 @@ func Views(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 	return m, nil
 }
 
-// TODO(js) Improve comments.
-
 // TableNames returns a list of all table names.
+//
+// Each name consists of a [2]string tuple: schema name, table name.
 func TableNames(db *sql.DB) ([][2]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
@@ -100,6 +102,8 @@ func TableNames(db *sql.DB) ([][2]string, error) {
 }
 
 // ViewNames returns a list of all view names.
+//
+// Each name consists of a [2]string tuple: schema name, view name.
 func ViewNames(db *sql.DB) ([][2]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
@@ -108,32 +112,36 @@ func ViewNames(db *sql.DB) ([][2]string, error) {
 	return d.ViewNames(db)
 }
 
-// Table returns the column type metadata for the given table name.
-func Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+// Table returns the column type metadata for the given table in the given schema.
+//
+// Setting schema to an empty string results in the current schema being used.
+func Table(db *sql.DB, schema, table string) ([]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.Table(db, schema, name)
+	return d.Table(db, schema, table)
 }
 
-// View returns the column type metadata for the given view name.
-func View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+// View returns the column type metadata for the given view in the given schema.
+//
+// Setting schema to an empty string results in the current schema being used.
+func View(db *sql.DB, schema, view string) ([]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.View(db, schema, name)
+	return d.View(db, schema, view)
 }
 
 // PrimaryKey returns a list of column names making up the primary
-// key for the given table name.
-func PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
+// key for the given table in the given schema.
+func PrimaryKey(db *sql.DB, schema, table string) ([]string, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.PrimaryKey(db, schema, name)
+	return d.PrimaryKey(db, schema, table)
 }
 
 // fetchNames executes the given query with an optional name parameter,

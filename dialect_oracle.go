@@ -4,8 +4,6 @@ import (
 	"database/sql"
 )
 
-// TODO(js) Is there some way to filter system tables (like mssql)? Or should we always just be using our own schema?
-
 const oracleAllColumns = `SELECT * FROM %s WHERE 1=0`
 
 const oracleTableNamesWithSchema = `

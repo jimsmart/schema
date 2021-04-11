@@ -4,6 +4,8 @@ import (
 	"database/sql"
 )
 
+// TODO(js) Should we be filtering out system tables, like we currently do?
+
 const postgresAllColumns = `SELECT * FROM %s LIMIT 0`
 
 const postgresTableNamesWithSchema = `

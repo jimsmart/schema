@@ -6,6 +6,8 @@ import (
 
 const mssqlAllColumns = `SELECT * FROM %s WHERE 1=0`
 
+// TODO(js) Should we be filtering out system tables, like we currently do?
+
 // See https://stackoverflow.com/questions/8774928/how-to-exclude-system-table-when-querying-sys-tables
 
 const mssqlTableNamesWithSchema = `
