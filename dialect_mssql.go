@@ -8,26 +8,6 @@ const mssqlAllColumns = `SELECT * FROM %s WHERE 1=0`
 
 // See https://stackoverflow.com/questions/8774928/how-to-exclude-system-table-when-querying-sys-tables
 
-const mssqlTableNames = `
-	SELECT
-		t.name
-	FROM
-		sys.tables t
-	INNER JOIN
-		sys.schemas s
-	ON	s.schema_id = t.schema_id
-	LEFT JOIN
-		sys.extended_properties ep
-	ON	ep.major_id = t.[object_id]
-	WHERE
-		t.schema_id = SCHEMA_ID() AND
-		t.is_ms_shipped = 0 AND
-		(ep.class_desc IS NULL OR (ep.class_desc <> 'OBJECT_OR_COLUMN' AND
-			ep.[name] <> 'microsoft_database_tools_support'))
-	ORDER BY
-		t.name
-`
-
 const mssqlTableNamesWithSchema = `
 	SELECT
 		schema_name(t.schema_id),
@@ -41,27 +21,6 @@ const mssqlTableNamesWithSchema = `
 		sys.extended_properties ep
 	ON	ep.major_id = t.[object_id]
 	WHERE
-		t.is_ms_shipped = 0 AND
-		(ep.class_desc IS NULL OR (ep.class_desc <> 'OBJECT_OR_COLUMN' AND
-			ep.[name] <> 'microsoft_database_tools_support'))
-	ORDER BY
-		schema_name(t.schema_id),
-		t.name
-`
-
-const mssqlViewNames = `
-	SELECT
-		t.name
-	FROM
-		sys.views t
-	INNER JOIN
-		sys.schemas s
-	ON	s.schema_id = t.schema_id
-	LEFT JOIN
-		sys.extended_properties ep
-	ON	ep.major_id = t.[object_id]
-	WHERE
-		t.schema_id = SCHEMA_ID() AND
 		t.is_ms_shipped = 0 AND
 		(ep.class_desc IS NULL OR (ep.class_desc <> 'OBJECT_OR_COLUMN' AND
 			ep.[name] <> 'microsoft_database_tools_support'))

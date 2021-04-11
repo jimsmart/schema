@@ -8,17 +8,6 @@ import (
 
 const oracleAllColumns = `SELECT * FROM %s WHERE 1=0`
 
-const oracleTableNames = `
-	SELECT
-		table_name
-	FROM
-		all_tables
-	WHERE
-		owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
-	ORDER BY
-		table_name
-`
-
 const oracleTableNamesWithSchema = `
 	SELECT
 		owner,
@@ -30,17 +19,6 @@ const oracleTableNamesWithSchema = `
 	ORDER BY
 		owner,
 		table_name
-`
-
-const oracleViewNames = `
-	SELECT
-		view_name
-	FROM
-		all_views
-	WHERE
-		owner IN (SELECT sys_context('userenv', 'current_schema') from dual)
-	ORDER BY
-		view_name
 `
 
 const oracleViewNamesWithSchema = `

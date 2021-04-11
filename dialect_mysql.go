@@ -6,18 +6,6 @@ import (
 
 const mysqlAllColumns = `SELECT * FROM %s LIMIT 0`
 
-const mysqlTableNames = `
-	SELECT
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'BASE TABLE' AND
-		table_schema = database()
-	ORDER BY
-		table_name
-`
-
 const mysqlTableNamesWithSchema = `
 	SELECT
 		table_schema,
@@ -28,18 +16,6 @@ const mysqlTableNamesWithSchema = `
 		table_type = 'BASE TABLE' 
 	ORDER BY
 		table_schema,
-		table_name
-`
-
-const mysqlViewNames = `
-	SELECT
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'VIEW' AND
-		table_schema = database()
-	ORDER BY
 		table_name
 `
 

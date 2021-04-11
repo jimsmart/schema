@@ -6,15 +6,40 @@ import (
 
 const sqliteAllColumns = `SELECT * FROM %s LIMIT 0`
 
-const sqliteTableNames = `SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name`
+const sqliteTableNamesWithSchema = `
+	SELECT
+		"" AS schema,
+		name 
+	FROM
+		sqlite_master
+	WHERE
+		type = 'table'
+	ORDER BY
+		name
+`
 
-const sqliteTableNamesWithSchema = `SELECT "" AS schema, name FROM sqlite_master WHERE type = 'table' ORDER BY name`
+const sqliteViewNamesWithSchema = `
+	SELECT
+		"" AS schema,
+		name
+	FROM
+		sqlite_master
+	WHERE
+		type = 'view'
+	ORDER BY
+		name
+`
 
-const sqliteViewNames = `SELECT name FROM sqlite_master WHERE type = 'view' ORDER BY name`
-
-const sqliteViewNamesWithSchema = `SELECT "" AS schema, name FROM sqlite_master WHERE type = 'view' ORDER BY name`
-
-const sqlitePrimaryKey = `SELECT name FROM pragma_table_info(?) WHERE pk > 0 ORDER BY pk`
+const sqlitePrimaryKey = `
+	SELECT
+		name
+	FROM
+		pragma_table_info(?)
+	WHERE
+		pk > 0
+	ORDER BY
+		pk
+`
 
 type sqliteDialect struct{}
 
@@ -24,9 +49,9 @@ func (sqliteDialect) escapeIdent(ident string) string {
 }
 
 func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
-	if schema == "" {
-		return fetchNames(db, sqlitePrimaryKey, "", name)
-	}
+	// if schema == "" {
+	// 	return fetchNames(db, sqlitePrimaryKey, "", name)
+	// }
 	return fetchNames(db, sqlitePrimaryKey, "", name)
 }
 

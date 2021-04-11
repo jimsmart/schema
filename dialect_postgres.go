@@ -6,17 +6,6 @@ import (
 
 const postgresAllColumns = `SELECT * FROM %s LIMIT 0`
 
-const postgresTableNames = `
-	SELECT
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'BASE TABLE' AND
-		table_schema = current_schema()
-	ORDER BY
-		table_name
-`
 const postgresTableNamesWithSchema = `
 	SELECT
 		table_schema,
@@ -28,18 +17,6 @@ const postgresTableNamesWithSchema = `
 		table_schema NOT IN ('pg_catalog', 'information_schema')
 	ORDER BY
 		table_schema,
-		table_name
-`
-
-const postgresViewNames = `
-	SELECT
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'VIEW' AND
-		table_schema = current_schema()
-	ORDER BY
 		table_name
 `
 
