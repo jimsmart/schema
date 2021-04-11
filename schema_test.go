@@ -65,11 +65,11 @@ func SchemaTestRunner(params *testParams) {
 		return db, doneFn
 	}
 
-	Describe("Table", func() {
+	Describe("ColumnTypes", func() {
 		It("should return the column type info for an existing table", func() {
 			db, done := setup()
 			defer done()
-			ci, err := schema.Table(db, params.TableNamesExpRes[1][0], params.TableNamesExpRes[1][1])
+			ci, err := schema.ColumnTypes(db, params.TableNamesExpRes[1][0], params.TableNamesExpRes[1][1])
 			Expect(err).To(BeNil())
 			var list []string
 			for _, c := range ci {
@@ -81,9 +81,21 @@ func SchemaTestRunner(params *testParams) {
 		It("should return an error for a non-existing table", func() {
 			db, done := setup()
 			defer done()
-			_, err := schema.Table(db, "", "XXX-NO-SUCH-TABLE-XXX")
+			_, err := schema.ColumnTypes(db, "", "XXX-NO-SUCH-TABLE-XXX")
 			Expect(err).ToNot(BeNil())
 		})
+		It("should return the column type info for the view", func() {
+			db, done := setup()
+			defer done()
+			ci, err := schema.ColumnTypes(db, params.ViewNamesExpRes[0][0], params.ViewNamesExpRes[0][1])
+			Expect(err).To(BeNil())
+			var list []string
+			for _, c := range ci {
+				list = append(list, c.Name())
+			}
+			Expect(list).To(Equal(params.ViewExpRes))
+		})
+		// TODO(js) check with empty schema param
 	})
 
 	Describe("TableNames", func() {
@@ -109,21 +121,6 @@ func SchemaTestRunner(params *testParams) {
 			Expect(ok).To(BeTrue())
 			Expect(ci).To(HaveLen(10))
 		})
-	})
-
-	Describe("View", func() {
-		It("should return the column type info for the view", func() {
-			db, done := setup()
-			defer done()
-			ci, err := schema.View(db, params.ViewNamesExpRes[0][0], params.ViewNamesExpRes[0][1])
-			Expect(err).To(BeNil())
-			var list []string
-			for _, c := range ci {
-				list = append(list, c.Name())
-			}
-			Expect(list).To(Equal(params.ViewExpRes))
-		})
-		// TODO(js) check with empty schema param
 	})
 
 	Describe("ViewNames", func() {
@@ -171,7 +168,7 @@ var _ = Describe("schema", func() {
 
 			var unknownDriverErr = schema.UnknownDriverError{Driver: "schema_test.FakeDb"}
 
-			ci, err := schema.Table(db, "", "web_resource")
+			ci, err := schema.ColumnTypes(db, "", "web_resource")
 			Expect(ci).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
@@ -179,21 +176,17 @@ var _ = Describe("schema", func() {
 			Expect(tn).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
-			// ta, err := schema.Tables(db)
-			// Expect(ta).To(BeNil())
-			// Expect(err).To(MatchError(unknownDriverErr))
-
-			ci, err = schema.View(db, "", "web_resource")
-			Expect(ci).To(BeNil())
+			ta, err := schema.Tables(db)
+			Expect(ta).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
 			vn, err := schema.ViewNames(db)
 			Expect(vn).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
 
-			// vw, err := schema.Views(db)
-			// Expect(vw).To(BeNil())
-			// Expect(err).To(MatchError(unknownDriverErr))
+			vw, err := schema.Views(db)
+			Expect(vw).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
 		})
 	})
 })

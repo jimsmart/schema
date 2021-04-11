@@ -113,6 +113,10 @@ func (mssqlDialect) escapeIdent(ident string) string {
 	return escapeWithBrackets(ident)
 }
 
+func (d mssqlDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
+}
+
 func (mssqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, mssqlPrimaryKey, "", name)
@@ -120,16 +124,8 @@ func (mssqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error
 	return fetchNames(db, mssqlPrimaryKeyWithSchema, schema, name)
 }
 
-func (d mssqlDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
-}
-
 func (mssqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, mssqlTableNamesWithSchema, "", "")
-}
-
-func (d mssqlDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
 func (mssqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {

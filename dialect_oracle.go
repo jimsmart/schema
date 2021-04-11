@@ -71,6 +71,10 @@ func (oracleDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
+func (d oracleDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
+}
+
 func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, oraclePrimaryKey, "", name)
@@ -78,16 +82,8 @@ func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 	return fetchNames(db, oraclePrimaryKeyWithSchema, schema, name)
 }
 
-func (d oracleDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
-}
-
 func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, oracleTableNamesWithSchema, "", "")
-}
-
-func (d oracleDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
 func (oracleDialect) ViewNames(db *sql.DB) ([][2]string, error) {

@@ -8,11 +8,10 @@ import (
 type dialect interface {
 	escapeIdent(ident string) string
 
+	ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
 	TableNames(db *sql.DB) ([][2]string, error)
-	Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 	ViewNames(db *sql.DB) ([][2]string, error)
-	View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.

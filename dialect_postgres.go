@@ -79,6 +79,10 @@ func (postgresDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
+func (d postgresDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
+}
+
 func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, postgresPrimaryKey, "", name)
@@ -86,16 +90,8 @@ func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, er
 	return fetchNames(db, postgresPrimaryKeyWithSchema, schema, name)
 }
 
-func (d postgresDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
-}
-
 func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, postgresTableNamesWithSchema, "", "")
-}
-
-func (d postgresDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
 func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {

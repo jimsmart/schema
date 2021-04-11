@@ -48,6 +48,10 @@ func (sqliteDialect) escapeIdent(ident string) string {
 	return escapeWithDoubleQuotes(ident)
 }
 
+func (d sqliteDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
+	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
+}
+
 func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	// if schema == "" {
 	// 	return fetchNames(db, sqlitePrimaryKey, "", name)
@@ -55,16 +59,8 @@ func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 	return fetchNames(db, sqlitePrimaryKey, "", name)
 }
 
-func (d sqliteDialect) Table(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
-}
-
 func (sqliteDialect) TableNames(db *sql.DB) ([][2]string, error) {
 	return fetchNamesWithSchema(db, sqliteTableNamesWithSchema, "", "")
-}
-
-func (d sqliteDialect) View(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
-	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
 }
 
 func (sqliteDialect) ViewNames(db *sql.DB) ([][2]string, error) {

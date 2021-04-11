@@ -55,7 +55,7 @@ func Tables(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 	}
 	m := make(map[[2]string][]*sql.ColumnType, len(names))
 	for _, n := range names {
-		ct, err := d.Table(db, n[0], n[1])
+		ct, err := d.ColumnTypes(db, n[0], n[1])
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func Views(db *sql.DB) (map[[2]string][]*sql.ColumnType, error) {
 	}
 	m := make(map[[2]string][]*sql.ColumnType, len(names))
 	for _, n := range names {
-		ct, err := d.View(db, n[0], n[1])
+		ct, err := d.ColumnTypes(db, n[0], n[1])
 		if err != nil {
 			return nil, err
 		}
@@ -112,26 +112,15 @@ func ViewNames(db *sql.DB) ([][2]string, error) {
 	return d.ViewNames(db)
 }
 
-// Table returns the column type metadata for the given table in the given schema.
+// ColumnTypes returns the column type metadata for the given object (table or view) in the given schema.
 //
 // Setting schema to an empty string results in the current schema being used.
-func Table(db *sql.DB, schema, table string) ([]*sql.ColumnType, error) {
+func ColumnTypes(db *sql.DB, schema, obj string) ([]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.Table(db, schema, table)
-}
-
-// View returns the column type metadata for the given view in the given schema.
-//
-// Setting schema to an empty string results in the current schema being used.
-func View(db *sql.DB, schema, view string) ([]*sql.ColumnType, error) {
-	d, err := getDialect(db)
-	if err != nil {
-		return nil, err
-	}
-	return d.View(db, schema, view)
+	return d.ColumnTypes(db, schema, obj)
 }
 
 // PrimaryKey returns a list of column names making up the primary

@@ -96,6 +96,7 @@ Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3
 
 ## History
 
+- v0.2.0: Clean up front-facing API.
 - v0.1.0: Added schema name to methods and results.
 - v0.0.8: Disabled Oracle tests on Travis.
 - v0.0.7: Added PrimaryKey method. TableNames and ViewNames are now sorted. Improved Oracle testing. Refactored dialect handling.

@@ -21,10 +21,10 @@
 //
 // Both user permissions and current database/schema effect table visibility.
 //
-// Use schema.Table() to query column type metadata for a single table:
+// Use schema.ColumnTypes() to query column type metadata for a single table:
 //
 //  // Fetch column metadata for given table
-//  tcols, err := schema.Table(db, "", "employee_tbl")
+//  tcols, err := schema.ColumnTypes(db, "", "employee_tbl")
 //  	...
 //  // tcols is []*sql.ColumnType
 //  for i := range tcols {
@@ -51,7 +51,7 @@
 //  vnames, err := schema.ViewNames(db)
 //  	...
 //  // Fetch column metadata for given view
-//  vcols, err := schema.View(db, "", "monthly_sales_view")
+//  vcols, err := schema.ColumnTypes(db, "", "monthly_sales_view")
 //  	...
 //  // Fetch column metadata for all views
 //  views, err := schema.Views(db)
