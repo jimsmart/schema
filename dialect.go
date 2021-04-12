@@ -42,10 +42,10 @@ var driverDialect = map[string]dialect{
 // func Register(driver sql.Driver, d *Dialect) {}
 //
 
-// pack a string, normalising its whitespace.
-func pack(s string) string {
-	return strings.Join(strings.Fields(s), " ")
-}
+// // pack a string, normalising its whitespace.
+// func pack(s string) string {
+// 	return strings.Join(strings.Fields(s), " ")
+// }
 
 // escapeWithDoubleQuotes implements double-quote escaping of a string,
 // in accordance with SQL:1999 standard.
