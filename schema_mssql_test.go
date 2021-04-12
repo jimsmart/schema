@@ -16,7 +16,6 @@ var _ = Describe("schema", func() {
 	Context("using github.com/denisenkom/go-mssqldb (Microsoft SQL-Server)", func() {
 
 		const (
-			// user = "mssql_test_user"
 			user = "test_user"
 			pass = "Password-123"
 			host = "localhost"

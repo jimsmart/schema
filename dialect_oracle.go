@@ -4,6 +4,8 @@ import (
 	"database/sql"
 )
 
+// TODO(js) Are we querying the correct tables? See https://dba.stackexchange.com/questions/153436/i-want-to-see-all-tables-of-db-but-no-system-tables
+
 const oracleAllColumns = `SELECT * FROM %s WHERE 1=0`
 
 const oracleTableNamesWithSchema = `

@@ -4,6 +4,8 @@ import (
 	"database/sql"
 )
 
+// TODO(js) Can we see tables in an attached database? How are their names handled? See https://sqlite.org/lang_naming.html
+
 const sqliteAllColumns = `SELECT * FROM %s LIMIT 0`
 
 const sqliteTableNamesWithSchema = `
