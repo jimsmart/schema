@@ -65,6 +65,8 @@ func SchemaTestRunner(params *testParams) {
 		return db, doneFn
 	}
 
+	// TODO(js) We should test Tables and Views against empty databases.
+
 	Describe("ColumnTypes", func() {
 		It("should return the column type info for an existing table", func() {
 			db, done := setup()
@@ -214,6 +216,12 @@ var _ = Describe("schema", func() {
 			vw, err := schema.Views(db)
 			Expect(vw).To(BeNil())
 			Expect(err).To(MatchError(unknownDriverErr))
+
+			pk, err := schema.PrimaryKey(db, "", "web_resource")
+			Expect(pk).To(BeNil())
+			Expect(err).To(MatchError(unknownDriverErr))
+
+			Expect(err.Error()).To(Equal("unknown database driver: schema_test.FakeDb"))
 		})
 	})
 })

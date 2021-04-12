@@ -85,9 +85,9 @@ func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 }
 
 func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, oracleTableNamesWithSchema, "", "")
+	return fetchObjectNames(db, oracleTableNamesWithSchema)
 }
 
 func (oracleDialect) ViewNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, oracleViewNamesWithSchema, "", "")
+	return fetchObjectNames(db, oracleViewNamesWithSchema)
 }

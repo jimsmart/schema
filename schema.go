@@ -33,7 +33,7 @@ type UnknownDriverError struct {
 
 // Error returns a formatted string description.
 func (e UnknownDriverError) Error() string {
-	return fmt.Sprintf("unknown database driver %s", e.Driver)
+	return fmt.Sprintf("unknown database driver: %s", e.Driver)
 }
 
 //
@@ -140,12 +140,10 @@ func PrimaryKey(db *sql.DB, schema, table string) ([]string, error) {
 func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 	var rows *sql.Rows
 	var err error
-	if len(name) > 0 && len(schema) > 0 {
+	if len(schema) > 0 {
 		rows, err = db.Query(query, schema, name)
-	} else if len(name) > 0 {
-		rows, err = db.Query(query, name)
 	} else {
-		rows, err = db.Query(query)
+		rows, err = db.Query(query, name)
 	}
 	if err != nil {
 		return nil, err
@@ -164,20 +162,12 @@ func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 	return names, nil
 }
 
-// fetchNames executes the given query with an optional name parameter,
+// fetchObjectNames executes the given query
 // and returns a list of table/view/column names.
-//
-// The name parameter (if not "") is passed as a parameter to db.Query.
-func fetchNamesWithSchema(db *sql.DB, query, schema, name string) ([][2]string, error) {
+func fetchObjectNames(db *sql.DB, query string) ([][2]string, error) {
 	var rows *sql.Rows
 	var err error
-	if len(name) > 0 && len(schema) > 0 {
-		rows, err = db.Query(query, schema, name)
-	} else if len(name) > 0 {
-		rows, err = db.Query(query, name)
-	} else {
-		rows, err = db.Query(query)
-	}
+	rows, err = db.Query(query)
 	if err != nil {
 		return nil, err
 	}

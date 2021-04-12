@@ -91,9 +91,9 @@ func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, er
 }
 
 func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, postgresTableNamesWithSchema, "", "")
+	return fetchObjectNames(db, postgresTableNamesWithSchema)
 }
 
 func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, postgresViewNamesWithSchema, "", "")
+	return fetchObjectNames(db, postgresViewNamesWithSchema)
 }

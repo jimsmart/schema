@@ -62,9 +62,9 @@ func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, erro
 }
 
 func (sqliteDialect) TableNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, sqliteTableNamesWithSchema, "", "")
+	return fetchObjectNames(db, sqliteTableNamesWithSchema)
 }
 
 func (sqliteDialect) ViewNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, sqliteViewNamesWithSchema, "", "")
+	return fetchObjectNames(db, sqliteViewNamesWithSchema)
 }

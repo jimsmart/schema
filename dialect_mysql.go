@@ -87,9 +87,9 @@ func (mysqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error
 }
 
 func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, mysqlTableNamesWithSchema, "", "")
+	return fetchObjectNames(db, mysqlTableNamesWithSchema)
 }
 
 func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
-	return fetchNamesWithSchema(db, mysqlViewNamesWithSchema, "", "")
+	return fetchObjectNames(db, mysqlViewNamesWithSchema)
 }
