@@ -115,12 +115,12 @@ func ViewNames(db *sql.DB) ([][2]string, error) {
 // ColumnTypes returns the column type metadata for the given object (table or view) in the given schema.
 //
 // Setting schema to an empty string results in the current schema being used.
-func ColumnTypes(db *sql.DB, schema, obj string) ([]*sql.ColumnType, error) {
+func ColumnTypes(db *sql.DB, schema, object string) ([]*sql.ColumnType, error) {
 	d, err := getDialect(db)
 	if err != nil {
 		return nil, err
 	}
-	return d.ColumnTypes(db, schema, obj)
+	return d.ColumnTypes(db, schema, object)
 }
 
 // PrimaryKey returns a list of column names making up the primary
