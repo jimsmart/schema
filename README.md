@@ -73,15 +73,21 @@ Build a Docker image for Oracle, by executing script:
 ./build_oracle_docker_image.sh
 ```
 
+Once the script has successfully completed, you are free to delete the folder used when creating the image:
+
+```bash
+rm -rf ./test/docker-oracle
+```
+
 #### Increase Docker's RAM limits
 
-By default, Docker allocates 2gb RAM to each container. To prevent out-of-memory errors when running Oracle, increase Docker's RAM limits.
+By default, Docker allocates 2gb RAM to each container. To prevent out-of-memory errors when running Oracle, increase Docker's RAM limits:
 
 Docker -> Preferences -> Resources -> Advanced -> Memory, change to 4gb, click Apply & Restart.
 
-#### Install Oracle Client
+#### Install Oracle Instant Client
 
-Oracle database drivers require dynamic libraries that are part of the Oracle Client installation.
+Oracle database/sql drivers require dynamic libraries that are part of the [Oracle Instant Client](https://www.oracle.com/uk/database/technologies/instant-client.html) installation.
 
 ##### Mac
 
@@ -92,7 +98,7 @@ brew install instantclient-basic
 
 ## License
 
-Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md)
+Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3-Clause License](LICENSE.md).
 
 ## History
 
