@@ -77,7 +77,17 @@ func SchemaTestRunner(params *testParams) {
 			}
 			Expect(list).To(Equal(params.TableExpRes))
 		})
-		// TODO(js) check with empty schema param
+		It("should return the column type info for an existing table with empty schema param", func() {
+			db, done := setup()
+			defer done()
+			ci, err := schema.ColumnTypes(db, "", params.TableNamesExpRes[1][1])
+			Expect(err).To(BeNil())
+			var list []string
+			for _, c := range ci {
+				list = append(list, c.Name())
+			}
+			Expect(list).To(Equal(params.TableExpRes))
+		})
 		It("should return an error for a non-existing table", func() {
 			db, done := setup()
 			defer done()
@@ -96,6 +106,17 @@ func SchemaTestRunner(params *testParams) {
 			Expect(list).To(Equal(params.ViewExpRes))
 		})
 		// TODO(js) check with empty schema param
+		It("should return the column type info for the view with empty schema param", func() {
+			db, done := setup()
+			defer done()
+			ci, err := schema.ColumnTypes(db, "", params.ViewNamesExpRes[0][1])
+			Expect(err).To(BeNil())
+			var list []string
+			for _, c := range ci {
+				list = append(list, c.Name())
+			}
+			Expect(list).To(Equal(params.ViewExpRes))
+		})
 	})
 
 	Describe("TableNames", func() {
@@ -154,7 +175,13 @@ func SchemaTestRunner(params *testParams) {
 			Expect(err).To(BeNil())
 			Expect(pk).To(Equal(params.PrimaryKeysExpRes))
 		})
-		// TODO(js) check with empty schema param
+		It("should return the primary key when schema param is empty", func() {
+			db, done := setup()
+			defer done()
+			pk, err := schema.PrimaryKey(db, "", params.TableNamesExpRes[0][1])
+			Expect(err).To(BeNil())
+			Expect(pk).To(Equal(params.PrimaryKeysExpRes))
+		})
 	})
 
 }
