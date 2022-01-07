@@ -83,6 +83,7 @@ var _ = Describe("schema", func() {
 			ViewNamesExpRes: [][2]string{
 				{"test_db", "web_resource_view"},
 			},
+			MaterializedViewNamesExpRes: [][2]string{},
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
 		}

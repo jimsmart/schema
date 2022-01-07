@@ -12,6 +12,7 @@ type dialect interface {
 	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
 	TableNames(db *sql.DB) ([][2]string, error)
 	ViewNames(db *sql.DB) ([][2]string, error)
+	MaterializedViewNames(db *sql.DB) ([][2]string, error)
 }
 
 // driverDialect is a registry, mapping database/sql driver names to database dialects.

@@ -23,8 +23,9 @@ type testParams struct {
 	TableExpRes []string
 	ViewExpRes  []string
 
-	TableNamesExpRes [][2]string
-	ViewNamesExpRes  [][2]string
+	TableNamesExpRes            [][2]string
+	ViewNamesExpRes             [][2]string
+	MaterializedViewNamesExpRes [][2]string
 
 	PrimaryKeysExpRes []string
 }
@@ -166,6 +167,16 @@ func SchemaTestRunner(params *testParams) {
 			ci, ok := sc[params.ViewNamesExpRes[0]]
 			Expect(ok).To(BeTrue())
 			Expect(ci).To(HaveLen(2))
+		})
+	})
+
+	Describe("MaterializedViewNames", func() {
+		It("should return the materialized view names", func() {
+			db, done := setup()
+			defer done()
+			sn, err := schema.MaterializedViewNames(db)
+			Expect(err).To(BeNil())
+			Expect(sn).To(Equal(params.MaterializedViewNamesExpRes))
 		})
 	})
 

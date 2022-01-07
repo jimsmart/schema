@@ -1,3 +1,4 @@
+//go:build !travis
 // +build !travis
 
 package schema_test
@@ -92,6 +93,7 @@ var _ = Describe("schema", func() {
 			ViewNamesExpRes: [][2]string{
 				{"TEST_USER", "WEB_RESOURCE_VIEW"},
 			},
+			MaterializedViewNamesExpRes: [][2]string{},
 
 			PrimaryKeysExpRes: []string{"FAMILY_NAME", "GIVEN_NAME"},
 		}
@@ -100,46 +102,46 @@ var _ = Describe("schema", func() {
 	})
 })
 
-// func oraDump(db *sql.DB) error {
+func oraDump(db *sql.DB) error {
 
-// 	//SELECT table_name FROM user_tables
-// 	rows, err := db.Query(`
-// 		SELECT *
-// 		  FROM user_tables
-//    `)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer rows.Close()
+	//SELECT table_name FROM user_tables
+	rows, err := db.Query(`
+		SELECT *
+		  FROM user_tables
+   `)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
 
-// 	ci, err := rows.ColumnTypes()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	for _, c := range ci {
-// 		log.Printf("%v", c)
-// 	}
+	ci, err := rows.ColumnTypes()
+	if err != nil {
+		return err
+	}
+	for _, c := range ci {
+		log.Printf("%v", c)
+	}
 
-// 	cols, err := rows.Columns()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	vals := make([]interface{}, len(cols))
-// 	for i, _ := range cols {
-// 		vals[i] = new(sql.RawBytes)
-// 	}
+	cols, err := rows.Columns()
+	if err != nil {
+		return err
+	}
+	vals := make([]interface{}, len(cols))
+	for i, _ := range cols {
+		vals[i] = new(sql.RawBytes)
+	}
 
-// 	for rows.Next() {
-// 		err = rows.Scan(vals...)
-// 		if err != nil {
-// 			// return err
-// 			log.Printf("%v", err)
-// 		}
-// 		s := ""
-// 		for _, v := range vals {
-// 			s = s + fmt.Sprintf("%s ", v)
-// 		}
-// 		log.Print(s)
-// 	}
-// 	return nil
-// }
+	for rows.Next() {
+		err = rows.Scan(vals...)
+		if err != nil {
+			// return err
+			log.Printf("%v", err)
+		}
+		s := ""
+		for _, v := range vals {
+			s = s + fmt.Sprintf("%s ", v)
+		}
+		log.Print(s)
+	}
+	return nil
+}

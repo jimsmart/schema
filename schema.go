@@ -112,6 +112,17 @@ func ViewNames(db *sql.DB) ([][2]string, error) {
 	return d.ViewNames(db)
 }
 
+// MaterializedViewNames returns a list of all materialized view names.
+//
+// Each name consists of a [2]string tuple: schema name, materialized view name.
+func MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.MaterializedViewNames(db)
+}
+
 // ColumnTypes returns the column type metadata for the given object (table or view) in the given schema.
 //
 // Setting schema to an empty string results in the current schema being used.

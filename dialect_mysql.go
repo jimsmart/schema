@@ -93,3 +93,7 @@ func (mysqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 func (mysqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, mysqlViewNamesWithSchema)
 }
+
+func (mysqlDialect) MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	return [][2]string{}, nil
+}

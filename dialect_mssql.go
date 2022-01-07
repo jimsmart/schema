@@ -131,3 +131,7 @@ func (mssqlDialect) TableNames(db *sql.DB) ([][2]string, error) {
 func (mssqlDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, mssqlViewNamesWithSchema)
 }
+
+func (mssqlDialect) MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	return [][2]string{}, nil
+}

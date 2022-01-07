@@ -68,3 +68,7 @@ func (sqliteDialect) TableNames(db *sql.DB) ([][2]string, error) {
 func (sqliteDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, sqliteViewNamesWithSchema)
 }
+
+func (sqliteDialect) MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	return [][2]string{}, nil
+}

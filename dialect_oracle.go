@@ -91,3 +91,7 @@ func (oracleDialect) TableNames(db *sql.DB) ([][2]string, error) {
 func (oracleDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, oracleViewNamesWithSchema)
 }
+
+func (oracleDialect) MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	return [][2]string{}, nil
+}

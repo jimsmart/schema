@@ -36,6 +36,17 @@ const postgresViewNamesWithSchema = `
 		table_name
 `
 
+const postgresMaterializedViewNamesWithSchema = `
+	SELECT
+		schemaname,
+		matviewname
+	FROM
+		pg_matviews
+	ORDER BY
+		schemaname,
+		matviewname
+`
+
 const postgresPrimaryKey = `
 	SELECT
 		kcu.column_name
@@ -96,4 +107,8 @@ func (postgresDialect) TableNames(db *sql.DB) ([][2]string, error) {
 
 func (postgresDialect) ViewNames(db *sql.DB) ([][2]string, error) {
 	return fetchObjectNames(db, postgresViewNamesWithSchema)
+}
+
+func (postgresDialect) MaterializedViewNames(db *sql.DB) ([][2]string, error) {
+	return fetchObjectNames(db, postgresMaterializedViewNamesWithSchema)
 }

@@ -45,6 +45,7 @@ var _ = Describe("schema", func() {
 				`CREATE INDEX idx_web_resource_created_at ON web_resource(created_at)`,
 				`CREATE INDEX idx_web_resource_modified_at ON web_resource(modified_at)`,
 				`CREATE VIEW web_resource_view AS SELECT id, url FROM web_resource`,
+				`CREATE MATERIALIZED VIEW web_resource_view_materialized AS SELECT content, compressed_size FROM web_resource WITH DATA`,
 				`CREATE TABLE person (
 					given_name		TEXT NOT NULL,
 					family_name		TEXT NOT NULL,
@@ -53,6 +54,7 @@ var _ = Describe("schema", func() {
 			},
 			DropDDL: []string{
 				`DROP TABLE person`,
+				`DROP MATERIALIZED VIEW web_resource_view_materialized`,
 				`DROP VIEW web_resource_view`,
 				`DROP INDEX idx_web_resource_modified_at`,
 				`DROP INDEX idx_web_resource_created_at`,
@@ -83,6 +85,9 @@ var _ = Describe("schema", func() {
 			},
 			ViewNamesExpRes: [][2]string{
 				{"public", "web_resource_view"},
+			},
+			MaterializedViewNamesExpRes: [][2]string{
+				{"public", "web_resource_view_materialized"},
 			},
 
 			PrimaryKeysExpRes: []string{"family_name", "given_name"},
