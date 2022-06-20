@@ -77,6 +77,11 @@ func (d oracleDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.Colu
 	return fetchColumnTypes(db, oracleAllColumns, schema, name, d.escapeIdent)
 }
 
+func (oracleDialect) Indices(db *sql.DB, schema, name string) (map[string][]string, error) {
+	panic("not implemented yet")
+	return fetchMap(db, mysqlIndexKey, schema, name)
+}
+
 func (oracleDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, oraclePrimaryKey, "", name)

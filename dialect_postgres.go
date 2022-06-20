@@ -83,6 +83,11 @@ func (d postgresDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.Co
 	return fetchColumnTypes(db, postgresAllColumns, schema, name, d.escapeIdent)
 }
 
+func (postgresDialect) Indices(db *sql.DB, schema, name string) (map[string][]string, error) {
+	panic("not implemented yet")
+	return fetchMap(db, mysqlIndexKey, schema, name)
+}
+
 func (postgresDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, postgresPrimaryKey, "", name)

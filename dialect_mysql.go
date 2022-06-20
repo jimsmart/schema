@@ -50,6 +50,25 @@ const mysqlPrimaryKey = `
 		sta.seq_in_index
 `
 
+const mysqlIndexKey = `
+	SELECT
+		sta.index_name,
+		sta.column_name
+	FROM
+		information_schema.tables tab
+	INNER JOIN
+		information_schema.statistics sta
+	ON	sta.table_schema = tab.table_schema AND
+		sta.table_name = tab.table_name AND
+		sta.index_name != 'primary'
+	WHERE
+		tab.table_type = 'BASE TABLE' AND
+		tab.table_schema = database() AND
+		tab.table_name = ?
+	ORDER BY
+		sta.index_name, sta.seq_in_index
+`
+
 const mysqlPrimaryKeyWithSchema = `
 	SELECT
 		sta.column_name
@@ -77,6 +96,10 @@ func (mysqlDialect) escapeIdent(ident string) string {
 
 func (d mysqlDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error) {
 	return fetchColumnTypes(db, mysqlAllColumns, schema, name, d.escapeIdent)
+}
+
+func (mysqlDialect) Indices(db *sql.DB, schema, name string) (map[string][]string, error) {
+	return fetchMap(db, mysqlIndexKey, schema, name)
 }
 
 func (mysqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {

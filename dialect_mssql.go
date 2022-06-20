@@ -117,6 +117,11 @@ func (d mssqlDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.Colum
 	return fetchColumnTypes(db, mssqlAllColumns, schema, name, d.escapeIdent)
 }
 
+func (mssqlDialect) Indices(db *sql.DB, schema, name string) (map[string][]string, error) {
+	panic("not implemented yet")
+	return fetchMap(db, mysqlIndexKey, schema, name)
+}
+
 func (mssqlDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	if schema == "" {
 		return fetchNames(db, mssqlPrimaryKey, "", name)

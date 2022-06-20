@@ -9,6 +9,7 @@ type dialect interface {
 	escapeIdent(ident string) string
 
 	ColumnTypes(db *sql.DB, schema, name string) ([]*sql.ColumnType, error)
+	Indices(db *sql.DB, schema, name string) (map[string][]string, error)
 	PrimaryKey(db *sql.DB, schema, name string) ([]string, error)
 	TableNames(db *sql.DB) ([][2]string, error)
 	ViewNames(db *sql.DB) ([][2]string, error)

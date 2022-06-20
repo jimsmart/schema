@@ -54,6 +54,11 @@ func (d sqliteDialect) ColumnTypes(db *sql.DB, schema, name string) ([]*sql.Colu
 	return fetchColumnTypes(db, sqliteAllColumns, schema, name, d.escapeIdent)
 }
 
+func (sqliteDialect) Indices(db *sql.DB, schema, name string) (map[string][]string, error) {
+	panic("not implemented yet")
+	return fetchMap(db, mysqlIndexKey, schema, name)
+}
+
 func (sqliteDialect) PrimaryKey(db *sql.DB, schema, name string) ([]string, error) {
 	// if schema == "" {
 	// 	return fetchNames(db, sqlitePrimaryKey, "", name)

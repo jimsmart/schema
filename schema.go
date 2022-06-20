@@ -133,6 +133,16 @@ func PrimaryKey(db *sql.DB, schema, table string) ([]string, error) {
 	return d.PrimaryKey(db, schema, table)
 }
 
+// PrimaryKey returns a list of column names making up the primary
+// key for the given table in the given schema.
+func Indices(db *sql.DB, schema, table string) (map[string][]string, error) {
+	d, err := getDialect(db)
+	if err != nil {
+		return nil, err
+	}
+	return d.Indices(db, schema, table)
+}
+
 // fetchNames executes the given query with an optional name parameter,
 // and returns a list of table/view/column names.
 //
@@ -158,6 +168,41 @@ func fetchNames(db *sql.DB, query, schema, name string) ([]string, error) {
 			return nil, err
 		}
 		names = append(names, n)
+	}
+	return names, nil
+}
+
+// fetchMap executes the given query with an optional name parameter,
+// and returns a map of table/view/column names.
+//
+// The name parameter (if not "") is passed as a parameter to db.Query.
+func fetchMap(db *sql.DB, query, schema, name string) (map[string][]string, error) {
+	var rows *sql.Rows
+	var err error
+	if len(schema) > 0 {
+		rows, err = db.Query(query, schema, name)
+	} else {
+		rows, err = db.Query(query, name)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	// Scan result into list of names.
+	names := make(map[string][]string, 0)
+	n := ""
+	key := ""
+	for rows.Next() {
+		err = rows.Scan(&key, &n)
+		if err != nil {
+			return nil, err
+		}
+		_, ok := names[key]
+		if !ok {
+			names[key] = []string{n}
+		} else {
+			names[key] = append(names[key], n)
+		}
 	}
 	return names, nil
 }
