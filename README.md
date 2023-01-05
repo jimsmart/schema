@@ -19,6 +19,7 @@ Currently supporting the following database engines / SQL dialects:
 - Postgres
 - Snowflake
 - SQLite
+- Vitess
 
 For a list of supported drivers, and their capabilities with regards to sql.ColumnType support, see [drivercaps](https://github.com/jimsmart/drivercaps)
 
@@ -102,6 +103,7 @@ Package schema is copyright 2018-2021 by Jim Smart and released under the [BSD 3
 
 ## History
 
+- v0.2.1: Added dialect alias for Vitess driver github.com/vitessio/vitess.
 - v0.2.0: Replaced Table and View methods with ColumnTypes method.
 - v0.1.0: Added schema name to methods and results.
 - v0.0.8: Disabled Oracle tests on Travis.
