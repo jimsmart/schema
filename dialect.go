@@ -26,6 +26,7 @@ var driverDialect = map[string]dialect{
 	"*gosnowflake.SnowflakeDriver": postgresDialect{}, // github.com/snowflakedb/gosnowflake
 	"*mysql.MySQLDriver":           mysqlDialect{},    // github.com/go-sql-driver/mysql
 	"*godrv.Driver":                mysqlDialect{},    // github.com/ziutek/mymysql
+	"vitessdriver.drv":             mysqlDialect{},    // github.com/vitessio/vitess
 	"*mssql.Driver":                mssqlDialect{},    // github.com/denisenkom/go-mssqldb
 	"*mssql.MssqlDriver":           mssqlDialect{},    // github.com/denisenkom/go-mssqldb
 	"*freetds.MssqlDriver":         mssqlDialect{},    // github.com/minus5/gofreetds
