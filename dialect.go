@@ -17,24 +17,25 @@ type dialect interface {
 // driverDialect is a registry, mapping database/sql driver names to database dialects.
 // This is somewhat fragile.
 var driverDialect = map[string]dialect{
-	"*sqlite3.SQLiteDriver":        sqliteDialect{},   // github.com/mattn/go-sqlite3
-	"*sqlite.impl":                 sqliteDialect{},   // github.com/gwenn/gosqlite
-	"sqlite3.Driver":               sqliteDialect{},   // github.com/mxk/go-sqlite
-	"*pq.Driver":                   postgresDialect{}, // github.com/lib/pq
-	"*stdlib.Driver":               postgresDialect{}, // github.com/jackc/pgx
-	"*pgsqldriver.postgresDriver":  postgresDialect{}, // github.com/jbarham/gopgsqldriver
-	"*gosnowflake.SnowflakeDriver": postgresDialect{}, // github.com/snowflakedb/gosnowflake
-	"*mysql.MySQLDriver":           mysqlDialect{},    // github.com/go-sql-driver/mysql
-	"*godrv.Driver":                mysqlDialect{},    // github.com/ziutek/mymysql
-	"vitessdriver.drv":             mysqlDialect{},    // github.com/vitessio/vitess
-	"*mssql.Driver":                mssqlDialect{},    // github.com/denisenkom/go-mssqldb
-	"*mssql.MssqlDriver":           mssqlDialect{},    // github.com/denisenkom/go-mssqldb
-	"*freetds.MssqlDriver":         mssqlDialect{},    // github.com/minus5/gofreetds
-	"*goracle.drv":                 oracleDialect{},   // gopkg.in/goracle.v2
-	"*godror.drv":                  oracleDialect{},   // github.com/godror/godror
-	"*ora.Drv":                     oracleDialect{},   // gopkg.in/rana/ora.v4
-	"*oci8.OCI8DriverStruct":       oracleDialect{},   // github.com/mattn/go-oci8
-	"*oci8.OCI8Driver":             oracleDialect{},   // github.com/mattn/go-oci8
+	"*sqlite3.SQLiteDriver":        sqliteDialect{},     // github.com/mattn/go-sqlite3
+	"*sqlite.impl":                 sqliteDialect{},     // github.com/gwenn/gosqlite
+	"sqlite3.Driver":               sqliteDialect{},     // github.com/mxk/go-sqlite
+	"*pq.Driver":                   postgresDialect{},   // github.com/lib/pq
+	"*stdlib.Driver":               postgresDialect{},   // github.com/jackc/pgx
+	"*pgsqldriver.postgresDriver":  postgresDialect{},   // github.com/jbarham/gopgsqldriver
+	"*gosnowflake.SnowflakeDriver": postgresDialect{},   // github.com/snowflakedb/gosnowflake
+	"*mysql.MySQLDriver":           mysqlDialect{},      // github.com/go-sql-driver/mysql
+	"*godrv.Driver":                mysqlDialect{},      // github.com/ziutek/mymysql
+	"vitessdriver.drv":             mysqlDialect{},      // github.com/vitessio/vitess
+	"*mssql.Driver":                mssqlDialect{},      // github.com/denisenkom/go-mssqldb
+	"*mssql.MssqlDriver":           mssqlDialect{},      // github.com/denisenkom/go-mssqldb
+	"*freetds.MssqlDriver":         mssqlDialect{},      // github.com/minus5/gofreetds
+	"*goracle.drv":                 oracleDialect{},     // gopkg.in/goracle.v2
+	"*godror.drv":                  oracleDialect{},     // github.com/godror/godror
+	"*ora.Drv":                     oracleDialect{},     // gopkg.in/rana/ora.v4
+	"*oci8.OCI8DriverStruct":       oracleDialect{},     // github.com/mattn/go-oci8
+	"*oci8.OCI8Driver":             oracleDialect{},     // github.com/mattn/go-oci8
+	"*clickhouse.stdDriver":        clickhouseDialect{}, // github.com/clickhouse-go/v2
 }
 
 // TODO Should we expose a method of registering a driver string/dialect in our registry?
