@@ -15,7 +15,7 @@ const clickhouseTableNamesWithSchema = `
 	FROM
 		information_schema.tables
 	WHERE
-		table_type = 1 AND
+		table_type = 'BASE TABLE' AND
 		table_schema NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
 	ORDER BY
 		table_schema,
@@ -29,7 +29,7 @@ const clickhouseViewNamesWithSchema = `
 	FROM
 		information_schema.tables
 	WHERE
-		table_type = 2 AND
+		table_type = 'VIEW' AND
 		table_schema NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
 	ORDER BY
 		table_schema,
