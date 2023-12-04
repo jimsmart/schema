@@ -9,31 +9,25 @@ import (
 const clickhouseAllColumns = `SELECT * FROM %s LIMIT 0`
 
 const clickhouseTableNamesWithSchema = `
-	SELECT
-		table_schema,
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'BASE TABLE' AND
-		table_schema NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
-	ORDER BY
-		table_schema,
-		table_name
+  SELECT database AS table_schema,
+         name AS table_name
+  FROM system.tables
+  WHERE NOT is_temporary 
+    AND engine NOT LIKE '%View'
+    AND engine NOT LIKE 'System%'
+    AND has_own_data != 0
+    AND database NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
+  ORDER BY database, name;
 `
 
 const clickhouseViewNamesWithSchema = `
-	SELECT
-		table_schema,
-		table_name
-	FROM
-		information_schema.tables
-	WHERE
-		table_type = 'VIEW' AND
-		table_schema NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
-	ORDER BY
-		table_schema,
-		table_name
+SELECT database AS table_schema,
+       name     AS table_name
+FROM system.tables
+WHERE engine LIKE '%View'
+  AND database NOT IN ('information_schema', 'system', 'INFORMATION_SCHEMA')
+ORDER BY table_schema,
+         table_name
 `
 
 const clickhousePrimaryKey = `
