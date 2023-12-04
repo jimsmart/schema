@@ -58,3 +58,10 @@ services:
       - 127.0.0.1:45432:5432
     environment:
         POSTGRES_HOST_AUTH_METHOD: trust
+
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    user: "101:101"
+    hostname: clickhouse
+    ports:
+      - "127.0.0.1:49000:9000"

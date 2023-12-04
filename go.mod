@@ -3,6 +3,7 @@ module github.com/jimsmart/schema
 go 1.16
 
 require (
+	github.com/ClickHouse/clickhouse-go/v2 v2.11.0
 	github.com/denisenkom/go-mssqldb v0.12.3
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.0

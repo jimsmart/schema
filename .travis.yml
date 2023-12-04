@@ -22,7 +22,7 @@ before_install:
 
 before_script:
   # Start everything except oracle servvice.
-  - docker-compose up -d mssql mysql postgres
+  - docker-compose up -d mssql mysql postgres clickhouse
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic -tags=travis
